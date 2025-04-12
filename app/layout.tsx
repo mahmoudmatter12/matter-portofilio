@@ -5,10 +5,16 @@ import "./globals.css"
 import { FloatingSocialDock } from "@/components/FloatingSocialDock"
 import { Toaster } from "@/components/ui/sonner"
 import { Header } from "@/Header"
+import { Metadata } from "next"
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Mahmoud Matter | Full Stack Developer",
   description: "Portfolio of Mahmoud Matter, a Full Stack Developer specializing in modern web technologies",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
