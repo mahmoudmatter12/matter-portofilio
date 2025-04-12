@@ -5,7 +5,7 @@ import { Spotlight } from "./ui/spotlight-new"
 import { MyLink } from "./MyLink"
 import Link from "next/link"
 import { useMobile } from "@/hooks/use-mobile"
-import { ArrowDown, Github, Linkedin, Twitter, ExternalLink } from "lucide-react"
+import { ArrowDown, Github, Linkedin,  ExternalLink } from "lucide-react"
 
 export function Hero() {
   const isMobile = useMobile()
@@ -133,9 +133,8 @@ export function Hero() {
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             {[
-              { icon: <Github className="w-5 h-5" />, href: "https://github.com/yourusername" },
-              { icon: <Linkedin className="w-5 h-5" />, href: "https://linkedin.com/in/yourusername" },
-              { icon: <Twitter className="w-5 h-5" />, href: "https://twitter.com/yourusername" },
+              { icon: <Github className="w-5 h-5" />, href: "https://github.com/mahmoudmatter12" },
+              { icon: <Linkedin className="w-5 h-5" />, href: "https://www.linkedin.com/in/mahmoudmatter/" },
             ].map((social, index) => (
               <motion.a
                 key={index}

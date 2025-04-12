@@ -7,7 +7,7 @@ import { useMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { Code, Monitor, Server, Sparkles, ArrowRight,  ExternalLink } from "lucide-react"
 
-export function About() {
+export function About() { // Todo: Archive
     const isMobile = useMobile()
     const [isHovered, setIsHovered] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -94,7 +94,7 @@ export function About() {
                                 {/* Main image container */}
                                 <div className="relative w-[280px] h-[350px] sm:w-[320px] sm:h-[400px] rounded-2xl overflow-hidden border-2 border-indigo-500/20 dark:border-cyan-400/20 shadow-lg transition-all duration-500 group-hover:border-indigo-500/50 dark:group-hover:border-cyan-400/50 group-hover:shadow-indigo-500/10 dark:group-hover:shadow-cyan-400/10">
                                     <Image
-                                        src="/acpc.jpg" // Your image path
+                                        src="/acpc.jpg" 
                                         alt="Mahmoud Gamal Talat matter"
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-105"
