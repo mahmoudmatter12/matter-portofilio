@@ -7,8 +7,17 @@ import Image from "next/image"
 import { projects } from "@/lib/constants"
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
 
+interface Project {
+  title: string
+  description: string
+  image?: string
+  github: string
+  live?: string
+  tags: string[]
+}
+
 // Optimized ProjectCard component
-const ProjectCard = React.memo(({ project, index }: { project: any; index: number }) => {
+const ProjectCard = React.memo(({ project, index }: { project: Project; index: number }) => {
   const [ref, isInView] = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.1,
     once: true,

@@ -14,7 +14,7 @@ export function useIntersectionObserver<T extends Element>(
 ): [RefObject<T>, boolean] {
   const { root = null, rootMargin = "0px", threshold = 0, once = false } = options
 
-  const ref = useRef<T>(null)
+  const ref = useRef<T>(null) as RefObject<T>
   const [isIntersecting, setIsIntersecting] = useState(false)
 
   useEffect(() => {

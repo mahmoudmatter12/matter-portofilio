@@ -8,6 +8,16 @@ import { useMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
 
+interface item {
+  title: string
+  institution: string
+  location: string
+  year: string
+  description: string
+  icon: React.ReactNode
+  type: string
+  link: string
+}
 // Memoized TimelineItem component
 const TimelineItem = React.memo(function TimelineItem({
   item,
@@ -16,7 +26,7 @@ const TimelineItem = React.memo(function TimelineItem({
   hoveredIndex,
   setHoveredIndex,
 }: {
-  item: any
+  item: item
   index: number
   isMobile: boolean
   hoveredIndex: number | null

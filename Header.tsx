@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { ScrollProgress } from "./components/ScrollProgress"
+import { MyLink } from "./components/MyLink"
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -59,13 +60,13 @@ export function Header() {
             className="hidden md:flex items-center space-x-1"
           >
             {navItems.map((item, index) => (
-              <Link
+              <MyLink
                 key={index}
                 href={item.href}
                 className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors"
               >
                 {item.name}
-              </Link>
+              </MyLink>
             ))}
 
            

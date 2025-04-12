@@ -6,7 +6,7 @@ type CacheEntry<T> = {
   }
   
   class MemoryCache {
-    private cache: Map<string, CacheEntry<any>> = new Map()
+    private cache: Map<string, CacheEntry<unknown>> = new Map()
   
     // Get data from cache if it exists and is not expired
     get<T>(key: string): T | null {
