@@ -23,13 +23,72 @@ export function Header() {
   }, [])
 
 
-  
+
 
   const navItems = [
+    { name: "About", href: "#about" },
+    // { name: "Experience", href: "#experience" },
+    // { name: "Education", href: "#education" },
+    // { name: "Achievements", href: "#achievements" },
+    // { name: "Certifications", href: "#certifications" },
+    // { name: "Testimonials", href: "#testimonials" },
+    // { name: "Awards", href: "#awards" },
+    // { name: "Publications", href: "#publications" },
+    // { name: "Languages", href: "#languages" },
+    // { name: "Interests", href: "#interests" },
+    // { name: "Hobbies", href: "#hobbies" },
+    // { name: "Volunteer", href: "#volunteer" },
+    // { name: "Courses", href: "#courses" },
+    // { name: "References", href: "#references" },
+    // { name: "Soft Skills", href: "#soft-skills" },
+    // { name: "Hard Skills", href: "#hard-skills" },
+    // { name: "Technical Skills", href: "#technical-skills" },
+    // { name: "Professional Skills", href: "#professional-skills" },
+    // { name: "Personal Projects", href: "#personal-projects" },
+    // { name: "Open Source", href: "#open-source" },
+    // { name: "Contributions", href: "#contributions" },
+    // { name: "Community", href: "#community" },
+    // { name: "Mentorship", href: "#mentorship" },
+    // { name: "Workshops", href: "#workshops" },
+    // { name: "Conferences", href: "#conferences" },
+    // { name: "Meetups", href: "#meetups" },
+    // { name: "Hackathons", href: "#hackathons" },
+    // { name: "Competitions", href: "#competitions" },
+    // { name: "Challenges", href: "#challenges" },
+    // { name: "Collaborations", href: "#collaborations" },
+    // { name: "Networking", href: "#networking" },
+    // { name: "Partnerships", href: "#partnerships" },
+    // { name: "Sponsorships", href: "#sponsorships" },
+    // { name: "Grants", href: "#grants" },
+    // { name: "Fellowships", href: "#fellowships" },
+    // { name: "Internships", href: "#internships" },
+    // { name: "Apprenticeships", href: "#apprenticeships" },
+    // { name: "Mentoring", href: "#mentoring" },
+    // { name: "Coaching", href: "#coaching" },
+    // { name: "Training", href: "#training" },
+    // { name: "Workshops", href: "#workshops" },
+    // { name: "Seminars", href: "#seminars" },
+    // { name: "Webinars", href: "#webinars" },
+    // { name: "Podcasts", href: "#podcasts" },
+    // { name: "Blogs", href: "#blogs" },
+    // { name: "Articles", href: "#articles" },
+    // { name: "Books", href: "#books" },
+    // { name: "Research", href: "#research" },
+    // { name: "Public Speaking", href: "#public-speaking" },
+    // { name: "Presentations", href: "#presentations" },
+    // { name: "Workshops", href: "#workshops" },
+    // { name: "Training", href: "#training" },
+    // { name: "Certifications", href: "#certifications" },
+    // { name: "Courses", href: "#courses" },
+    // { name: "Online Courses", href: "#online-courses" },
+    // { name: "E-learning", href: "#e-learning" },
+    // { name: "Self-study", href: "#self-study" },
+    // { name: "Online Learning", href: "#online-learning" },
+    { name: "Time Line", href: "#timeline" },
     { name: "Skills", href: "#skills" },
     { name: "Projects", href: "#projects" },
-    { name: "Timeline", href: "#timeline" },
     { name: "Services", href: "#services" },
+    { name: "Team", href: "#team" },
     { name: "Contact", href: "#contact" },
   ]
 
@@ -68,15 +127,10 @@ export function Header() {
                 {item.name}
               </MyLink>
             ))}
-
-           
           </motion.nav>
-
-        
         </div>
       </div>
       <ScrollProgress />
-
     </header>
   )
 }
