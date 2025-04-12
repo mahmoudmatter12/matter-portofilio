@@ -1,13 +1,17 @@
 "use client"
-import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence, useInView } from "framer-motion"
+import { useState, useEffect, useMemo, useCallback } from "react"
+import React from "react"
+
+import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { Code, Database, Server, Award, Sparkles, ChevronRight, Plus, Monitor } from "lucide-react"
+import { Code, Award, Sparkles, ChevronRight, Plus, Server, Monitor, Database } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { useMobile } from "@/hooks/use-mobile"
+import { memoryCache } from "@/lib/cache-utils"
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
 import { SiTypescript, SiExpress } from "react-icons/si";
 import { IoLogoJavascript } from "react-icons/io5";
 import { FaPython } from "react-icons/fa6";
@@ -26,327 +30,328 @@ import { SiPostman } from "react-icons/si";
 
 // Enhanced skill data with more metadata
 const skillsData = [
-  // Languages
-  {
-    name: "TypeScript",
-    icon: <SiTypescript className="w-5 h-5" />,
-    category: "lang",
-    level: 80,
-    color: "from-blue-600 to-blue-700", // TypeScript blue
-    description: "Static typing for JavaScript",
-    years: 1.5,
-  },
-  {
-    name: "JavaScript",
-    icon: <IoLogoJavascript className="w-5 h-5" />,
-    category: "lang",
-    level: 80,
-    color: "from-yellow-300 to-yellow-500", // JS yellow
-    description: "Web's primary language",
-    years: 2,
-  },
-  {
-    name: "Python",
-    icon: <FaPython className="w-5 h-5" />,
-    category: "lang",
-    level: 70,
-    color: "from-yellow-400 to-blue-500", // Python dual-tone
-    description: "Data science & automation",
-    years: 4,
-  },
-  {
-    name: "Java",
-    icon: <FaJava className="w-5 h-5" />,
-    category: "lang",
-    level: 75,
-    color: "from-orange-600 to-red-500", // Java red-orange tone
-    description: "Enterprise applications",
-    years: 2,
-  },
-  {
-    name: "GoLang",
-    icon: <FaGolang className="w-5 h-5" />,
-    category: "lang",
-    level: 70,
-    color: "from-teal-400 to-teal-600", // Go cyan-ish teal
-    description: "Efficient and scalable programming for backend systems",
-    years: 1,
-  },
-  {
-    name: "C#",
-    icon: <PiFileCSharp className="w-5 h-5" />,
-    category: "lang",
-    level: 70,
-    color: "from-purple-700 to-purple-900", // C# / .NET purple
-    description: "",
-    years: 1,
-  },
-  {
-    name: "C",
-    icon: <Code className="w-5 h-5" />,
-    category: "lang",
-    level: 60,
-    color: "from-gray-600 to-gray-700",
-    description: "Low-level programming language",
-    years: 3,
-  },
-  {
-    name: "C++",
-    icon: <PiFileCppBold className="w-5 h-5" />,
-    category: "lang",
-    level: 65,
-    color: "from-blue-700 to-blue-800", // C++ deep blue
-    description: "Object-oriented programming",
-    years: 2,
-  },
-
-  // Frontend
-  {
-    name: "React",
-    icon: <FaReact className="w-5 h-5" />,
-    category: "frontend",
-    level: 80,
-    color: "from-cyan-400 to-blue-600", // React neon blue
-    description: "UI component library",
-    years: 2,
-  },
-  {
-    name: "Next.js",
-    icon: <RiNextjsFill className="w-5 h-5" />,
-    category: "frontend",
-    level: 80,
-    color: "from-gray-900 to-black", // Next.js black/gray
-    description: "React framework",
-    years: 2,
-  },
-  {
-    name: "Tailwind",
-    icon: <RiTailwindCssFill className="w-5 h-5" />,
-    category: "frontend",
-    level: 80,
-    color: "from-teal-400 to-teal-600", // Tailwind teal
-    description: "Utility-first CSS",
-    years: 2,
-  },
-  {
-    name: "HTML5",
-    icon: <FaHtml5 className="w-5 h-5" />,
-    category: "frontend",
-    level: 90,
-    color: "from-orange-500 to-red-500", // HTML5 orange
-    description: "Markup language for web pages",
-    years: 3,
-  },
-  {
-    name: "CSS",
-    icon: <FaCss3 className="w-5 h-5" />,
-    category: "frontend",
-    level: 90,
-    color: "from-blue-500 to-blue-700", // CSS3 blue
-    description: "Styling",
-    years: 3,
-  },
-  {
-    name: "Bootstrap",
-    icon: <FaBootstrap className="w-5 h-5" />,
-    category: "frontend",
-    level: 90,
-    color: "from-purple-600 to-purple-800", // Bootstrap purple
-    description: "Utility-classes for CSS",
-    years: 2,
-  },
-
-  // Backend
-  {
-    name: "Node.js",
-    icon: <RiNodejsLine className="w-5 h-5" />,
-    category: "backend",
-    level: 80,
-    color: "from-green-500 to-green-700", // Node.js green
-    description: "JavaScript runtime",
-    years: 2,
-  },
-  {
-    name: "Express",
-    icon: <SiExpress className="w-5 h-5" />,
-    category: "backend",
-    level: 85,
-    color: "from-gray-700 to-black", // Express gray/black
-    description: "Web framework for Node.js",
-    years: 2,
-  },
-  {
-    name: "REST API",
-    icon: <Server className="w-5 h-5" />,
-    category: "backend",
-    level: 90,
-    color: "from-indigo-500 to-indigo-700",
-    description: "RESTful architecture",
-    years: 2,
-  },
-
-  // Databases
-  {
-    name: "MongoDB",
-    icon: <DiMongodb className="w-5 h-5" />,
-    category: "db",
-    level: 60,
-    color: "from-green-700 to-green-800", // MongoDB dark green
-    description: "NoSQL database",
-    years: 1,
-  },
-  {
-    name: "PostgreSQL",
-    icon: <DiPostgresql className="w-5 h-5" />,
-    category: "db",
-    level: 80,
-    color: "from-blue-700 to-indigo-700", // PostgreSQL blue
-    description: "Relational database",
-    years: 2,
-  },
-  {
-    name: "Firebase",
-    icon: <RiFirebaseFill className="w-5 h-5" />,
-    category: "db",
-    level: 90,
-    color: "from-yellow-400 to-orange-500", // Firebase yellow-orange
-    description: "Backend-as-a-service",
-    years: 4,
-  },
-  {
-    name: "Supabase",
-    icon: <RiSupabaseLine className="w-5 h-5" />,
-    category: "db",
-    level: 50,
-    color: "from-emerald-500 to-emerald-700", // Supabase green
-    description: "Open-source Firebase alternative",
-    years: 0.5,
-  },
-
-  // DevOps
-  {
-    name: "Docker",
-    icon: <FaDocker className="w-5 h-5" />,
-    category: "devops",
-    level: 40,
-    color: "from-sky-400 to-sky-600", // Docker blue
-    description: "Containerization",
-    years: 0.5,
-  },
-  {
-    name: "Git",
-    icon: <FaGithub className="w-5 h-5" />,
-    category: "devops",
-    level: 95,
-    color: "from-gray-800 to-black", // GitHub black
-    description: "Version control",
-    years: 4,
-  },
-  {
-    name: "VS Code",
-    icon: <VscVscode className="w-5 h-5" />,
-    category: "devops",
-    level: 90,
-    color: "from-blue-500 to-indigo-600", // VS Code blue
-    description: "Code editor",
-    years: 6,
-  },
-  {
-    name: "Post Man",
-    icon: <SiPostman className="w-5 h-5" />,
-    category: "devops",
-    level: 80,
-    color: "from-orange-500 to-orange-600", // Postman orange
-    description: "For testing the APIs",
-    years: 1,
-  },
-]
-
-const certifications = [
-  {
-    title: "AWS Certified",
-    issuer: "Amazon Web Services",
-    year: "2022",
-    icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
-    img: "",
-    color: "from-orange-500 to-yellow-500",
-  },
-  {
-    title: "Google Cloud",
-    issuer: "Google Cloud",
-    year: "2023",
-    icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
-    img: "",
-    color: "from-blue-500 to-cyan-500",
-  },
-  {
-    title: "Microsoft Certified",
-    issuer: "Microsoft",
-    year: "2023",
-    icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
-    img: "",
-    color: "from-purple-500 to-pink-500",
-  },
-]
-
-
-const categoryInfo = {
-  lang: {
-    name: "Languages",
-    icon: <Code className="w-5 h-5 text-sky-400" />,
-    description: "Programming languages I'm proficient in",
-  },
-  frontend: {
-    name: "Frontend",
-    icon: <Monitor className="w-5 h-5 text-sky-400" />,
-    description: "Technologies for building beautiful user interfaces",
-  },
-  backend: {
-    name: "Backend",
-    icon: <Server className="w-5 h-5 text-sky-400" />,
-    description: "Server-side technologies and APIs",
-  },
-  db: {
-    name: "Databases",
-    icon: <Database className="w-5 h-5 text-sky-400" />,
-    description: "Data storage and management solutions",
-  },
-  devops: {
-    name: "DevOps",
-    icon: <VscAzureDevops className="w-5 h-5 text-sky-400" />,
-    description: "Tools for development operations and deployment",
-  },
-}
-
-const categoryArr = [
-  {
-    name: "All",
-    value: "all"
-  },
-  {
-    name: "Languages",
-    value: "lang"
-  },
-  {
-    name: "Frontend",
-    value: "frontend"
-  },
-  {
-    name: "Backend",
-    value: "backend"
-  },
-  {
-    name: "Databases",
-    value: "db"
-  },
-  {
-    name: "DevOps",
-    value: "devops"
+    // Languages
+    {
+      name: "TypeScript",
+      icon: <SiTypescript className="w-5 h-5" />,
+      category: "lang",
+      level: 80,
+      color: "from-blue-600 to-blue-700", // TypeScript blue
+      description: "Static typing for JavaScript",
+      years: 1.5,
+    },
+    {
+      name: "JavaScript",
+      icon: <IoLogoJavascript className="w-5 h-5" />,
+      category: "lang",
+      level: 80,
+      color: "from-yellow-300 to-yellow-500", // JS yellow
+      description: "Web's primary language",
+      years: 2,
+    },
+    {
+      name: "Python",
+      icon: <FaPython className="w-5 h-5" />,
+      category: "lang",
+      level: 70,
+      color: "from-yellow-400 to-blue-500", // Python dual-tone
+      description: "Data science & automation",
+      years: 4,
+    },
+    {
+      name: "Java",
+      icon: <FaJava className="w-5 h-5" />,
+      category: "lang",
+      level: 75,
+      color: "from-orange-600 to-red-500", // Java red-orange tone
+      description: "Enterprise applications",
+      years: 2,
+    },
+    {
+      name: "GoLang",
+      icon: <FaGolang className="w-5 h-5" />,
+      category: "lang",
+      level: 70,
+      color: "from-teal-400 to-teal-600", // Go cyan-ish teal
+      description: "Efficient and scalable programming for backend systems",
+      years: 1,
+    },
+    {
+      name: "C#",
+      icon: <PiFileCSharp className="w-5 h-5" />,
+      category: "lang",
+      level: 70,
+      color: "from-purple-700 to-purple-900", // C# / .NET purple
+      description: "",
+      years: 1,
+    },
+    {
+      name: "C",
+      icon: <Code className="w-5 h-5" />,
+      category: "lang",
+      level: 60,
+      color: "from-gray-600 to-gray-700",
+      description: "Low-level programming language",
+      years: 3,
+    },
+    {
+      name: "C++",
+      icon: <PiFileCppBold className="w-5 h-5" />,
+      category: "lang",
+      level: 65,
+      color: "from-blue-700 to-blue-800", // C++ deep blue
+      description: "Object-oriented programming",
+      years: 2,
+    },
+  
+    // Frontend
+    {
+      name: "React",
+      icon: <FaReact className="w-5 h-5" />,
+      category: "frontend",
+      level: 80,
+      color: "from-cyan-400 to-blue-600", // React neon blue
+      description: "UI component library",
+      years: 2,
+    },
+    {
+      name: "Next.js",
+      icon: <RiNextjsFill className="w-5 h-5" />,
+      category: "frontend",
+      level: 80,
+      color: "from-gray-900 to-black", // Next.js black/gray
+      description: "React framework",
+      years: 2,
+    },
+    {
+      name: "Tailwind",
+      icon: <RiTailwindCssFill className="w-5 h-5" />,
+      category: "frontend",
+      level: 80,
+      color: "from-teal-400 to-teal-600", // Tailwind teal
+      description: "Utility-first CSS",
+      years: 2,
+    },
+    {
+      name: "HTML5",
+      icon: <FaHtml5 className="w-5 h-5" />,
+      category: "frontend",
+      level: 90,
+      color: "from-orange-500 to-red-500", // HTML5 orange
+      description: "Markup language for web pages",
+      years: 3,
+    },
+    {
+      name: "CSS",
+      icon: <FaCss3 className="w-5 h-5" />,
+      category: "frontend",
+      level: 90,
+      color: "from-blue-500 to-blue-700", // CSS3 blue
+      description: "Styling",
+      years: 3,
+    },
+    {
+      name: "Bootstrap",
+      icon: <FaBootstrap className="w-5 h-5" />,
+      category: "frontend",
+      level: 90,
+      color: "from-purple-600 to-purple-800", // Bootstrap purple
+      description: "Utility-classes for CSS",
+      years: 2,
+    },
+  
+    // Backend
+    {
+      name: "Node.js",
+      icon: <RiNodejsLine className="w-5 h-5" />,
+      category: "backend",
+      level: 80,
+      color: "from-green-500 to-green-700", // Node.js green
+      description: "JavaScript runtime",
+      years: 2,
+    },
+    {
+      name: "Express",
+      icon: <SiExpress className="w-5 h-5" />,
+      category: "backend",
+      level: 85,
+      color: "from-gray-700 to-black", // Express gray/black
+      description: "Web framework for Node.js",
+      years: 2,
+    },
+    {
+      name: "REST API",
+      icon: <Server className="w-5 h-5" />,
+      category: "backend",
+      level: 90,
+      color: "from-indigo-500 to-indigo-700",
+      description: "RESTful architecture",
+      years: 2,
+    },
+  
+    // Databases
+    {
+      name: "MongoDB",
+      icon: <DiMongodb className="w-5 h-5" />,
+      category: "db",
+      level: 60,
+      color: "from-green-700 to-green-800", // MongoDB dark green
+      description: "NoSQL database",
+      years: 1,
+    },
+    {
+      name: "PostgreSQL",
+      icon: <DiPostgresql className="w-5 h-5" />,
+      category: "db",
+      level: 80,
+      color: "from-blue-700 to-indigo-700", // PostgreSQL blue
+      description: "Relational database",
+      years: 2,
+    },
+    {
+      name: "Firebase",
+      icon: <RiFirebaseFill className="w-5 h-5" />,
+      category: "db",
+      level: 90,
+      color: "from-yellow-400 to-orange-500", // Firebase yellow-orange
+      description: "Backend-as-a-service",
+      years: 4,
+    },
+    {
+      name: "Supabase",
+      icon: <RiSupabaseLine className="w-5 h-5" />,
+      category: "db",
+      level: 50,
+      color: "from-emerald-500 to-emerald-700", // Supabase green
+      description: "Open-source Firebase alternative",
+      years: 0.5,
+    },
+  
+    // DevOps
+    {
+      name: "Docker",
+      icon: <FaDocker className="w-5 h-5" />,
+      category: "devops",
+      level: 40,
+      color: "from-sky-400 to-sky-600", // Docker blue
+      description: "Containerization",
+      years: 0.5,
+    },
+    {
+      name: "Git",
+      icon: <FaGithub className="w-5 h-5" />,
+      category: "devops",
+      level: 95,
+      color: "from-gray-800 to-black", // GitHub black
+      description: "Version control",
+      years: 4,
+    },
+    {
+      name: "VS Code",
+      icon: <VscVscode className="w-5 h-5" />,
+      category: "devops",
+      level: 90,
+      color: "from-blue-500 to-indigo-600", // VS Code blue
+      description: "Code editor",
+      years: 6,
+    },
+    {
+      name: "Post Man",
+      icon: <SiPostman className="w-5 h-5" />,
+      category: "devops",
+      level: 80,
+      color: "from-orange-500 to-orange-600", // Postman orange
+      description: "For testing the APIs",
+      years: 1,
+    },
+  ]
+  
+  const certifications = [
+    {
+      title: "AWS Certified",
+      issuer: "Amazon Web Services",
+      year: "2022",
+      icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
+      img: "",
+      color: "from-orange-500 to-yellow-500",
+    },
+    {
+      title: "Google Cloud",
+      issuer: "Google Cloud",
+      year: "2023",
+      icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
+      img: "",
+      color: "from-blue-500 to-cyan-500",
+    },
+    {
+      title: "Microsoft Certified",
+      issuer: "Microsoft",
+      year: "2023",
+      icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
+      img: "",
+      color: "from-purple-500 to-pink-500",
+    },
+  ]
+  
+  
+  const categoryInfo = {
+    lang: {
+      name: "Languages",
+      icon: <Code className="w-5 h-5 text-sky-400" />,
+      description: "Programming languages I'm proficient in",
+    },
+    frontend: {
+      name: "Frontend",
+      icon: <Monitor className="w-5 h-5 text-sky-400" />,
+      description: "Technologies for building beautiful user interfaces",
+    },
+    backend: {
+      name: "Backend",
+      icon: <Server className="w-5 h-5 text-sky-400" />,
+      description: "Server-side technologies and APIs",
+    },
+    db: {
+      name: "Databases",
+      icon: <Database className="w-5 h-5 text-sky-400" />,
+      description: "Data storage and management solutions",
+    },
+    devops: {
+      name: "DevOps",
+      icon: <VscAzureDevops className="w-5 h-5 text-sky-400" />,
+      description: "Tools for development operations and deployment",
+    },
   }
-]
+  
+  const categoryArr = [
+    {
+      name: "All",
+      value: "all"
+    },
+    {
+      name: "Languages",
+      value: "lang"
+    },
+    {
+      name: "Frontend",
+      value: "frontend"
+    },
+    {
+      name: "Backend",
+      value: "backend"
+    },
+    {
+      name: "Databases",
+      value: "db"
+    },
+    {
+      name: "DevOps",
+      value: "devops"
+    }
+  ]
+  
 
-// Hexagon skill component using only Tailwind
-function SelectedSkill({
+// Memoized Hexagon skill component
+const SelectedSkill = React.memo(function SelectedSkill({
   skill,
   index,
   onClick,
@@ -357,12 +362,14 @@ function SelectedSkill({
   onClick: () => void
   isSelected: boolean
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2 })
+  const [ref, isInView] = useIntersectionObserver<HTMLDivElement>({
+    threshold: 0.1,
+    once: true,
+  })
 
   // Hexagon clip path
   const clipPath = "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)"
-  console.log("test")
+
   return (
     <motion.div
       ref={ref}
@@ -370,7 +377,7 @@ function SelectedSkill({
       animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
       transition={{
         duration: 0.4,
-        delay: index * 0.05,
+        delay: Math.min(index * 0.05, 0.5), // Cap the delay to avoid long waits
         type: "spring",
         stiffness: 100,
       }}
@@ -403,7 +410,7 @@ function SelectedSkill({
                 className="h-full bg-white"
                 initial={{ width: 0 }}
                 animate={isInView ? { width: `${skill.level}%` } : { width: 0 }}
-                transition={{ duration: 1, delay: 0.5 + index * 0.05 }}
+                transition={{ duration: 1, delay: 0.5 + Math.min(index * 0.05, 0.5) }}
               />
             </div>
           </div>
@@ -414,10 +421,10 @@ function SelectedSkill({
       </div>
     </motion.div>
   )
-}
+})
 
-// Skill detail card component
-function SkillDetailCard({ skill }: { skill: (typeof skillsData)[0] | null }) {
+// Memoized Skill detail card component
+const SkillDetailCard = React.memo(function SkillDetailCard({ skill }: { skill: (typeof skillsData)[0] | null }) {
   if (!skill) return null
 
   return (
@@ -428,7 +435,6 @@ function SkillDetailCard({ skill }: { skill: (typeof skillsData)[0] | null }) {
       transition={{ duration: 0.3 }}
       className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-xl p-6 shadow-xl"
     >
-      
       <div className="flex items-start gap-4">
         <div className={`p-3 rounded-xl bg-gradient-to-br ${skill.color}`}>{skill.icon}</div>
         <div>
@@ -477,46 +483,57 @@ function SkillDetailCard({ skill }: { skill: (typeof skillsData)[0] | null }) {
       </div>
     </motion.div>
   )
-}
+})
 
-// Certification card component
-function CertificationCard({ cert, index }: { cert: (typeof certifications)[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2 })
+// Memoized Certification card component
+const CertificationCard = React.memo(function CertificationCard({
+  cert,
+  index,
+}: { cert: (typeof certifications)[0]; index: number }) {
+  const [ref, isInView] = useIntersectionObserver<HTMLDivElement>({
+    threshold: 0.1,
+    once: true,
+  })
 
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ delay: index * 0.1 }}
+      transition={{ delay: Math.min(index * 0.1, 0.5) }}
       whileHover={{ y: -5 }}
-      className="group"
+      className="group flex flex-col h-full"
     >
-      <div className="relative rounded-2xl overflow-hidden">
+      {/* Glowing border container */}
+      <div className="relative rounded-2xl overflow-hidden flex-1 flex flex-col">
         {/* Glowing border effect */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-500 to-cyan-500 rounded-2xl opacity-30 blur-sm group-hover:opacity-100 group-hover:blur-md transition duration-500"></div>
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-sky-500 to-cyan-500 rounded-2xl opacity-30 blur-sm group-hover:opacity-100 group-hover:blur-md transition duration-500" />
 
-        <div className="relative h-full rounded-2xl bg-gray-900 overflow-hidden">
-          {/* Certificate image */}
-          <div className="relative h-32 overflow-hidden">
+        {/* Main card content */}
+        <div className="relative flex-1 flex flex-col rounded-2xl bg-gray-900 overflow-hidden">
+          {/* Certificate image - Full width at top */}
+          <div className="relative aspect-video w-full overflow-hidden">
             <Image
               src={cert.img || "/placeholder-certificate.svg"}
               alt={cert.title}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 400px"
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent" />
             <Badge
               variant="outline"
-              className="absolute top-2 right-2 text-xs bg-gray-900/70 border-gray-700 text-gray-300"
+              className="absolute top-3 right-3 text-xs bg-gray-900/70 border-gray-700 text-gray-300"
             >
               {cert.year}
             </Badge>
           </div>
 
-          {/* Certificate content */}
-          <div className="p-5">
+          {/* Certificate content - Below image */}
+          <div className="flex-1 flex flex-col p-5">
             <div className="flex items-start gap-3 mb-3">
               <div className={`p-2 rounded-lg bg-gradient-to-br ${cert.color} flex-shrink-0`}>{cert.icon}</div>
               <div>
@@ -525,31 +542,55 @@ function CertificationCard({ cert, index }: { cert: (typeof certifications)[0]; 
               </div>
             </div>
 
-            <div className="flex items-center text-xs text-sky-400 hover:underline cursor-pointer group-hover:translate-x-1 transition-transform">
-              <span>View credential</span>
-              <ChevronRight className="w-3 h-3 ml-1 group-hover:ml-2 transition-all" />
+            {/* Link at bottom */}
+            <div className="mt-auto pt-3">
+              <div className="flex items-center text-sm text-sky-400 hover:underline cursor-pointer group-hover:translate-x-1 transition-transform">
+                <span>View credential</span>
+                <ChevronRight className="w-3 h-3 ml-1 group-hover:ml-2 transition-all" />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </motion.div>
   )
-}
+})
+
+// Cache key for filtered skills
+const getFilteredSkillsCacheKey = (activeTab: string) => `filteredSkills:${activeTab}`
 
 // Update the TechStackSection component to include the show more functionality
-export function TechStackSection() {
+export function TechStackSectionOpt() {
   const [activeTab, setActiveTab] = useState("all")
   const [selectedSkill, setSelectedSkill] = useState<(typeof skillsData)[0] | null>(null)
-  const [visibleSkills, setVisibleSkills] = useState(5)
+  const [visibleSkills, setVisibleSkills] = useState(6)
   const isMobile = useMobile()
-
-  // Filter skills based on active tab
-  const filteredSkills = skillsData.filter((skill) => {
-    return activeTab === "all" || skill.category === activeTab
+  const [sectionRef, isSectionInView] = useIntersectionObserver<HTMLElement>({
+    threshold: 0.1,
+    once: true,
   })
 
+  // Memoized filtered skills with caching
+  const filteredSkills = useMemo(() => {
+    const cacheKey = getFilteredSkillsCacheKey(activeTab)
+    const cached = memoryCache.get<typeof skillsData>(cacheKey)
+
+    if (cached) {
+      return cached
+    }
+
+    const filtered = skillsData.filter((skill) => {
+      return activeTab === "all" || skill.category === activeTab
+    })
+
+    memoryCache.set(cacheKey, filtered, 60 * 60 * 1000) // Cache for 1 hour
+    return filtered
+  }, [activeTab])
+
   // Determine how many skills to show
-  const displayedSkills = isMobile ? filteredSkills.slice(0, visibleSkills) : filteredSkills
+  const displayedSkills = useMemo(() => {
+    return isMobile ? filteredSkills.slice(0, visibleSkills) : filteredSkills
+  }, [filteredSkills, isMobile, visibleSkills])
 
   // Reset selected skill when changing tabs
   useEffect(() => {
@@ -558,24 +599,31 @@ export function TechStackSection() {
   }, [activeTab])
 
   // Handle showing more skills
-  const handleShowMore = () => {
+  const handleShowMore = useCallback(() => {
     setVisibleSkills((prev) => Math.min(prev + 6, filteredSkills.length))
-  }
+  }, [filteredSkills.length])
 
-  return (
-    <section className="relative py-24 overflow-hidden">
-      {/* Animated background */}
+  // Memoize background elements
+  const BackgroundElements = useMemo(
+    () => (
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.15),transparent_50%)]" />
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-3xl opacity-20" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl opacity-20" />
       </div>
+    ),
+    [],
+  )
+
+  return (
+    <section id="skills" ref={sectionRef} className="relative py-24 overflow-hidden">
+      {/* Animated background */}
+      {BackgroundElements}
 
       <div className="container mx-auto px-4 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={isSectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
@@ -707,7 +755,7 @@ export function TechStackSection() {
             ))}
             {certifications.length === 0 && (
               <div className="col-span-1 md:col-span-2 lg:col-span-4">
-                <p className="text-gray-400 text-center">No certifications Attatched yet</p>
+                <p className="text-gray-400 text-center">No certifications attached yet</p>
               </div>
             )}
           </div>

@@ -1,0 +1,119 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Deep space background -->
+  <rect width="1200" height="800" fill="#020617" />
+  
+  <!-- Blurred cosmic elements -->
+  <g filter="url(#blurFilter)">
+    <!-- Distant galaxies -->
+    <circle cx="200" cy="150" r="80" fill="url(#galaxy1)" opacity="0.6" />
+    <circle cx="1000" cy="250" r="120" fill="url(#galaxy2)" opacity="0.5" />
+    
+    <!-- Nebula clouds -->
+    <path d="M400 100C450 200 500 150 600 100C700 50 800 150 900 100" stroke="url(#nebula1)" stroke-width="120" stroke-linecap="round" opacity="0.4" />
+    <path d="M300 600C400 500 500 650 700 550C900 450 1000 600 1100 500" stroke="url(#nebula2)" stroke-width="150" stroke-linecap="round" opacity="0.3" />
+    
+    <!-- Star clusters -->
+    <circle cx="150" cy="700" r="60" fill="url(#starCluster1)" opacity="0.7" />
+    <circle cx="900" cy="650" r="90" fill="url(#starCluster2)" opacity="0.5" />
+  </g>
+  
+  <!-- Floating space elements -->
+  <g filter="url(#glowFilter)">
+    <!-- Animated planets -->
+    <circle cx="250" cy="500" r="40" fill="url(#planet1)">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 0,-10; 0,0" dur="8s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="950" cy="300" r="30" fill="url(#planet2)">
+      <animateTransform attributeName="transform" type="translate" values="0,0; 5,-5; 0,0" dur="10s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Satellites -->
+    <path d="M600 200L620 220" stroke="#7DD3FC" stroke-width="3" stroke-linecap="round">
+      <animateTransform attributeName="transform" type="rotate" from="0 600 200" to="360 600 200" dur="20s" repeatCount="indefinite" />
+    </path>
+  </g>
+  
+  <!-- Main title with cosmic gradient -->
+  <text x="600" y="380" font-family="Arial" font-size="120" font-weight="bold" text-anchor="middle" fill="url(#titleGradient)" letter-spacing="2">
+    MAHMOUD MATTER
+  </text>
+  
+  <!-- Subtitle with animated glow -->
+  <text x="600" y="450" font-family="Arial" font-size="48" font-weight="medium" text-anchor="middle" fill="url(#subtitleGradient)">
+    <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" />
+    Software Solutions
+  </text>
+  
+  <!-- Binary code particles -->
+  <text x="600" y="700" font-family="Courier New" font-size="14" text-anchor="middle" fill="#7DD3FC" opacity="0.3">
+    01101101 01100001 01101000 01101101 01101111 01110101 01100100
+  </text>
+  
+  <!-- Filters and Gradients -->
+  <defs>
+    <!-- Blur filter for background elements -->
+    <filter id="blurFilter" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" />
+    </filter>
+    
+    <!-- Glow filter -->
+    <filter id="glowFilter" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <!-- Cosmic gradients -->
+    <radialGradient id="galaxy1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(200 150) rotate(0) scale(80)">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0" />
+    </radialGradient>
+    
+    <radialGradient id="galaxy2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 250) rotate(45) scale(120)">
+      <stop offset="0%" stop-color="#7DD3FC" />
+      <stop offset="100%" stop-color="#6366F1" stop-opacity="0" />
+    </radialGradient>
+    
+    <linearGradient id="nebula1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22D3EE" />
+      <stop offset="100%" stop-color="#7DD3FC" />
+    </linearGradient>
+    
+    <linearGradient id="nebula2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#22D3EE" />
+    </linearGradient>
+    
+    <radialGradient id="starCluster1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(150 700) rotate(0) scale(60)">
+      <stop offset="0%" stop-color="#7DD3FC" />
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0" />
+    </radialGradient>
+    
+    <radialGradient id="starCluster2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(900 650) rotate(45) scale(90)">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#7DD3FC" stop-opacity="0" />
+    </radialGradient>
+    
+    <!-- Planet gradients -->
+    <radialGradient id="planet1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 500) rotate(0) scale(40)">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#22D3EE" />
+    </radialGradient>
+    
+    <radialGradient id="planet2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(950 300) rotate(45) scale(30)">
+      <stop offset="0%" stop-color="#7DD3FC" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </radialGradient>
+    
+    <!-- Text gradients -->
+    <linearGradient id="titleGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7DD3FC" />
+      <stop offset="50%" stop-color="#22D3EE" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+    
+    <linearGradient id="subtitleGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22D3EE" />
+      <stop offset="100%" stop-color="#7DD3FC" />
+    </linearGradient>
+  </defs>
+</svg>

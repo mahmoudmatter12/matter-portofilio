@@ -1,14 +1,16 @@
 "use client"
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Projects } from "@/components/Projects"
-import { Timeline } from "@/components/Timeline"
 import { Services } from "@/components/Services"
 import { Contact } from "@/components/Contact"
 import { Hero } from "@/components/HeroSection"
 import { About } from "@/components/AboutSection"
-import { TechStackSection } from "@/components/SkillsAndCertifications"
 import { SpaceLoader } from "@/components/Loader"
+import { Footer } from "@/components/Footer"
+import { TeamCarousel } from "@/components/TeamCarousel"
+import { ProjectsOpt } from "@/components/ProjectsOpimites"
+import { TechStackSectionOpt } from "@/components/tech-stack-section-optimized"
+import { TimelineOPT } from "@/components/timeline-optimized"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -41,11 +43,13 @@ export default function Home() {
         >
           <Hero />
           <About />
-          <TechStackSection />
-          <Projects />
-          <Timeline />
+          <TimelineOPT />
+          <TechStackSectionOpt />
+          <ProjectsOpt />
           <Services />
+          <TeamCarousel />
           <Contact />
+          <Footer />
         </motion.div>
       )}
     </AnimatePresence>

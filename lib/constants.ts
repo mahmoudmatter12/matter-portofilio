@@ -38,6 +38,7 @@ export const projects = [
     tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
     github: "https://github.com/yourusername/portfolio",
     live: "https://yourportfolio.com",
+    image: "",
   },
   {
     title: "E-Commerce Platform",
@@ -45,6 +46,7 @@ export const projects = [
     tags: ["Next.js", "Node.js", "Stripe", "MongoDB"],
     github: "https://github.com/yourusername/ecommerce",
     live: "https://store.example.com",
+    image: "",
   },
   {
     title: "Task Management App",
@@ -52,5 +54,6 @@ export const projects = [
     tags: ["React", "Firebase", "React DnD"],
     github: "https://github.com/yourusername/task-manager",
     live: "https://tasks.example.com",
+    image: "",
   }
 ]

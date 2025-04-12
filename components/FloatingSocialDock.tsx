@@ -1,20 +1,22 @@
 "use client"
 import { useState, useEffect } from "react"
 import React from "react"
+import { FaTimeline } from "react-icons/fa6";
+import { SiSkillshare } from "react-icons/si";
+import { MdMiscellaneousServices } from "react-icons/md";
+import { AiOutlineTeam } from "react-icons/ai";
+import { FaSquareUpwork } from "react-icons/fa6";
+import { FaWhatsapp } from "react-icons/fa";
 
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Github,
   Linkedin,
   Mail,
-  Twitter,
   Instagram,
-  MessageSquare,
-  Briefcase,
   Home,
   User,
   Folder,
-  Code,
   ChevronRight,
   X,
 } from "lucide-react"
@@ -93,14 +95,29 @@ export function FloatingSocialDock() {
       href: "#about",
     },
     {
+      title: "Timeline",
+      icon: <FaTimeline className="h-5 w-5" />,
+      href: "#timeline",
+    },
+    {
       title: "Skills",
-      icon: <Code className="h-5 w-5" />,
+      icon: <SiSkillshare className="h-5 w-5" />,
       href: "#skills",
     },
     {
       title: "Projects",
       icon: <Folder className="h-5 w-5" />,
       href: "#projects",
+    },
+    {
+      title: "Services",
+      icon: <MdMiscellaneousServices className="h-5 w-5" />,
+      href: "#services",
+    },
+    {
+      title: "Team",
+      icon: <AiOutlineTeam className="h-5 w-5" />,
+      href: "#team",
     },
     {
       title: "Contact",
@@ -113,32 +130,27 @@ export function FloatingSocialDock() {
     {
       title: "GitHub",
       icon: <Github className="h-5 w-5" />,
-      href: "https://github.com/yourusername",
+      href: "https://github.com/mahmoudmatter12",
     },
     {
       title: "LinkedIn",
       icon: <Linkedin className="h-5 w-5" />,
-      href: "https://linkedin.com/in/yourprofile",
-    },
-    {
-      title: "Twitter",
-      icon: <Twitter className="h-5 w-5" />,
-      href: "https://twitter.com/yourhandle",
+      href: "https://linkedin.com/in/mahmoudmatter",
     },
     {
       title: "Instagram",
       icon: <Instagram className="h-5 w-5" />,
-      href: "https://instagram.com/yourprofile",
+      href: "https://www.instagram.com/mahmoud_mater_",
     },
     {
       title: "WhatsApp",
-      icon: <MessageSquare className="h-5 w-5" />,
-      href: "https://wa.me/yourphonenumber",
+      icon: <FaWhatsapp className="h-5 w-5" />,
+      href: "https://wa.me/+201100108253",
     },
     {
       title: "Upwork",
-      icon: <Briefcase className="h-5 w-5" />,
-      href: "https://upwork.com/freelancers/~yourprofile",
+      icon: <FaSquareUpwork className="h-5 w-5" />,
+      href: "https://www.upwork.com/freelancers/~01d16f0d4d25be61d2",
     },
   ]
 

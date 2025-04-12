@@ -7,7 +7,7 @@ import { useMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { Code, Monitor, Server, Sparkles, ArrowRight,  ExternalLink } from "lucide-react"
 
-export function About() { // Todo: Archive
+export function About() { 
     const isMobile = useMobile()
     const [isHovered, setIsHovered] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
