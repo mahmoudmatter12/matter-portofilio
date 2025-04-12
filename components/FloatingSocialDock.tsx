@@ -6,7 +6,8 @@ import { SiSkillshare } from "react-icons/si";
 import { MdMiscellaneousServices } from "react-icons/md";
 import { AiOutlineTeam } from "react-icons/ai";
 import { FaSquareUpwork } from "react-icons/fa6";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaRegArrowAltCircleLeft, FaWhatsapp } from "react-icons/fa";
+import { FaRegArrowAltCircleRight } from "react-icons/fa";
 
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -163,7 +164,7 @@ export function FloatingSocialDock() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => setHidden(!hidden)}
-          className="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 text-white shadow-lg"
+          className="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 text-white shadow-lg opacity-40 "
         >
           {hidden ? <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5" /> : <X className="h-4 w-4 sm:h-5 sm:w-5" />}
         </motion.button>
@@ -173,9 +174,9 @@ export function FloatingSocialDock() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => setHidden(!hidden)}
-          className="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 text-white shadow-lg"
+          className="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 text-white shadow-lg opacity-40 hover:opacity-100 transition-opacity duration-300"
         >
-          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+          {hidden ? <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" /> : <X className="h-4 w-4 sm:h-5 sm:w-5" />}
         </motion.button>
       </div>
 
@@ -242,17 +243,17 @@ export function FloatingSocialDock() {
 
                 {/* Social links */}
                 <motion.div
-                  animate={{ rotate: expanded ? 180 : 0 }}
+                  animate={{ rotate: expanded ? 180 : 180 }}
                   className="h-10 w-[1px] bg-gray-200 dark:bg-gray-700 mx-1"
                 />
 
                 <motion.button
-                  whileHover={{ rotate: expanded ? 0 : 90 }}
+                  whileHover={{ rotate: expanded ? -90 : 90 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setExpanded(!expanded)}
                   className="p-3 rounded-full hover:bg-indigo-100/50 dark:hover:bg-gray-700 text-indigo-500 dark:text-cyan-400"
                 >
-                  {expanded ? <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5"/> : <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />}
+                  {expanded ? <FaRegArrowAltCircleLeft /> : <FaRegArrowAltCircleRight />  }
                 </motion.button>
 
                 <AnimatePresence>
