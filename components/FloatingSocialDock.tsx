@@ -19,6 +19,8 @@ import {
   Folder,
   ChevronRight,
   X,
+  ChevronDown,
+  ChevronLeft,
 } from "lucide-react"
 
 export function FloatingSocialDock() {
@@ -86,42 +88,42 @@ export function FloatingSocialDock() {
   const links = [
     {
       title: "Home",
-      icon: <Home className="h-5 w-5" />,
+      icon: <Home className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "#home",
     },
     {
       title: "About",
-      icon: <User className="h-5 w-5" />,
+      icon: <User className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "#about",
     },
     {
       title: "Timeline",
-      icon: <FaTimeline className="h-5 w-5" />,
+      icon: <FaTimeline className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "#timeline",
     },
     {
       title: "Skills",
-      icon: <SiSkillshare className="h-5 w-5" />,
+      icon: <SiSkillshare className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "#skills",
     },
     {
       title: "Projects",
-      icon: <Folder className="h-5 w-5" />,
+      icon: <Folder className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "#projects",
     },
     {
       title: "Services",
-      icon: <MdMiscellaneousServices className="h-5 w-5" />,
+      icon: <MdMiscellaneousServices className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "#services",
     },
     {
       title: "Team",
-      icon: <AiOutlineTeam className="h-5 w-5" />,
+      icon: <AiOutlineTeam className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "#team",
     },
     {
       title: "Contact",
-      icon: <Mail className="h-5 w-5" />,
+      icon: <Mail className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "#contact",
     },
   ]
@@ -129,27 +131,27 @@ export function FloatingSocialDock() {
   const socialLinks = [
     {
       title: "GitHub",
-      icon: <Github className="h-5 w-5" />,
+      icon: <Github className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "https://github.com/mahmoudmatter12",
     },
     {
       title: "LinkedIn",
-      icon: <Linkedin className="h-5 w-5" />,
+      icon: <Linkedin className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "https://linkedin.com/in/mahmoudmatter",
     },
     {
       title: "Instagram",
-      icon: <Instagram className="h-5 w-5" />,
+      icon: <Instagram className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "https://www.instagram.com/mahmoud_mater_",
     },
     {
       title: "WhatsApp",
-      icon: <FaWhatsapp className="h-5 w-5" />,
+      icon: <FaWhatsapp className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "https://wa.me/+201100108253",
     },
     {
       title: "Upwork",
-      icon: <FaSquareUpwork className="h-5 w-5" />,
+      icon: <FaSquareUpwork className="h-4 w-4 sm:h-5 sm:w-5" />,
       href: "https://www.upwork.com/freelancers/~01d16f0d4d25be61d2",
     },
   ]
@@ -157,13 +159,23 @@ export function FloatingSocialDock() {
   return (
     <>
       {/* Mobile Toggle Button (hidden on desktop) */}
-      <div className="fixed bottom-6 right-6 z-50 sm:hidden">
+      <div className="fixed top-15 sm:top-auto sm:hidden right-6 z-50">
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => setHidden(!hidden)}
           className="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 text-white shadow-lg"
         >
-          {hidden ? <ChevronRight className="h-5 w-5" /> : <X className="h-5 w-5" />}
+          {hidden ? <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5" /> : <X className="h-4 w-4 sm:h-5 sm:w-5" />}
+        </motion.button>
+      </div>
+
+      <div className="fixed top-15 sm:top-auto bottom-6 right-6 z-50">
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setHidden(!hidden)}
+          className="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 text-white shadow-lg"
+        >
+          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.button>
       </div>
 
@@ -207,21 +219,19 @@ export function FloatingSocialDock() {
                     className={`
                       p-3 rounded-full flex items-center justify-center
                       transition-colors
-                      ${
-                        activeHash === item.href || (item.href === "#home" && activeHash === "")
-                          ? "bg-gradient-to-r from-indigo-500/20 to-cyan-400/20"
-                          : "hover:bg-indigo-100/50 dark:hover:bg-gray-700"
+                      ${activeHash === item.href || (item.href === "#home" && activeHash === "")
+                        ? "bg-gradient-to-r from-indigo-500/20 to-cyan-400/20"
+                        : "hover:bg-indigo-100/50 dark:hover:bg-gray-700"
                       }
                     `}
                     aria-label={item.title}
                   >
                     <div className="relative group">
                       {React.cloneElement(item.icon, {
-                        className: `h-5 w-5 ${
-                          activeHash === item.href || (item.href === "#home" && activeHash === "")
+                        className: `h-4 w-4 sm:h-5 sm:w-5 ${activeHash === item.href || (item.href === "#home" && activeHash === "")
                             ? "text-indigo-600 dark:text-cyan-400"
                             : "text-indigo-500 dark:text-cyan-400"
-                        }`,
+                          }`,
                       })}
                       <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 text-xs font-medium bg-gray-800 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         {item.title}
@@ -242,7 +252,7 @@ export function FloatingSocialDock() {
                   onClick={() => setExpanded(!expanded)}
                   className="p-3 rounded-full hover:bg-indigo-100/50 dark:hover:bg-gray-700 text-indigo-500 dark:text-cyan-400"
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  {expanded ? <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5"/> : <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />}
                 </motion.button>
 
                 <AnimatePresence>
@@ -267,7 +277,7 @@ export function FloatingSocialDock() {
                         >
                           <div className="relative group">
                             {React.cloneElement(item.icon, {
-                              className: "h-5 w-5 text-indigo-500 dark:text-cyan-400",
+                              className: "h-4 w-4 sm:h-5 sm:w-5 text-indigo-500 dark:text-cyan-400",
                             })}
                             <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 text-xs font-medium bg-gray-800 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                               {item.title}
@@ -292,7 +302,7 @@ export function FloatingSocialDock() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex sm:hidden"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex max-w-[95vw] sm:hidden overflow-auto custom-scrollbar"
           >
             <motion.div
               animate={{
@@ -316,19 +326,17 @@ export function FloatingSocialDock() {
                     }}
                     className={`
                       p-3 rounded-full flex items-center justify-center
-                      ${
-                        activeHash === item.href || (item.href === "#home" && activeHash === "")
-                          ? "bg-gradient-to-r from-indigo-500/20 to-cyan-400/20"
-                          : "hover:bg-indigo-100/50 dark:hover:bg-gray-700"
+                      ${activeHash === item.href || (item.href === "#home" && activeHash === "")
+                        ? "bg-gradient-to-r from-indigo-500/20 to-cyan-400/20"
+                        : "hover:bg-indigo-100/50 dark:hover:bg-gray-700"
                       }
                     `}
                   >
                     {React.cloneElement(item.icon, {
-                      className: `h-5 w-5 ${
-                        activeHash === item.href || (item.href === "#home" && activeHash === "")
+                      className: `h-4 w-4 sm:h-5 sm:w-5 ${activeHash === item.href || (item.href === "#home" && activeHash === "")
                           ? "text-indigo-600 dark:text-cyan-400"
                           : "text-indigo-500 dark:text-cyan-400"
-                      }`,
+                        }`,
                     })}
                   </motion.button>
                 ))}
@@ -338,9 +346,8 @@ export function FloatingSocialDock() {
                   className="p-3 rounded-full hover:bg-indigo-100/50 dark:hover:bg-gray-700"
                 >
                   <ChevronRight
-                    className={`h-5 w-5 text-indigo-500 dark:text-cyan-400 transition-transform ${
-                      expanded ? "rotate-90" : ""
-                    }`}
+                    className={`h-4 w-4 sm:h-5 sm:w-5 text-indigo-500 dark:text-cyan-400 transition-transform ${expanded ? "rotate-90" : ""
+                      }`}
                   />
                 </motion.button>
               </div>
@@ -367,7 +374,7 @@ export function FloatingSocialDock() {
                           className="p-2 rounded-full hover:bg-indigo-100/50 dark:hover:bg-gray-700"
                         >
                           {React.cloneElement(item.icon, {
-                            className: "h-5 w-5 text-indigo-500 dark:text-cyan-400",
+                            className: "h-4 w-4 sm:h-5 sm:w-5 text-indigo-500 dark:text-cyan-400",
                           })}
                         </motion.a>
                       ))}

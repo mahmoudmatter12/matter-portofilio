@@ -120,17 +120,20 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --animate-meteor: meteor 5s linear infinite;
+
   @keyframes meteor {
-  0% {
-    transform: rotate(var(--angle)) translateX(0);
-    opacity: 1;
+    0% {
+      transform: rotate(var(--angle)) translateX(0);
+      opacity: 1;
     }
-  70% {
-    opacity: 1;
+
+    70% {
+      opacity: 1;
     }
-  100% {
-    transform: rotate(var(--angle)) translateX(-500px);
-    opacity: 0;
+
+    100% {
+      transform: rotate(var(--angle)) translateX(-500px);
+      opacity: 0;
     }
   }
 }
@@ -140,6 +143,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground transition-colors duration-300;
   }
@@ -147,8 +151,15 @@
 
 /* Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
 }
 
 /* Utility Classes */
@@ -157,7 +168,7 @@
 }
 
 .grid-pattern {
-  background-image: 
+  background-image:
     linear-gradient(to right, currentColor 1px, transparent 1px),
     linear-gradient(to bottom, currentColor 1px, transparent 1px);
   background-size: 40px 40px;
@@ -172,6 +183,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -193,6 +205,7 @@
 }
 
 @layer components {
+
   /* Hexagon grid layout */
   .hexagon-grid {
     display: grid;
@@ -215,7 +228,8 @@
   /* Hexagon shape */
   .hexagon-container {
     width: 100%;
-    padding-bottom: 115%; /* Maintain aspect ratio */
+    padding-bottom: 115%;
+    /* Maintain aspect ratio */
     position: relative;
   }
 
@@ -251,4 +265,13 @@
     justify-content: center;
     z-index: 1;
   }
+}
+
+.custom-scrollbar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
