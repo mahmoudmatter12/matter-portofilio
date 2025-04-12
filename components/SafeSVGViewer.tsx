@@ -137,7 +137,12 @@ export function DynamicPoster({
         dangerouslySetInnerHTML={{ __html: svgContent }}
         className="w-full h-full"
         style={{
-          transform: `scale(${Math.min(width / 1200, height / 800)})`,
+          transform: `scale(${Math.min(width /1250, height / 100)}) translate(-50%, -50%)`,
+          position: 'absolute',
+          top: '19%',
+          left: '50%',
+          width: '1250px',
+          height: '100%',
           transformOrigin: 'top left'
         }}
       />
