@@ -2,106 +2,176 @@
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence, useInView } from "framer-motion"
 import Image from "next/image"
-import { Code, Database, GitBranch, Monitor, Server, Award, Sparkles, ChevronRight, Plus } from "lucide-react"
+import { Code, Database, Server, Award, Sparkles, ChevronRight, Plus, Monitor } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { useMobile } from "@/hooks/use-mobile"
+import { SiTypescript, SiExpress } from "react-icons/si";
+import { IoLogoJavascript } from "react-icons/io5";
+import { FaPython } from "react-icons/fa6";
+import { FaJava, FaReact, FaHtml5, FaDocker, FaGithub } from "react-icons/fa";
+import { RiNextjsFill, RiNodejsLine, RiTailwindCssFill, RiFirebaseFill, RiSupabaseLine } from "react-icons/ri";
+import { DiMongodb, DiPostgresql } from "react-icons/di";
+import { VscVscode, VscAzureDevops } from "react-icons/vsc";
+import { AiFillSafetyCertificate } from "react-icons/ai";
+import { FaGolang } from "react-icons/fa6";
+import { PiFileCSharp } from "react-icons/pi";
+import { PiFileCppBold } from "react-icons/pi";
+import { FaCss3 } from "react-icons/fa";
+import { FaBootstrap } from "react-icons/fa";
+import { SiPostman } from "react-icons/si";
+
+
 // Enhanced skill data with more metadata
 const skillsData = [
   // Languages
   {
     name: "TypeScript",
-    icon: <Code className="w-5 h-5" />,
+    icon: <SiTypescript className="w-5 h-5" />,
     category: "lang",
     level: 80,
-    color: "from-blue-500 to-blue-600",
+    color: "from-blue-600 to-blue-700", // TypeScript blue
     description: "Static typing for JavaScript",
     years: 1.5,
   },
   {
     name: "JavaScript",
-    icon: <Code className="w-5 h-5" />,
+    icon: <IoLogoJavascript className="w-5 h-5" />,
     category: "lang",
     level: 80,
-    color: "from-yellow-400 to-yellow-500",
+    color: "from-yellow-300 to-yellow-500", // JS yellow
     description: "Web's primary language",
     years: 2,
   },
   {
     name: "Python",
-    icon: <Code className="w-5 h-5" />,
+    icon: <FaPython className="w-5 h-5" />,
     category: "lang",
     level: 70,
-    color: "from-blue-600 to-green-500",
+    color: "from-yellow-400 to-blue-500", // Python dual-tone
     description: "Data science & automation",
     years: 4,
   },
   {
     name: "Java",
-    icon: <Code className="w-5 h-5" />,
+    icon: <FaJava className="w-5 h-5" />,
     category: "lang",
     level: 75,
-    color: "from-red-500 to-orange-500",
+    color: "from-orange-600 to-red-500", // Java red-orange tone
     description: "Enterprise applications",
+    years: 2,
+  },
+  {
+    name: "GoLang",
+    icon: <FaGolang className="w-5 h-5" />,
+    category: "lang",
+    level: 70,
+    color: "from-teal-400 to-teal-600", // Go cyan-ish teal
+    description: "Efficient and scalable programming for backend systems",
+    years: 1,
+  },
+  {
+    name: "C#",
+    icon: <PiFileCSharp className="w-5 h-5" />,
+    category: "lang",
+    level: 70,
+    color: "from-purple-700 to-purple-900", // C# / .NET purple
+    description: "",
+    years: 1,
+  },
+  {
+    name: "C",
+    icon: <Code className="w-5 h-5" />,
+    category: "lang",
+    level: 60,
+    color: "from-gray-600 to-gray-700",
+    description: "Low-level programming language",
+    years: 3,
+  },
+  {
+    name: "C++",
+    icon: <PiFileCppBold className="w-5 h-5" />,
+    category: "lang",
+    level: 65,
+    color: "from-blue-700 to-blue-800", // C++ deep blue
+    description: "Object-oriented programming",
     years: 2,
   },
 
   // Frontend
   {
     name: "React",
-    icon: <Monitor className="w-5 h-5" />,
+    icon: <FaReact className="w-5 h-5" />,
     category: "frontend",
     level: 80,
-    color: "from-cyan-400 to-blue-500",
+    color: "from-cyan-400 to-blue-600", // React neon blue
     description: "UI component library",
     years: 2,
   },
   {
     name: "Next.js",
-    icon: <Monitor className="w-5 h-5" />,
+    icon: <RiNextjsFill className="w-5 h-5" />,
     category: "frontend",
     level: 80,
-    color: "from-gray-800 to-gray-900",
+    color: "from-gray-900 to-black", // Next.js black/gray
     description: "React framework",
     years: 2,
   },
   {
     name: "Tailwind",
-    icon: <Monitor className="w-5 h-5" />,
+    icon: <RiTailwindCssFill className="w-5 h-5" />,
     category: "frontend",
     level: 80,
-    color: "from-cyan-500 to-blue-500",
+    color: "from-teal-400 to-teal-600", // Tailwind teal
     description: "Utility-first CSS",
     years: 2,
   },
   {
     name: "HTML5",
-    icon: <Monitor className="w-5 h-5" />,
+    icon: <FaHtml5 className="w-5 h-5" />,
     category: "frontend",
     level: 90,
-    color: "from-orange-500 to-red-500",
+    color: "from-orange-500 to-red-500", // HTML5 orange
     description: "Markup language for web pages",
-    years: 5,
+    years: 3,
+  },
+  {
+    name: "CSS",
+    icon: <FaCss3 className="w-5 h-5" />,
+    category: "frontend",
+    level: 90,
+    color: "from-blue-500 to-blue-700", // CSS3 blue
+    description: "Styling",
+    years: 3,
+  },
+  {
+    name: "Bootstrap",
+    icon: <FaBootstrap className="w-5 h-5" />,
+    category: "frontend",
+    level: 90,
+    color: "from-purple-600 to-purple-800", // Bootstrap purple
+    description: "Utility-classes for CSS",
+    years: 2,
   },
 
   // Backend
   {
     name: "Node.js",
-    icon: <Server className="w-5 h-5" />,
+    icon: <RiNodejsLine className="w-5 h-5" />,
     category: "backend",
     level: 80,
-    color: "from-green-500 to-green-600",
+    color: "from-green-500 to-green-700", // Node.js green
     description: "JavaScript runtime",
     years: 2,
   },
   {
     name: "Express",
-    icon: <Server className="w-5 h-5" />,
+    icon: <SiExpress className="w-5 h-5" />,
     category: "backend",
     level: 85,
-    color: "from-gray-600 to-gray-700",
+    color: "from-gray-700 to-black", // Express gray/black
     description: "Web framework for Node.js",
     years: 2,
   },
@@ -110,7 +180,7 @@ const skillsData = [
     icon: <Server className="w-5 h-5" />,
     category: "backend",
     level: 90,
-    color: "from-blue-500 to-indigo-500",
+    color: "from-indigo-500 to-indigo-700",
     description: "RESTful architecture",
     years: 2,
   },
@@ -118,37 +188,37 @@ const skillsData = [
   // Databases
   {
     name: "MongoDB",
-    icon: <Database className="w-5 h-5" />,
+    icon: <DiMongodb className="w-5 h-5" />,
     category: "db",
     level: 60,
-    color: "from-green-600 to-green-700",
+    color: "from-green-700 to-green-800", // MongoDB dark green
     description: "NoSQL database",
     years: 1,
   },
   {
     name: "PostgreSQL",
-    icon: <Database className="w-5 h-5" />,
+    icon: <DiPostgresql className="w-5 h-5" />,
     category: "db",
     level: 80,
-    color: "from-blue-600 to-blue-700",
+    color: "from-blue-700 to-indigo-700", // PostgreSQL blue
     description: "Relational database",
     years: 2,
   },
   {
     name: "Firebase",
-    icon: <Database className="w-5 h-5" />,
+    icon: <RiFirebaseFill className="w-5 h-5" />,
     category: "db",
     level: 90,
-    color: "from-yellow-500 to-orange-500",
+    color: "from-yellow-400 to-orange-500", // Firebase yellow-orange
     description: "Backend-as-a-service",
     years: 4,
   },
   {
     name: "Supabase",
-    icon: <Database className="w-5 h-5" />,
+    icon: <RiSupabaseLine className="w-5 h-5" />,
     category: "db",
     level: 50,
-    color: "from-red-500 to-red-600",
+    color: "from-emerald-500 to-emerald-700", // Supabase green
     description: "Open-source Firebase alternative",
     years: 0.5,
   },
@@ -156,30 +226,39 @@ const skillsData = [
   // DevOps
   {
     name: "Docker",
-    icon: <GitBranch className="w-5 h-5" />,
+    icon: <FaDocker className="w-5 h-5" />,
     category: "devops",
     level: 40,
-    color: "from-blue-500 to-blue-600",
+    color: "from-sky-400 to-sky-600", // Docker blue
     description: "Containerization",
     years: 0.5,
   },
   {
     name: "Git",
-    icon: <GitBranch className="w-5 h-5" />,
+    icon: <FaGithub className="w-5 h-5" />,
     category: "devops",
     level: 95,
-    color: "from-orange-500 to-red-500",
+    color: "from-gray-800 to-black", // GitHub black
     description: "Version control",
     years: 4,
   },
   {
     name: "VS Code",
-    icon: <GitBranch className="w-5 h-5" />,
+    icon: <VscVscode className="w-5 h-5" />,
     category: "devops",
     level: 90,
-    color: "from-blue-500 to-blue-600",
+    color: "from-blue-500 to-indigo-600", // VS Code blue
     description: "Code editor",
     years: 6,
+  },
+  {
+    name: "Post Man",
+    icon: <SiPostman className="w-5 h-5" />,
+    category: "devops",
+    level: 80,
+    color: "from-orange-500 to-orange-600", // Postman orange
+    description: "For testing the APIs",
+    years: 1,
   },
 ]
 
@@ -188,24 +267,24 @@ const certifications = [
     title: "AWS Certified",
     issuer: "Amazon Web Services",
     year: "2022",
-    icon: <Server className="w-5 h-5 text-sky-400" />,
-    img: "/cert-badges/test.png",
+    icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
+    img: "",
     color: "from-orange-500 to-yellow-500",
   },
   {
     title: "Google Cloud",
     issuer: "Google Cloud",
     year: "2023",
-    icon: <Server className="w-5 h-5 text-sky-400" />,
-    img: "/cert-badges/test.png",
+    icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
+    img: "",
     color: "from-blue-500 to-cyan-500",
   },
   {
     title: "Microsoft Certified",
     issuer: "Microsoft",
     year: "2023",
-    icon: <Server className="w-5 h-5 text-sky-400" />,
-    img: "/cert-badges/test.png",
+    icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
+    img: "",
     color: "from-purple-500 to-pink-500",
   },
 ]
@@ -234,13 +313,40 @@ const categoryInfo = {
   },
   devops: {
     name: "DevOps",
-    icon: <GitBranch className="w-5 h-5 text-sky-400" />,
+    icon: <VscAzureDevops className="w-5 h-5 text-sky-400" />,
     description: "Tools for development operations and deployment",
   },
 }
 
+const categoryArr = [
+  {
+    name: "All",
+    value: "all"
+  },
+  {
+    name: "Languages",
+    value: "lang"
+  },
+  {
+    name: "Frontend",
+    value: "frontend"
+  },
+  {
+    name: "Backend",
+    value: "backend"
+  },
+  {
+    name: "Databases",
+    value: "db"
+  },
+  {
+    name: "DevOps",
+    value: "devops"
+  }
+]
+
 // Hexagon skill component using only Tailwind
-function HexagonSkill({
+function SelectedSkill({
   skill,
   index,
   onClick,
@@ -256,7 +362,7 @@ function HexagonSkill({
 
   // Hexagon clip path
   const clipPath = "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)"
-
+  console.log("test")
   return (
     <motion.div
       ref={ref}
@@ -322,6 +428,7 @@ function SkillDetailCard({ skill }: { skill: (typeof skillsData)[0] | null }) {
       transition={{ duration: 0.3 }}
       className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-xl p-6 shadow-xl"
     >
+      
       <div className="flex items-start gap-4">
         <div className={`p-3 rounded-xl bg-gradient-to-br ${skill.color}`}>{skill.icon}</div>
         <div>
@@ -394,7 +501,7 @@ function CertificationCard({ cert, index }: { cert: (typeof certifications)[0]; 
           {/* Certificate image */}
           <div className="relative h-32 overflow-hidden">
             <Image
-              src={cert.img || "/placeholder.svg"}
+              src={cert.img || "/placeholder-certificate.svg"}
               alt={cert.title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -447,12 +554,12 @@ export function TechStackSection() {
   // Reset selected skill when changing tabs
   useEffect(() => {
     setSelectedSkill(null)
-    setVisibleSkills(5) // Reset visible skills when changing tabs
+    setVisibleSkills(6) // Reset visible skills when changing tabs
   }, [activeTab])
 
   // Handle showing more skills
   const handleShowMore = () => {
-    setVisibleSkills((prev) => Math.min(prev + 5, filteredSkills.length))
+    setVisibleSkills((prev) => Math.min(prev + 6, filteredSkills.length))
   }
 
   return (
@@ -489,42 +596,15 @@ export function TechStackSection() {
           <div className="flex justify-center mb-8">
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="bg-gray-900/50 border border-gray-800 p-1">
-                <TabsTrigger
-                  value="all"
-                  className="text-xs data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-400"
-                >
-                  All
-                </TabsTrigger>
-                <TabsTrigger
-                  value="lang"
-                  className="text-xs data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-400"
-                >
-                  Languages
-                </TabsTrigger>
-                <TabsTrigger
-                  value="frontend"
-                  className="text-xs data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-400"
-                >
-                  Frontend
-                </TabsTrigger>
-                <TabsTrigger
-                  value="backend"
-                  className="text-xs data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-400"
-                >
-                  Backend
-                </TabsTrigger>
-                <TabsTrigger
-                  value="db"
-                  className="text-xs data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-400"
-                >
-                  Databases
-                </TabsTrigger>
-                <TabsTrigger
-                  value="devops"
-                  className="text-xs data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-400"
-                >
-                  DevOps
-                </TabsTrigger>
+                {categoryArr.map((category) => (
+                  <TabsTrigger
+                    key={category.value}
+                    value={category.value}
+                    className="text-xs data-[state=active]:bg-sky-500/20 data-[state=active]:text-sky-400"
+                  >
+                    {category.name}
+                  </TabsTrigger>
+                ))}
               </TabsList>
             </Tabs>
           </div>
@@ -562,7 +642,7 @@ export function TechStackSection() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
               <AnimatePresence>
                 {displayedSkills.map((skill, index) => (
-                  <HexagonSkill
+                  <SelectedSkill
                     key={skill.name}
                     skill={skill}
                     index={index}

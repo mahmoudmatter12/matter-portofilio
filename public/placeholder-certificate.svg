@@ -1,0 +1,47 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" rx="16" fill="url(#bgGradient)" />
+  
+  <!-- Border -->
+  <rect x="0.5" y="0.5" width="799" height="599" rx="15.5" stroke="url(#borderGradient)" stroke-width="1" />
+  
+  <!-- Ribbon -->
+  <path d="M0 120H800V180C800 220 760 240 720 240H80C40 240 0 220 0 180V120Z" fill="url(#ribbonGradient)" />
+  
+  <!-- Seal -->
+  <circle cx="400" cy="300" r="120" fill="url(#sealGradient)" />
+  <circle cx="400" cy="300" r="100" fill="#0F172A" />
+  
+  <!-- Text -->
+  <text x="400" y="130" font-family="Arial" font-size="32" font-weight="bold" text-anchor="middle" fill="white">CERTIFICATE</text>
+  <text x="400" y="300" font-family="Arial" font-size="24" text-anchor="middle" fill="#7DD3FC">NO IMAGE</text>
+  <text x="400" y="340" font-family="Arial" font-size="16" text-anchor="middle" fill="#E2E8F0">Available</text>
+  
+  <!-- Decorative Elements -->
+  <path d="M100 100L150 150M700 500L650 450" stroke="#22D3EE" stroke-width="2" stroke-linecap="round" />
+  <path d="M700 100L650 150M100 500L150 450" stroke="#6366F1" stroke-width="2" stroke-linecap="round" />
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="800" y2="600">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+    
+    <linearGradient id="borderGradient" x1="0" y1="0" x2="800" y2="0">
+      <stop offset="0%" stop-color="#7DD3FC"/>
+      <stop offset="50%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+    
+    <linearGradient id="ribbonGradient" x1="0" y1="0" x2="800" y2="0">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+    
+    <radialGradient id="sealGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(400 300) rotate(90) scale(120)">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </radialGradient>
+  </defs>
+</svg>
