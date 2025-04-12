@@ -6,6 +6,8 @@ import { FloatingSocialDock } from "@/components/FloatingSocialDock"
 import { Toaster } from "@/components/ui/sonner"
 import { Header } from "@/Header"
 import { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/react"
+
 
 export const metadata: Metadata = {
   title: "Mahmoud Matter | Full Stack Developer",
@@ -58,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="relative z-10">
               <FloatingSocialDock />
               {children}
+              <Analytics />
               <Toaster />
             </main>
 

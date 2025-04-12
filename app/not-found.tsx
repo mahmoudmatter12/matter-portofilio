@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Rocket, ArrowRight, Satellite } from "lucide-react"
 import Link from "next/link"
 
+
 export default function NotFound() {
   return (
     <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black p-4">

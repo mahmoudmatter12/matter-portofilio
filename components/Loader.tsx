@@ -184,6 +184,7 @@ export function SpaceLoader() {
           </motion.div>
         )}
       </AnimatePresence>
+      
     </div>
   )
 }
