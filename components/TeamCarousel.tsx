@@ -31,7 +31,7 @@ const teamData: TeamMember[] = [
     id: 1,
     name: "Yahia khaild",
     placHolder: "Yahia Khalid",
-    role: "Lead Fullstack Developer",
+    role: "Lead Softwear Engneer",
     image: "", // Replace with actual image path
     bio: "Passionate about creating beautiful, responsive interfaces with a focus on accessibility and performance.",
     skills: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
