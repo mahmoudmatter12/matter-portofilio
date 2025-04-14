@@ -4,7 +4,7 @@ import { ThemeProvider } from "next-themes"
 import "./globals.css"
 import { FloatingSocialDock } from "@/components/FloatingSocialDock"
 import { Toaster } from "@/components/ui/sonner"
-import { Header } from "@/Header"
+import { Header } from "@/components/Header"
 import { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/react"
 

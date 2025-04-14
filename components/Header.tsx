@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { ScrollProgress } from "./components/ScrollProgress"
-import { MyLink } from "./components/MyLink"
+import { ScrollProgress } from "./ScrollProgress"
+import { MyLink } from "./MyLink"
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -21,8 +21,6 @@ export function Header() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-
 
 
   const navItems = [
@@ -84,7 +82,7 @@ export function Header() {
     // { name: "E-learning", href: "#e-learning" },
     // { name: "Self-study", href: "#self-study" },
     // { name: "Online Learning", href: "#online-learning" },
-    { name: "Time Line", href: "#timeline" },
+    { name: "Qualification", href: "#qualification" },
     { name: "Skills", href: "#skills" },
     { name: "Projects", href: "#projects" },
     { name: "Services", href: "#services" },
@@ -101,6 +99,16 @@ export function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
+            {/* <motion.img
+              src="/logo.png"
+              alt="Logo"
+              width={30}
+              height={30}
+              className="m-3"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            /> */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}

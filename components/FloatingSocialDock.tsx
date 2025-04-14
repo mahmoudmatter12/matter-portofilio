@@ -98,9 +98,9 @@ export function FloatingSocialDock() {
       href: "#about",
     },
     {
-      title: "Timeline",
+      title: "Qualification",
       icon: <FaTimeline className="h-4 w-4 sm:h-5 sm:w-5" />,
-      href: "#timeline",
+      href: "#qualification",
     },
     {
       title: "Skills",

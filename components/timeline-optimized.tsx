@@ -43,18 +43,16 @@ const TimelineItem = React.memo(function TimelineItem({
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ delay: 0.1 * index, duration: 0.5 }}
-      className={`relative mb-12 flex ${
-        isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-      } items-center`}
+      className={`relative mb-12 flex ${isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+        } items-center`}
       onMouseEnter={() => setHoveredIndex(index)}
       onMouseLeave={() => setHoveredIndex(null)}
     >
       {/* Timeline dot with pulse effect on hover */}
       <div className="relative flex items-center justify-center z-10">
         <div
-          className={`w-10 h-10 rounded-full bg-white dark:bg-gray-800 border-4 ${
-            hoveredIndex === index ? "border-indigo-500 dark:border-cyan-400" : "border-indigo-300 dark:border-cyan-600"
-          } flex items-center justify-center transition-colors duration-300`}
+          className={`w-10 h-10 rounded-full bg-white dark:bg-gray-800 border-4 ${hoveredIndex === index ? "border-indigo-500 dark:border-cyan-400" : "border-indigo-300 dark:border-cyan-600"
+            } flex items-center justify-center transition-colors duration-300`}
         >
           {item.icon}
         </div>
@@ -71,9 +69,8 @@ const TimelineItem = React.memo(function TimelineItem({
 
       {/* Card with enhanced hover effects */}
       <div
-        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${
-          !isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
-        }`}
+        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${!isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
+          }`}
       >
         <motion.div
           className="relative p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-sky-100 dark:border-gray-700 shadow-sm overflow-hidden group"
@@ -86,11 +83,10 @@ const TimelineItem = React.memo(function TimelineItem({
           {/* Type badge and year */}
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <span
-              className={`px-2.5 py-1 text-xs font-medium rounded-full ${
-                item.type === "education"
+              className={`px-2.5 py-1 text-xs font-medium rounded-full ${item.type === "education"
                   ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-cyan-400"
                   : "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400"
-              }`}
+                }`}
             >
               {item.type === "education" ? "Education" : "Work"}
             </span>
@@ -250,7 +246,7 @@ export function TimelineOPT() {
 
   return (
     <section
-      id="timeline"
+      id="qualification"
       className="relative py-24 sm:py-32 overflow-hidden"
       ref={(el) => {
         // Combine refs
@@ -285,7 +281,7 @@ export function TimelineOPT() {
 
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               <span className="bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent">
-                My Journey
+                Qualification 
               </span>
             </h2>
 
