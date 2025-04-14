@@ -33,27 +33,28 @@ export const certifications = [
 
 export const projects = [
   {
-    title: "Portfolio Website",
-    description: "Modern developer portfolio with dark mode, animations and responsive design.",
-    tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/yourusername/portfolio",
-    live: "https://yourportfolio.com",
-    image: "",
-  },
-  {
-    title: "E-Commerce Platform",
-    description: "Full-stack e-commerce solution with payment integration and admin dashboard.",
-    tags: ["Next.js", "Node.js", "Stripe", "MongoDB"],
-    github: "https://github.com/yourusername/ecommerce",
-    live: "https://store.example.com",
-    image: "",
-  },
-  {
-    title: "Task Management App",
-    description: "Productivity application with drag-and-drop interface and real-time updates.",
-    tags: ["React", "Firebase", "React DnD"],
-    github: "https://github.com/yourusername/task-manager",
-    live: "https://tasks.example.com",
-    image: "",
+    "title": "HNU-PORTAL",
+    "description": "A full-featured university management system built with vanilla JavaScript, featuring role-based access control, dynamic timetables, QR attendance tracking, and student data management.",
+    "tags": [
+      "JavaScript", 
+      "HTML5", 
+      "CSS3",
+    ],
+    "github": "https://github.com/mahmoudmatter12/hnu-portal",
+    "live": "",
+    "image": "",
+    "features": [
+      "Role-based authentication system",
+      "Dynamic timetable generator",
+      "QR code attendance tracking",
+      "Student data management",
+      "Excel export functionality",
+      "Responsive faculty dashboard"
+    ],
+    "achievements": [
+      "Optimized vanilla JS performance (50% faster render than jQuery equivalent)",
+      "Implemented complex state management without frameworks",
+      "Reduced bundle size to just 45KB (uncompressed)"
+    ]
   }
 ]

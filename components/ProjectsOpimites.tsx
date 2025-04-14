@@ -1,7 +1,7 @@
 "use client"
 import React, { useMemo } from "react"
 import { motion } from "framer-motion"
-import { Github, ExternalLink } from "lucide-react"
+import { Github, ExternalLink, CheckCircle, Award } from "lucide-react"
 import { MyLink } from "./MyLink"
 import Image from "next/image"
 import { projects } from "@/lib/constants"
@@ -14,6 +14,8 @@ interface Project {
   github: string
   live?: string
   tags: string[]
+  features?: string[] // New field
+  achievements?: string[] // New field
 }
 
 // Optimized ProjectCard component
@@ -39,9 +41,9 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover group-hover:scale-105 transition-transform duration-500"
-          loading="lazy" // Add lazy loading
-          placeholder="blur" // Add blur placeholder
-          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4=" // Simple SVG placeholder
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
         />
       </div>
 
@@ -52,7 +54,7 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
           <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-4">
             {project.tags.map((tag: string, tagIndex: number) => (
               <span
                 key={tagIndex}
@@ -62,10 +64,56 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
               </span>
             ))}
           </div>
+
+          {/* Features - New section */}
+          {project.features && project.features.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center">
+                <CheckCircle className="h-4 w-4 mr-1.5 text-indigo-500 dark:text-cyan-400" />
+                Key Features
+              </h4>
+              <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-300">
+                {project.features.slice(0, 3).map((feature, idx) => (
+                  <li key={idx} className="flex items-start">
+                    <span className="text-indigo-500 dark:text-cyan-400 mr-1.5">•</span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+                {project.features.length > 3 && (
+                  <li className="text-xs text-indigo-500 dark:text-cyan-400 italic">
+                    +{project.features.length - 3} more features
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+
+          {/* Achievements - New section */}
+          {project.achievements && project.achievements.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center">
+                <Award className="h-4 w-4 mr-1.5 text-indigo-500 dark:text-cyan-400" />
+                Achievements
+              </h4>
+              <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-300">
+                {project.achievements.slice(0, 2).map((achievement, idx) => (
+                  <li key={idx} className="flex items-start">
+                    <span className="text-indigo-500 dark:text-cyan-400 mr-1.5">•</span>
+                    <span>{achievement}</span>
+                  </li>
+                ))}
+                {project.achievements.length > 2 && (
+                  <li className="text-xs text-indigo-500 dark:text-cyan-400 italic">
+                    +{project.achievements.length - 2} more achievements
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Links */}
-        <div className="flex gap-4 mt-auto">
+        <div className="flex gap-4 mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
           <MyLink
             href={project.github}
             target="_blank"
@@ -120,7 +168,7 @@ export function ProjectsOpt() {
           initial={{ opacity: 0, y: 20 }}
           animate={isSectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto"
+          className="max-w-6xl mx-auto" // Increased max-width to accommodate larger cards
         >
           {/* Section Header */}
           <div className="text-center mb-16">
@@ -135,8 +183,8 @@ export function ProjectsOpt() {
             </p>
           </div>
 
-          {/* Projects Grid - Updated layout with virtualization for large lists */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Projects Grid - Updated layout with fewer columns for larger cards */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {projects.map((project, index) => (
               <ProjectCard key={project.title} project={project} index={index} />
             ))}
