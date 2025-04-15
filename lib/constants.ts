@@ -56,5 +56,35 @@ export const projects = [
       "Implemented complex state management without frameworks",
       "Reduced bundle size to just 45KB (uncompressed)"
     ]
-  }
+  },
+  {
+    "title": "HNU-ICPC Admin Management",
+    "description": "A full-stack student management system built with React and Flask, designed to help HNU-ICPC community admins efficiently manage their students through CRUD operations and real-time status toggling.",
+    "tags": [
+      "React",
+      "React Router",
+      "Flask",
+      "REST API",
+      "Python",
+      "SQLAlchemy"
+    ],
+    "github": "https://github.com/mahmoudmatter12/ICPC_Admin_Panal_react-router",
+    "live": "",
+    "image": "",
+    "features": [
+      "View all students with pagination and filters",
+      "Toggle student status (Accepted / Rejected)",
+      "Add new students with validation",
+      "Update existing student data",
+      "Delete student records",
+      "View individual student profiles",
+      "Frontend routing with React Router",
+      "RESTful Flask backend with SQLAlchemy ORM"
+    ],
+    "achievements": [
+      "First full-stack project using React Router and Flask REST APIs",
+      "Successfully implemented full CRUD operations from scratch",
+      "Improved student management experience for ICPC admins"
+    ]
+  }  
 ]
