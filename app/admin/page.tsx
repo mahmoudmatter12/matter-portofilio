@@ -211,9 +211,15 @@ export default function AdminDashboard() {
               </Button>
             </Link>
             <Link href="/admin/projects">
-              <Button className="w-full justify-start" variant="outline" disabled>
+              <Button className="w-full justify-start" variant="outline">
                 <Plus className="h-4 w-4 mr-2" />
                 Create New Project
+              </Button>
+            </Link>
+            <Link href="/admin/projects">
+              <Button className="w-full justify-start" variant="outline" disabled>
+                <Plus className="h-4 w-4 mr-2" />
+                Add new skills
                 <Badge variant="secondary" className="ml-auto">
                   Soon
                 </Badge>

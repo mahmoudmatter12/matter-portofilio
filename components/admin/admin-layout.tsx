@@ -86,7 +86,6 @@ const navigationSections: NavSection[] = [
         title: "Projects",
         href: "/admin/projects",
         icon: FolderOpen,
-        badge: "Soon",
         description: "Portfolio projects and case studies",
       },
       {

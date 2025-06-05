@@ -1,22 +1,111 @@
 "use client"
-import React, { useMemo } from "react"
+import React, { useMemo, useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Github, ExternalLink, CheckCircle, Award } from "lucide-react"
 import { MyLink } from "./MyLink"
 import Image from "next/image"
-import { projects } from "@/lib/constants"
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
 
+enum ProjectTags {
+  JS = "JS",
+  HTML = "HTML",
+  CSS = "CSS",
+  REACT = "REACT",
+  NEXTJS = "NEXTJS",
+  TAILWINDCSS = "TAILWINDCSS",
+  TYPESCRIPT = "TYPESCRIPT",
+  NODEJS = "NODEJS",
+  EXPRESSJS = "EXPRESSJS",
+  MONGODB = "MONGODB",
+  POSTGRESQL = "POSTGRESQL",
+  GRAPHQL = "GRAPHQL",
+  GITHUB = "GITHUB",
+  VERCEL = "VERCEL",
+  NETLIFY = "NETLIFY",
+  AWS = "AWS",
+  DOCKER = "DOCKER",
+  KUBERNETES = "KUBERNETES",
+  PYTHON = "PYTHON",
+  DJANGO = "DJANGO",
+  FLASK = "FLASK",
+  REACT_ROUTER = "REACT_ROUTER",
+  REDUX = "REDUX",
+  VUEJS = "VUEJS",
+  ANGULAR = "ANGULAR",
+  BOOTSTRAP = "BOOTSTRAP",
+  SASS = "SASS",
+  FIGMA = "FIGMA",
+  API = "API",
+  OTHER = "OTHER",
+}
+
 interface Project {
+  id: string
   title: string
   description: string
   image?: string
-  github: string
+  github?: string
   live?: string
-  tags: string[]
-  features?: string[] // New field
-  achievements?: string[] // New field
+  tags: ProjectTags[]
+  features: string[]
+  achievements: string[]
+  createdAt: Date
+  updatedAt: Date
 }
+
+// Loading skeleton component
+const ProjectCardSkeleton = React.memo(({ index }: { index: number }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 * index, duration: 0.5 }}
+      className="group flex flex-col rounded-xl border border-sky-100 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm overflow-hidden"
+    >
+      {/* Image skeleton */}
+      <div className="relative h-48 w-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+
+      {/* Content skeleton */}
+      <div className="flex-1 flex flex-col p-6">
+        <div className="flex-1">
+          {/* Title skeleton */}
+          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+
+          {/* Description skeleton */}
+          <div className="space-y-2 mb-4">
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4" />
+          </div>
+
+          {/* Tags skeleton */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+            ))}
+          </div>
+
+          {/* Features skeleton */}
+          <div className="mb-4">
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2 w-24" />
+            <div className="space-y-1">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Links skeleton */}
+        <div className="flex gap-4 mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+          <div className="h-4 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        </div>
+      </div>
+    </motion.div>
+  )
+})
+
+ProjectCardSkeleton.displayName = "ProjectCardSkeleton"
 
 // Optimized ProjectCard component
 const ProjectCard = React.memo(({ project, index }: { project: Project; index: number }) => {
@@ -24,6 +113,11 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
     threshold: 0.1,
     once: true,
   })
+
+  // Format tags for display
+  const formatTag = (tag: ProjectTags) => {
+    return tag.replace(/_/g, " ")
+  }
 
   return (
     <motion.div
@@ -55,12 +149,12 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-4">
-            {project.tags.map((tag: string, tagIndex: number) => (
+            {project.tags.map((tag: ProjectTags, tagIndex: number) => (
               <span
                 key={tagIndex}
                 className="text-xs font-medium px-2.5 py-1 rounded-full bg-indigo-100/50 dark:bg-gray-700 text-indigo-700 dark:text-cyan-400"
               >
-                {tag}
+                {formatTag(tag)}
               </span>
             ))}
           </div>
@@ -114,14 +208,16 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
 
         {/* Links */}
         <div className="flex gap-4 mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
-          <MyLink
-            href={project.github}
-            target="_blank"
-            className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-cyan-400"
-          >
-            <Github className="h-4 w-4" />
-            <span>Code</span>
-          </MyLink>
+          {project.github && (
+            <MyLink
+              href={project.github}
+              target="_blank"
+              className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-cyan-400"
+            >
+              <Github className="h-4 w-4" />
+              <span>Code</span>
+            </MyLink>
+          )}
           {project.live && (
             <MyLink
               href={project.live}
@@ -141,6 +237,37 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
 ProjectCard.displayName = "ProjectCard"
 
 export function ProjectsOpt() {
+  // State for projects data
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Fetch projects data
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const response = await fetch("/api/projects")
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch projects: ${response.status}`)
+        }
+
+        const data: Project[] = await response.json()
+        setProjects(data)
+      } catch (err) {
+        console.error("Error fetching projects:", err)
+        setError(err instanceof Error ? err.message : "Failed to load projects")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
+
   // Memoize the background elements to prevent unnecessary re-renders
   const BackgroundElements = useMemo(
     () => (
@@ -183,29 +310,64 @@ export function ProjectsOpt() {
             </p>
           </div>
 
-          {/* Projects Grid - Updated layout with fewer columns for larger cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <ProjectCard key={project.title} project={project} index={index} />
-            ))}
-          </div>
+          {/* Error state */}
+          {error && (
+            <div className="text-center py-12">
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
+                <p className="text-red-600 dark:text-red-400 font-medium">Failed to load projects</p>
+                <p className="text-red-500 dark:text-red-300 text-sm mt-1">{error}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                >
+                  Retry
+                </button>
+              </div>
+            </div>
+          )}
 
-          {/* View All Button */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isSectionInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-center mt-12"
-          >
-            <MyLink
-              href="https://github.com/mahmoudmatter12?tab=repositories"
-              target="_blank"
-              className="inline-flex items-center px-6 py-3 rounded-full border-2 border-indigo-500 dark:border-cyan-400 text-indigo-600 dark:text-cyan-400 hover:bg-indigo-50 dark:hover:bg-gray-800/50 transition-all"
-            >
-              <Github className="h-5 w-5 mr-2" />
-              View All on GitHub
-            </MyLink>
-          </motion.div>
+          {/* Loading state */}
+          {loading && !error && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <ProjectCardSkeleton key={index} index={index} />
+              ))}
+            </div>
+          )}
+
+          {/* Projects Grid - Updated layout with fewer columns for larger cards */}
+          {!loading && !error && projects.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 dark:text-gray-400">No projects found.</p>
+            </div>
+          )}
+
+          {!loading && !error && projects.length > 0 && (
+            <>
+              <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                {projects.map((project, index) => (
+                  <ProjectCard key={project.id} project={project} index={index} />
+                ))}
+              </div>
+
+              {/* View All Button */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={isSectionInView ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="text-center mt-12"
+              >
+                <MyLink
+                  href="https://github.com/mahmoudmatter12?tab=repositories"
+                  target="_blank"
+                  className="inline-flex items-center px-6 py-3 rounded-full border-2 border-indigo-500 dark:border-cyan-400 text-indigo-600 dark:text-cyan-400 hover:bg-indigo-50 dark:hover:bg-gray-800/50 transition-all"
+                >
+                  <Github className="h-5 w-5 mr-2" />
+                  View All on GitHub
+                </MyLink>
+              </motion.div>
+            </>
+          )}
         </motion.div>
       </div>
     </section>

@@ -14,7 +14,7 @@ datasource db {
 }
 
 model TimeLinePost {
-  id          String   @id @default(cuid())
+  id          String            @id @default(cuid())
   title       String
   institution String?
   location    String?
@@ -22,8 +22,33 @@ model TimeLinePost {
   description String
   type        TimeLinePostType?
   link        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+// interface Project {
+//   title: string
+//   description: string
+//   image?: string
+//   github: string
+//   live?: string
+//   tags: string[]
+//   features?: string[] // New field
+//   achievements?: string[] // New field
+// }
+
+model Projects {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  image        String?
+  github       String?
+  live         String?
+  tags         ProjectTags[]
+  features     String[]
+  achievements String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 enum TimeLinePostType {
@@ -34,4 +59,48 @@ enum TimeLinePostType {
   AWARD
   PUBLICATION
   OTHER
+}
+
+// tags for projects like: js html css and other libraries tools frameworks etc languages
+enum ProjectTags {
+  JS
+  HTML
+  CSS
+  REACT
+  NEXTJS
+  TAILWINDCSS
+  TYPESCRIPT
+  NODEJS
+  EXPRESSJS
+  MONGODB
+  POSTGRESQL
+  GRAPHQL
+  GITHUB
+  VERCEL
+  NETLIFY
+  AWS
+  DOCKER
+  KUBERNETES
+  PYTHON
+  DJANGO
+  FLASK
+  REACT_ROUTER
+  REDUX
+  VUEJS
+  ANGULAR
+  BOOTSTRAP
+  SASS
+  Figma
+  API
+  OTHER
+  DOTNET
+  JAVA
+  SPRING
+  CSHARP
+  CPP
+  C
+  ASPNET
+  ENTITY_FRAMEWORK
+  LARAVEL
+  RUBY
 }
