@@ -91,9 +91,14 @@ const navigationSections: NavSection[] = [
       {
         title: "Skills",
         href: "/admin/skills",
+        icon: BarChart3,
+        description: "Manage skills and expertise",
+      },
+      {
+        title: "Certifications",
+        href: "/admin/certificates",
         icon: Award,
-        badge: "Soon",
-        description: "Technical and soft skills",
+        description: "Professional certifications and achievements",
       },
       {
         title: "Experience",

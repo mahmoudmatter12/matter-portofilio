@@ -11,6 +11,7 @@ import { TeamCarousel } from "@/components/TeamCarousel"
 import { ProjectsOpt } from "@/components/ProjectsOpimites"
 import { TimelineOPT } from "@/components/timeline-optimized"
 import { SkillsOpt } from "@/components/newSkills-opt"
+import { CertificationsOpt } from "@/components/certificatesNew"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -46,6 +47,7 @@ export default function Home() {
           <TimelineOPT />
           {/* <TechStackSectionOpt /> */}
           <SkillsOpt />
+          <CertificationsOpt />
           <ProjectsOpt />
           <Services />
           <TeamCarousel />

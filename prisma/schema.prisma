@@ -63,6 +63,28 @@ model skills {
   updatedAt         DateTime        @updatedAt
 }
 
+model certifications {
+  id            String          @id @default(cuid())
+  name          String
+  issuer        String
+  issueDate     DateTime
+  expiryDate    DateTime?
+  credentialId  String?
+  credentialUrl String?
+  description   String?
+  skills        String[]
+  status        CertificationStatus
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+enum CertificationStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+  PENDING
+}
+
 enum SkillCategory {
   FRONTEND
   BACKEND
