@@ -7,29 +7,6 @@ export const NAV_LINKS = [
   { name: "Contact", href: "#contact" },
 ];
 
-export const certifications = [
-  {
-    title: "Advanced React",
-    issuer: "Udemy",
-    year: "2023",
-    link: "https://www.udemy.com/certificate/...",
-    badge: "/cert-badges/react-cert.png" // Optional badge images
-  },
-  {
-    title: "Next.js Fundamentals",
-    issuer: "Frontend Masters",
-    year: "2022",
-    link: "https://frontendmasters.com/certificates/...",
-    badge: "/cert-badges/nextjs-cert.png"
-  },
-  {
-    title: "TypeScript Masterclass",
-    issuer: "Pluralsight",
-    year: "2021",
-    link: "https://www.pluralsight.com/certificates/...",
-    badge: "/cert-badges/typescript-cert.png"
-  }
-]
 
 export const projects = [
   {
