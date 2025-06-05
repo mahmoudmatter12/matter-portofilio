@@ -8,16 +8,27 @@ import { useMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
 
-interface item {
+interface TimeLineItem {
   title: string
   institution: string
   location: string
   year: string
   description: string
-  icon: React.ReactNode
   type: string
   link: string
 }
+
+function getIcon(type: string): React.ReactNode {
+  switch (type) {
+    case "education":
+      return <GraduationCap className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    case "work":
+      return <Briefcase className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    default:
+      return <Calendar className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+  }
+}
+
 // Memoized TimelineItem component
 const TimelineItem = React.memo(function TimelineItem({
   item,
@@ -26,7 +37,7 @@ const TimelineItem = React.memo(function TimelineItem({
   hoveredIndex,
   setHoveredIndex,
 }: {
-  item: item
+  item: TimeLineItem
   index: number
   isMobile: boolean
   hoveredIndex: number | null
@@ -54,7 +65,7 @@ const TimelineItem = React.memo(function TimelineItem({
           className={`w-10 h-10 rounded-full bg-white dark:bg-gray-800 border-4 ${hoveredIndex === index ? "border-indigo-500 dark:border-cyan-400" : "border-indigo-300 dark:border-cyan-600"
             } flex items-center justify-center transition-colors duration-300`}
         >
-          {item.icon}
+          {getIcon(item.type)}
         </div>
         {hoveredIndex === index && (
           <motion.div
@@ -84,8 +95,8 @@ const TimelineItem = React.memo(function TimelineItem({
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <span
               className={`px-2.5 py-1 text-xs font-medium rounded-full ${item.type === "education"
-                  ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-cyan-400"
-                  : "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400"
+                ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-cyan-400"
+                : "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400"
                 }`}
             >
               {item.type === "education" ? "Education" : "Work"}
@@ -129,6 +140,7 @@ const TimelineItem = React.memo(function TimelineItem({
   )
 })
 
+
 export function TimelineOPT() {
   const isMobile = useMobile()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -159,7 +171,6 @@ export function TimelineOPT() {
         year: "2018 - 2022",
         description:
           "Specialized in Web Development and Human-Computer Interaction. Graduated with honors and completed a thesis on responsive design patterns.",
-        icon: <GraduationCap className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />,
         type: "education",
         link: "#",
       },
@@ -170,7 +181,6 @@ export function TimelineOPT() {
         year: "Summer 2021",
         description:
           "Developed responsive UIs using React and implemented accessibility features. Worked on a team of 5 developers to deliver a client dashboard application.",
-        icon: <Briefcase className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />,
         type: "work",
         link: "#",
       },
@@ -181,7 +191,6 @@ export function TimelineOPT() {
         year: "2022 - 2024",
         description:
           "Focus on scalable architecture and cloud computing. Conducted research on serverless architectures and contributed to open-source projects.",
-        icon: <GraduationCap className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />,
         type: "education",
         link: "#",
       },
@@ -192,7 +201,6 @@ export function TimelineOPT() {
         year: "2022 - Present",
         description:
           "Leading development of Next.js applications with TypeScript and GraphQL. Managing a team of developers and implementing CI/CD pipelines for streamlined deployment.",
-        icon: <Briefcase className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />,
         type: "work",
         link: "#",
       },
@@ -203,7 +211,6 @@ export function TimelineOPT() {
         year: "2005 - Present",
         description:
           "Architecting scalable solutions for enterprise clients. Implementing microservices architecture and mentoring junior developers on best practices.",
-        icon: <Briefcase className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />,
         type: "work",
         link: "#",
       },
@@ -281,7 +288,7 @@ export function TimelineOPT() {
 
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               <span className="bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent">
-                Qualification 
+                Qualification
               </span>
             </h2>
 

@@ -27,328 +27,322 @@ import { FaCss3 } from "react-icons/fa";
 import { FaBootstrap } from "react-icons/fa";
 import { SiPostman } from "react-icons/si";
 
-
+const CertIcon = <AiFillSafetyCertificate className="w-5 h-5 text-gray-900" />;
 // Enhanced skill data with more metadata
 const skillsData = [
-    // Languages
-    {
-      name: "TypeScript",
-      icon: <SiTypescript className="w-5 h-5" />,
-      category: "lang",
-      level: 80,
-      color: "from-blue-600 to-blue-700", // TypeScript blue
-      description: "Static typing for JavaScript",
-      years: 1.5,
-    },
-    {
-      name: "JavaScript",
-      icon: <IoLogoJavascript className="w-5 h-5" />,
-      category: "lang",
-      level: 80,
-      color: "from-yellow-300 to-yellow-500", // JS yellow
-      description: "Web's primary language",
-      years: 2,
-    },
-    {
-      name: "Python",
-      icon: <FaPython className="w-5 h-5" />,
-      category: "lang",
-      level: 70,
-      color: "from-yellow-400 to-blue-500", // Python dual-tone
-      description: "Data science & automation",
-      years: 4,
-    },
-    {
-      name: "Java",
-      icon: <FaJava className="w-5 h-5" />,
-      category: "lang",
-      level: 75,
-      color: "from-orange-600 to-red-500", // Java red-orange tone
-      description: "Enterprise applications",
-      years: 2,
-    },
-    {
-      name: "GoLang",
-      icon: <FaGolang className="w-5 h-5" />,
-      category: "lang",
-      level: 70,
-      color: "from-teal-400 to-teal-600", // Go cyan-ish teal
-      description: "Efficient and scalable programming for backend systems",
-      years: 1,
-    },
-    {
-      name: "C#",
-      icon: <PiFileCSharp className="w-5 h-5" />,
-      category: "lang",
-      level: 70,
-      color: "from-purple-700 to-purple-900", // C# / .NET purple
-      description: "",
-      years: 1,
-    },
-    {
-      name: "C",
-      icon: <Code className="w-5 h-5" />,
-      category: "lang",
-      level: 60,
-      color: "from-gray-600 to-gray-700",
-      description: "Low-level programming language",
-      years: 3,
-    },
-    {
-      name: "C++",
-      icon: <PiFileCppBold className="w-5 h-5" />,
-      category: "lang",
-      level: 65,
-      color: "from-blue-700 to-blue-800", // C++ deep blue
-      description: "Object-oriented programming",
-      years: 2,
-    },
-  
-    // Frontend
-    {
-      name: "React",
-      icon: <FaReact className="w-5 h-5" />,
-      category: "frontend",
-      level: 80,
-      color: "from-cyan-400 to-blue-600", // React neon blue
-      description: "UI component library",
-      years: 2,
-    },
-    {
-      name: "Next.js",
-      icon: <RiNextjsFill className="w-5 h-5" />,
-      category: "frontend",
-      level: 80,
-      color: "from-gray-900 to-black", // Next.js black/gray
-      description: "React framework",
-      years: 2,
-    },
-    {
-      name: "Tailwind",
-      icon: <RiTailwindCssFill className="w-5 h-5" />,
-      category: "frontend",
-      level: 80,
-      color: "from-teal-400 to-teal-600", // Tailwind teal
-      description: "Utility-first CSS",
-      years: 2,
-    },
-    {
-      name: "HTML5",
-      icon: <FaHtml5 className="w-5 h-5" />,
-      category: "frontend",
-      level: 90,
-      color: "from-orange-500 to-red-500", // HTML5 orange
-      description: "Markup language for web pages",
-      years: 3,
-    },
-    {
-      name: "CSS",
-      icon: <FaCss3 className="w-5 h-5" />,
-      category: "frontend",
-      level: 90,
-      color: "from-blue-500 to-blue-700", // CSS3 blue
-      description: "Styling",
-      years: 3,
-    },
-    {
-      name: "Bootstrap",
-      icon: <FaBootstrap className="w-5 h-5" />,
-      category: "frontend",
-      level: 90,
-      color: "from-purple-600 to-purple-800", // Bootstrap purple
-      description: "Utility-classes for CSS",
-      years: 2,
-    },
-  
-    // Backend
-    {
-      name: "Node.js",
-      icon: <RiNodejsLine className="w-5 h-5" />,
-      category: "backend",
-      level: 80,
-      color: "from-green-500 to-green-700", // Node.js green
-      description: "JavaScript runtime",
-      years: 2,
-    },
-    {
-      name: "Express",
-      icon: <SiExpress className="w-5 h-5" />,
-      category: "backend",
-      level: 85,
-      color: "from-gray-700 to-black", // Express gray/black
-      description: "Web framework for Node.js",
-      years: 2,
-    },
-    {
-      name: "REST API",
-      icon: <Server className="w-5 h-5" />,
-      category: "backend",
-      level: 90,
-      color: "from-indigo-500 to-indigo-700",
-      description: "RESTful architecture",
-      years: 2,
-    },
-  
-    // Databases
-    {
-      name: "MongoDB",
-      icon: <DiMongodb className="w-5 h-5" />,
-      category: "db",
-      level: 60,
-      color: "from-green-700 to-green-800", // MongoDB dark green
-      description: "NoSQL database",
-      years: 1,
-    },
-    {
-      name: "PostgreSQL",
-      icon: <DiPostgresql className="w-5 h-5" />,
-      category: "db",
-      level: 80,
-      color: "from-blue-700 to-indigo-700", // PostgreSQL blue
-      description: "Relational database",
-      years: 2,
-    },
-    {
-      name: "Firebase",
-      icon: <RiFirebaseFill className="w-5 h-5" />,
-      category: "db",
-      level: 90,
-      color: "from-yellow-400 to-orange-500", // Firebase yellow-orange
-      description: "Backend-as-a-service",
-      years: 4,
-    },
-    {
-      name: "Supabase",
-      icon: <RiSupabaseLine className="w-5 h-5" />,
-      category: "db",
-      level: 50,
-      color: "from-emerald-500 to-emerald-700", // Supabase green
-      description: "Open-source Firebase alternative",
-      years: 0.5,
-    },
-  
-    // DevOps
-    {
-      name: "Docker",
-      icon: <FaDocker className="w-5 h-5" />,
-      category: "devops",
-      level: 40,
-      color: "from-sky-400 to-sky-600", // Docker blue
-      description: "Containerization",
-      years: 0.5,
-    },
-    {
-      name: "Git",
-      icon: <FaGithub className="w-5 h-5" />,
-      category: "devops",
-      level: 95,
-      color: "from-gray-800 to-black", // GitHub black
-      description: "Version control",
-      years: 4,
-    },
-    {
-      name: "VS Code",
-      icon: <VscVscode className="w-5 h-5" />,
-      category: "devops",
-      level: 90,
-      color: "from-blue-500 to-indigo-600", // VS Code blue
-      description: "Code editor",
-      years: 6,
-    },
-    {
-      name: "Post Man",
-      icon: <SiPostman className="w-5 h-5" />,
-      category: "devops",
-      level: 80,
-      color: "from-orange-500 to-orange-600", // Postman orange
-      description: "For testing the APIs",
-      years: 1,
-    },
-  ]
-  
-  const certifications = [
-    {
-      title: "AWS Certified",
-      issuer: "Amazon Web Services",
-      year: "2022",
-      icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
-      img: "",
-      color: "from-orange-500 to-yellow-500",
-    },
-    {
-      title: "Google Cloud",
-      issuer: "Google Cloud",
-      year: "2023",
-      icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
-      img: "",
-      color: "from-blue-500 to-cyan-500",
-    },
-    {
-      title: "Microsoft Certified",
-      issuer: "Microsoft",
-      year: "2023",
-      icon: <AiFillSafetyCertificate className="w-5 h-5 text-sky-400" />,
-      img: "",
-      color: "from-purple-500 to-pink-500",
-    },
-  ]
-  
-  
-  const categoryInfo = {
-    lang: {
-      name: "Languages",
-      icon: <Code className="w-5 h-5 text-sky-400" />,
-      description: "Programming languages I'm proficient in",
-    },
-    frontend: {
-      name: "Frontend",
-      icon: <Monitor className="w-5 h-5 text-sky-400" />,
-      description: "Technologies for building beautiful user interfaces",
-    },
-    backend: {
-      name: "Backend",
-      icon: <Server className="w-5 h-5 text-sky-400" />,
-      description: "Server-side technologies and APIs",
-    },
-    db: {
-      name: "Databases",
-      icon: <Database className="w-5 h-5 text-sky-400" />,
-      description: "Data storage and management solutions",
-    },
-    devops: {
-      name: "DevOps",
-      icon: <VscAzureDevops className="w-5 h-5 text-sky-400" />,
-      description: "Tools for development operations and deployment",
-    },
+  // Languages
+  {
+    name: "TypeScript",
+    icon: <SiTypescript className="w-5 h-5" />,
+    category: "lang",
+    level: 80,
+    color: "from-blue-600 to-blue-700", // TypeScript blue
+    description: "Static typing for JavaScript",
+    years: 1.5,
+  },
+  {
+    name: "JavaScript",
+    icon: <IoLogoJavascript className="w-5 h-5" />,
+    category: "lang",
+    level: 80,
+    color: "from-yellow-300 to-yellow-500", // JS yellow
+    description: "Web's primary language",
+    years: 2,
+  },
+  {
+    name: "Python",
+    icon: <FaPython className="w-5 h-5" />,
+    category: "lang",
+    level: 70,
+    color: "from-yellow-400 to-blue-500", // Python dual-tone
+    description: "Data science & automation",
+    years: 4,
+  },
+  {
+    name: "Java",
+    icon: <FaJava className="w-5 h-5" />,
+    category: "lang",
+    level: 75,
+    color: "from-orange-600 to-red-500", // Java red-orange tone
+    description: "Enterprise applications",
+    years: 2,
+  },
+  {
+    name: "GoLang",
+    icon: <FaGolang className="w-5 h-5" />,
+    category: "lang",
+    level: 70,
+    color: "from-teal-400 to-teal-600", // Go cyan-ish teal
+    description: "Efficient and scalable programming for backend systems",
+    years: 1,
+  },
+  {
+    name: "C#",
+    icon: <PiFileCSharp className="w-5 h-5" />,
+    category: "lang",
+    level: 70,
+    color: "from-purple-700 to-purple-900", // C# / .NET purple
+    description: "",
+    years: 1,
+  },
+  {
+    name: "C",
+    icon: <Code className="w-5 h-5" />,
+    category: "lang",
+    level: 60,
+    color: "from-gray-600 to-gray-700",
+    description: "Low-level programming language",
+    years: 3,
+  },
+  {
+    name: "C++",
+    icon: <PiFileCppBold className="w-5 h-5" />,
+    category: "lang",
+    level: 65,
+    color: "from-blue-700 to-blue-800", // C++ deep blue
+    description: "Object-oriented programming",
+    years: 2,
+  },
+
+  // Frontend
+  {
+    name: "React",
+    icon: <FaReact className="w-5 h-5" />,
+    category: "frontend",
+    level: 80,
+    color: "from-cyan-400 to-blue-600", // React neon blue
+    description: "UI component library",
+    years: 2,
+  },
+  {
+    name: "Next.js",
+    icon: <RiNextjsFill className="w-5 h-5" />,
+    category: "frontend",
+    level: 80,
+    color: "from-gray-900 to-black", // Next.js black/gray
+    description: "React framework",
+    years: 2,
+  },
+  {
+    name: "Tailwind",
+    icon: <RiTailwindCssFill className="w-5 h-5" />,
+    category: "frontend",
+    level: 80,
+    color: "from-teal-400 to-teal-600", // Tailwind teal
+    description: "Utility-first CSS",
+    years: 2,
+  },
+  {
+    name: "HTML5",
+    icon: <FaHtml5 className="w-5 h-5" />,
+    category: "frontend",
+    level: 90,
+    color: "from-orange-500 to-red-500", // HTML5 orange
+    description: "Markup language for web pages",
+    years: 3,
+  },
+  {
+    name: "CSS",
+    icon: <FaCss3 className="w-5 h-5" />,
+    category: "frontend",
+    level: 90,
+    color: "from-blue-500 to-blue-700", // CSS3 blue
+    description: "Styling",
+    years: 3,
+  },
+  {
+    name: "Bootstrap",
+    icon: <FaBootstrap className="w-5 h-5" />,
+    category: "frontend",
+    level: 90,
+    color: "from-purple-600 to-purple-800", // Bootstrap purple
+    description: "Utility-classes for CSS",
+    years: 2,
+  },
+
+  // Backend
+  {
+    name: "Node.js",
+    icon: <RiNodejsLine className="w-5 h-5" />,
+    category: "backend",
+    level: 80,
+    color: "from-green-500 to-green-700", // Node.js green
+    description: "JavaScript runtime",
+    years: 2,
+  },
+  {
+    name: "Express",
+    icon: <SiExpress className="w-5 h-5" />,
+    category: "backend",
+    level: 85,
+    color: "from-gray-700 to-black", // Express gray/black
+    description: "Web framework for Node.js",
+    years: 2,
+  },
+  {
+    name: "REST API",
+    icon: <Server className="w-5 h-5" />,
+    category: "backend",
+    level: 90,
+    color: "from-indigo-500 to-indigo-700",
+    description: "RESTful architecture",
+    years: 2,
+  },
+
+  // Databases
+  {
+    name: "MongoDB",
+    icon: <DiMongodb className="w-5 h-5" />,
+    category: "db",
+    level: 60,
+    color: "from-green-700 to-green-800", // MongoDB dark green
+    description: "NoSQL database",
+    years: 1,
+  },
+  {
+    name: "PostgreSQL",
+    icon: <DiPostgresql className="w-5 h-5" />,
+    category: "db",
+    level: 80,
+    color: "from-blue-700 to-indigo-700", // PostgreSQL blue
+    description: "Relational database",
+    years: 2,
+  },
+  {
+    name: "Firebase",
+    icon: <RiFirebaseFill className="w-5 h-5" />,
+    category: "db",
+    level: 90,
+    color: "from-yellow-400 to-orange-500", // Firebase yellow-orange
+    description: "Backend-as-a-service",
+    years: 4,
+  },
+  {
+    name: "Supabase",
+    icon: <RiSupabaseLine className="w-5 h-5" />,
+    category: "db",
+    level: 50,
+    color: "from-emerald-500 to-emerald-700", // Supabase green
+    description: "Open-source Firebase alternative",
+    years: 0.5,
+  },
+
+  // DevOps
+  {
+    name: "Docker",
+    icon: <FaDocker className="w-5 h-5" />,
+    category: "devops",
+    level: 40,
+    color: "from-sky-400 to-sky-600", // Docker blue
+    description: "Containerization",
+    years: 0.5,
+  },
+  {
+    name: "Git",
+    icon: <FaGithub className="w-5 h-5" />,
+    category: "devops",
+    level: 95,
+    color: "from-gray-800 to-black", // GitHub black
+    description: "Version control",
+    years: 4,
+  },
+  {
+    name: "VS Code",
+    icon: <VscVscode className="w-5 h-5" />,
+    category: "devops",
+    level: 90,
+    color: "from-blue-500 to-indigo-600", // VS Code blue
+    description: "Code editor",
+    years: 6,
+  },
+  {
+    name: "Post Man",
+    icon: <SiPostman className="w-5 h-5" />,
+    category: "devops",
+    level: 80,
+    color: "from-orange-500 to-orange-600", // Postman orange
+    description: "For testing the APIs",
+    years: 1,
+  },
+]
+
+const certifications = [
+  {
+    title: "AWS Certified",
+    issuer: "Amazon Web Services",
+    year: "2022",
+    img: "",
+  },
+  {
+    title: "Google Cloud",
+    issuer: "Google Cloud",
+    year: "2023",
+    img: "",
+  },
+  {
+    title: "Microsoft Certified",
+    issuer: "Microsoft",
+    year: "2023",
+    img: "",
+  },
+]
+
+
+const categoryInfo = {
+  lang: {
+    name: "Languages",
+    icon: <Code className="w-5 h-5 text-sky-400" />,
+    description: "Programming languages I'm proficient in",
+  },
+  frontend: {
+    name: "Frontend",
+    icon: <Monitor className="w-5 h-5 text-sky-400" />,
+    description: "Technologies for building beautiful user interfaces",
+  },
+  backend: {
+    name: "Backend",
+    icon: <Server className="w-5 h-5 text-sky-400" />,
+    description: "Server-side technologies and APIs",
+  },
+  db: {
+    name: "Databases",
+    icon: <Database className="w-5 h-5 text-sky-400" />,
+    description: "Data storage and management solutions",
+  },
+  devops: {
+    name: "DevOps",
+    icon: <VscAzureDevops className="w-5 h-5 text-sky-400" />,
+    description: "Tools for development operations and deployment",
+  },
+}
+
+const categoryArr = [
+  {
+    name: "All",
+    value: "all"
+  },
+  {
+    name: "Languages",
+    value: "lang"
+  },
+  {
+    name: "Frontend",
+    value: "frontend"
+  },
+  {
+    name: "Backend",
+    value: "backend"
+  },
+  {
+    name: "Databases",
+    value: "db"
+  },
+  {
+    name: "DevOps",
+    value: "devops"
   }
-  
-  const categoryArr = [
-    {
-      name: "All",
-      value: "all"
-    },
-    {
-      name: "Languages",
-      value: "lang"
-    },
-    {
-      name: "Frontend",
-      value: "frontend"
-    },
-    {
-      name: "Backend",
-      value: "backend"
-    },
-    {
-      name: "Databases",
-      value: "db"
-    },
-    {
-      name: "DevOps",
-      value: "devops"
-    }
-  ]
-  
+]
+
 
 // Memoized Hexagon skill component
 const SelectedSkill = React.memo(function SelectedSkill({
@@ -535,7 +529,7 @@ const CertificationCard = React.memo(function CertificationCard({
           {/* Certificate content - Below image */}
           <div className="flex-1 flex flex-col p-5">
             <div className="flex items-start gap-3 mb-3">
-              <div className={`p-2 rounded-lg bg-gradient-to-br ${cert.color} flex-shrink-0`}>{cert.icon}</div>
+              <div className={`p-2 rounded-lg bg-gradient-to-br from-gray-800 via-cyan-500 to-gray-800 flex-shrink-0`}>{CertIcon}</div>
               <div>
                 <h4 className="text-lg font-bold text-white">{cert.title}</h4>
                 <p className="text-sm text-sky-400">{cert.issuer}</p>
