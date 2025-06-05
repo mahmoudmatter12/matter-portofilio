@@ -1,31 +1,83 @@
 "use client"
-import { useState, useRef, useMemo } from "react"
+import { useState, useRef, useMemo, useEffect } from "react"
 import React from "react"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { GraduationCap, Briefcase, Calendar, MapPin, ExternalLink } from "lucide-react"
+import {
+  GraduationCap,
+  Briefcase,
+  Calendar,
+  MapPin,
+  ExternalLink,
+  Heart,
+  Trophy,
+  BookOpen,
+  Users,
+  Star,
+} from "lucide-react"
 import { useMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
+import { TimeLinePostType } from "@prisma/client"
+import { TimelinePost } from "@/types/timelineposts"
 
-interface TimeLineItem {
-  title: string
-  institution: string
-  location: string
-  year: string
-  description: string
-  type: string
-  link: string
+
+
+
+function getIcon(type: TimeLinePostType): React.ReactNode {
+  switch (type) {
+    case TimeLinePostType.EDUCATION:
+      return <GraduationCap className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    case TimeLinePostType.WORK:
+      return <Briefcase className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    case TimeLinePostType.VOLUNTEERING:
+      return <Heart className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    case TimeLinePostType.PARTICIPATION:
+      return <Users className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    case TimeLinePostType.AWARD:
+      return <Trophy className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    case TimeLinePostType.PUBLICATION:
+      return <BookOpen className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    default:
+      return <Star className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+  }
 }
 
-function getIcon(type: string): React.ReactNode {
+function getTypeLabel(type: TimeLinePostType): string {
   switch (type) {
-    case "education":
-      return <GraduationCap className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
-    case "work":
-      return <Briefcase className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+    case TimeLinePostType.EDUCATION:
+      return "Education"
+    case TimeLinePostType.WORK:
+      return "Work"
+    case TimeLinePostType.VOLUNTEERING:
+      return "Volunteering"
+    case TimeLinePostType.PARTICIPATION:
+      return "Participation"
+    case TimeLinePostType.AWARD:
+      return "Award"
+    case TimeLinePostType.PUBLICATION:
+      return "Publication"
     default:
-      return <Calendar className="h-5 w-5 text-indigo-500 dark:text-cyan-400" />
+      return "Other"
+  }
+}
+
+function getTypeBadgeColor(type: TimeLinePostType): string {
+  switch (type) {
+    case TimeLinePostType.EDUCATION:
+      return "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-cyan-400"
+    case TimeLinePostType.WORK:
+      return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400"
+    case TimeLinePostType.VOLUNTEERING:
+      return "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400"
+    case TimeLinePostType.PARTICIPATION:
+      return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+    case TimeLinePostType.AWARD:
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+    case TimeLinePostType.PUBLICATION:
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
+    default:
+      return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
   }
 }
 
@@ -37,7 +89,7 @@ const TimelineItem = React.memo(function TimelineItem({
   hoveredIndex,
   setHoveredIndex,
 }: {
-  item: TimeLineItem
+  item: TimelinePost
   index: number
   isMobile: boolean
   hoveredIndex: number | null
@@ -54,16 +106,18 @@ const TimelineItem = React.memo(function TimelineItem({
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ delay: 0.1 * index, duration: 0.5 }}
-      className={`relative mb-12 flex ${isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-        } items-center`}
+      className={`relative mb-12 flex ${
+        isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+      } items-center`}
       onMouseEnter={() => setHoveredIndex(index)}
       onMouseLeave={() => setHoveredIndex(null)}
     >
       {/* Timeline dot with pulse effect on hover */}
       <div className="relative flex items-center justify-center z-10">
         <div
-          className={`w-10 h-10 rounded-full bg-white dark:bg-gray-800 border-4 ${hoveredIndex === index ? "border-indigo-500 dark:border-cyan-400" : "border-indigo-300 dark:border-cyan-600"
-            } flex items-center justify-center transition-colors duration-300`}
+          className={`w-10 h-10 rounded-full bg-white dark:bg-gray-800 border-4 ${
+            hoveredIndex === index ? "border-indigo-500 dark:border-cyan-400" : "border-indigo-300 dark:border-cyan-600"
+          } flex items-center justify-center transition-colors duration-300`}
         >
           {getIcon(item.type)}
         </div>
@@ -80,8 +134,9 @@ const TimelineItem = React.memo(function TimelineItem({
 
       {/* Card with enhanced hover effects */}
       <div
-        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${!isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
-          }`}
+        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${
+          !isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
+        }`}
       >
         <motion.div
           className="relative p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-sky-100 dark:border-gray-700 shadow-sm overflow-hidden group"
@@ -93,13 +148,8 @@ const TimelineItem = React.memo(function TimelineItem({
 
           {/* Type badge and year */}
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span
-              className={`px-2.5 py-1 text-xs font-medium rounded-full ${item.type === "education"
-                ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-cyan-400"
-                : "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400"
-                }`}
-            >
-              {item.type === "education" ? "Education" : "Work"}
+            <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${getTypeBadgeColor(item.type)}`}>
+              {getTypeLabel(item.type)}
             </span>
             <span className="flex items-center text-sm text-gray-500 dark:text-gray-400">
               <Calendar className="h-3.5 w-3.5 mr-1" />
@@ -111,35 +161,85 @@ const TimelineItem = React.memo(function TimelineItem({
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-cyan-400 transition-colors">
             {item.title}
           </h3>
-          <div className="flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-cyan-400 mb-1">
-            {item.institution}
-          </div>
+          {item.institution && (
+            <div className="flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-cyan-400 mb-1">
+              {item.institution}
+            </div>
+          )}
 
           {/* Location */}
-          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
-            <MapPin className="h-3.5 w-3.5 mr-1" />
-            {item.location}
-          </div>
+          {item.location && (
+            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
+              <MapPin className="h-3.5 w-3.5 mr-1" />
+              {item.location}
+            </div>
+          )}
 
           {/* Description */}
           <p className="text-gray-600 dark:text-gray-300 text-sm">{item.description}</p>
 
           {/* Link */}
-          <div className="mt-4 flex justify-end">
-            <a
-              href={item.link}
-              className="inline-flex items-center text-xs text-indigo-600 dark:text-cyan-400 hover:underline group-hover:translate-x-1 transition-transform"
-            >
-              Learn more
-              <ExternalLink className="h-3 w-3 ml-1" />
-            </a>
-          </div>
+          {item.link && (
+            <div className="mt-4 flex justify-end">
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-xs text-indigo-600 dark:text-cyan-400 hover:underline group-hover:translate-x-1 transition-transform"
+              >
+                Learn more
+                <ExternalLink className="h-3 w-3 ml-1" />
+              </a>
+            </div>
+          )}
         </motion.div>
       </div>
     </motion.div>
   )
 })
 
+// Loading skeleton component
+const TimelineItemSkeleton = React.memo(function TimelineItemSkeleton({
+  index,
+  isMobile,
+}: {
+  index: number
+  isMobile: boolean
+}) {
+  return (
+    <div
+      className={`relative mb-12 flex ${
+        isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+      } items-center`}
+    >
+      {/* Timeline dot skeleton */}
+      <div className="relative flex items-center justify-center z-10">
+        <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+      </div>
+
+      {/* Card skeleton */}
+      <div
+        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${
+          !isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
+        }`}
+      >
+        <div className="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-sky-100 dark:border-gray-700 shadow-sm">
+          <div className="flex gap-2 mb-2">
+            <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+            <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          </div>
+          <div className="h-6 w-3/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+          <div className="h-4 w-1/2 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-1" />
+          <div className="h-4 w-1/3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-3" />
+          <div className="space-y-2">
+            <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            <div className="h-4 w-5/6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+})
 
 export function TimelineOPT() {
   const isMobile = useMobile()
@@ -155,68 +255,42 @@ export function TimelineOPT() {
   // State to track which item is being hovered
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
+  // State for timeline data
+  const [timelineItems, setTimelineItems] = useState<TimelinePost[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   // Section intersection observer
   const [sectionRef, isSectionInView] = useIntersectionObserver<HTMLElement>({
     threshold: 0.1,
     once: true,
   })
 
-  // Memoize timeline data to prevent unnecessary re-renders
-  const timelineItems = useMemo(
-    () => [
-      {
-        title: "Bachelor's in Computer Science",
-        institution: "Tech University",
-        location: "San Francisco, CA",
-        year: "2018 - 2022",
-        description:
-          "Specialized in Web Development and Human-Computer Interaction. Graduated with honors and completed a thesis on responsive design patterns.",
-        type: "education",
-        link: "#",
-      },
-      {
-        title: "Frontend Developer Intern",
-        institution: "Digital Solutions Inc.",
-        location: "New York, NY",
-        year: "Summer 2021",
-        description:
-          "Developed responsive UIs using React and implemented accessibility features. Worked on a team of 5 developers to deliver a client dashboard application.",
-        type: "work",
-        link: "#",
-      },
-      {
-        title: "Master's in Software Engineering",
-        institution: "Advanced Tech Institute",
-        location: "Boston, MA",
-        year: "2022 - 2024",
-        description:
-          "Focus on scalable architecture and cloud computing. Conducted research on serverless architectures and contributed to open-source projects.",
-        type: "education",
-        link: "#",
-      },
-      {
-        title: "Full Stack Developer",
-        institution: "Innovatech",
-        location: "Remote",
-        year: "2022 - Present",
-        description:
-          "Leading development of Next.js applications with TypeScript and GraphQL. Managing a team of developers and implementing CI/CD pipelines for streamlined deployment.",
-        type: "work",
-        link: "#",
-      },
-      {
-        title: "Senior Developer",
-        institution: "TechForward",
-        location: "Seattle, WA",
-        year: "2005 - Present",
-        description:
-          "Architecting scalable solutions for enterprise clients. Implementing microservices architecture and mentoring junior developers on best practices.",
-        type: "work",
-        link: "#",
-      },
-    ],
-    [],
-  )
+  // Fetch timeline data
+  useEffect(() => {
+    const fetchTimelineData = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const response = await fetch("/api/timelineposts")
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch timeline data: ${response.status}`)
+        }
+
+        const data: TimelinePost[] = await response.json()
+        setTimelineItems(data)
+      } catch (err) {
+        console.error("Error fetching timeline data:", err)
+        setError(err instanceof Error ? err.message : "Failed to load timeline data")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTimelineData()
+  }, [])
 
   // Memoize background elements
   const BackgroundElements = useMemo(
@@ -314,16 +388,50 @@ export function TimelineOPT() {
               />
             </div>
 
-            {timelineItems.map((item, index) => (
-              <TimelineItem
-                key={index}
-                item={item}
-                index={index}
-                isMobile={isMobile}
-                hoveredIndex={hoveredIndex}
-                setHoveredIndex={setHoveredIndex}
-              />
-            ))}
+            {/* Error state */}
+            {error && (
+              <div className="text-center py-12">
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
+                  <p className="text-red-600 dark:text-red-400 font-medium">Failed to load timeline</p>
+                  <p className="text-red-500 dark:text-red-300 text-sm mt-1">{error}</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                  >
+                    Retry
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Loading state */}
+            {loading && !error && (
+              <>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <TimelineItemSkeleton key={index} index={index} isMobile={isMobile} />
+                ))}
+              </>
+            )}
+
+            {/* Timeline items */}
+            {!loading && !error && timelineItems.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-500 dark:text-gray-400">No timeline items found.</p>
+              </div>
+            )}
+
+            {!loading &&
+              !error &&
+              timelineItems.map((item, index) => (
+                <TimelineItem
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  isMobile={isMobile}
+                  hoveredIndex={hoveredIndex}
+                  setHoveredIndex={setHoveredIndex}
+                />
+              ))}
           </div>
         </motion.div>
       </div>

@@ -23,11 +23,21 @@ import {
   ChevronDown,
   ChevronLeft,
 } from "lucide-react"
+import { usePathname } from "next/navigation";
 
 export function FloatingSocialDock() {
   const [expanded, setExpanded] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [activeHash, setActiveHash] = useState("")
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname.startsWith("/admin")) {
+      setHidden(true);
+      return;
+    }
+  }, [pathname]);
 
   const smoothScroll = (targetId: string) => {
     const target = document.querySelector(targetId)
@@ -230,8 +240,8 @@ export function FloatingSocialDock() {
                     <div className="relative group">
                       {React.cloneElement(item.icon, {
                         className: `h-4 w-4 sm:h-5 sm:w-5 ${activeHash === item.href || (item.href === "#home" && activeHash === "")
-                            ? "text-indigo-600 dark:text-cyan-400"
-                            : "text-indigo-500 dark:text-cyan-400"
+                          ? "text-indigo-600 dark:text-cyan-400"
+                          : "text-indigo-500 dark:text-cyan-400"
                           }`,
                       })}
                       <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 text-xs font-medium bg-gray-800 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
@@ -253,7 +263,7 @@ export function FloatingSocialDock() {
                   onClick={() => setExpanded(!expanded)}
                   className="p-3 rounded-full hover:bg-indigo-100/50 dark:hover:bg-gray-700 text-indigo-500 dark:text-cyan-400"
                 >
-                  {expanded ? <FaRegArrowAltCircleLeft /> : <FaRegArrowAltCircleRight />  }
+                  {expanded ? <FaRegArrowAltCircleLeft /> : <FaRegArrowAltCircleRight />}
                 </motion.button>
 
                 <AnimatePresence>
@@ -335,8 +345,8 @@ export function FloatingSocialDock() {
                   >
                     {React.cloneElement(item.icon, {
                       className: `h-4 w-4 sm:h-5 sm:w-5 ${activeHash === item.href || (item.href === "#home" && activeHash === "")
-                          ? "text-indigo-600 dark:text-cyan-400"
-                          : "text-indigo-500 dark:text-cyan-400"
+                        ? "text-indigo-600 dark:text-cyan-400"
+                        : "text-indigo-500 dark:text-cyan-400"
                         }`,
                     })}
                   </motion.button>

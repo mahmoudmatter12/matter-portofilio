@@ -4,10 +4,11 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { ScrollProgress } from "./ScrollProgress"
 import { MyLink } from "./MyLink"
+import { usePathname } from "next/navigation"
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
-
+  const pathname = usePathname()
   // Handle scroll events
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +23,9 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-
+  if (pathname.startsWith("/admin")) {
+    return;
+  }
   const navItems = [
     { name: "About", href: "#about" },
     // { name: "Experience", href: "#experience" },

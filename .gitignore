@@ -42,3 +42,4 @@ next-env.d.ts
 *.todo
 /prisma/migrations
 /lib/generated
+/lib/generated/prisma
