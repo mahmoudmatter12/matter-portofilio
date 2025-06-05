@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Services } from "@/components/Services"
-import { Contact } from "@/components/Contact"
 import { Hero } from "@/components/HeroSection"
 import { About } from "@/components/AboutSection"
 import { SpaceLoader } from "@/components/Loader"
@@ -12,6 +11,7 @@ import { ProjectsOpt } from "@/components/ProjectsOpimites"
 import { TimelineOPT } from "@/components/timeline-optimized"
 import { SkillsOpt } from "@/components/newSkills-opt"
 import { CertificationsOpt } from "@/components/certificatesNew"
+import { NewContact } from "@/components/contact-form"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -51,7 +51,8 @@ export default function Home() {
           <ProjectsOpt />
           <Services />
           <TeamCarousel />
-          <Contact />
+          {/* <Contact /> */}
+          <NewContact />
           <Footer />
         </motion.div>
       )}
