@@ -9,8 +9,8 @@ import { SpaceLoader } from "@/components/Loader"
 import { Footer } from "@/components/Footer"
 import { TeamCarousel } from "@/components/TeamCarousel"
 import { ProjectsOpt } from "@/components/ProjectsOpimites"
-import { TechStackSectionOpt } from "@/components/tech-stack-section-optimized"
 import { TimelineOPT } from "@/components/timeline-optimized"
+import { SkillsOpt } from "@/components/newSkills-opt"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -44,7 +44,8 @@ export default function Home() {
           <Hero />
           <About />
           <TimelineOPT />
-          <TechStackSectionOpt />
+          {/* <TechStackSectionOpt /> */}
+          <SkillsOpt />
           <ProjectsOpt />
           <Services />
           <TeamCarousel />

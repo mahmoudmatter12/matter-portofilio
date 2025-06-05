@@ -38,7 +38,7 @@ model TimeLinePost {
 // }
 
 model Projects {
-  id           String   @id @default(cuid())
+  id           String        @id @default(cuid())
   title        String
   description  String
   image        String?
@@ -47,8 +47,40 @@ model Projects {
   tags         ProjectTags[]
   features     String[]
   achievements String[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model skills {
+  id                String          @id @default(cuid())
+  name              String
+  category          SkillCategory
+  level             SkillLevel
+  description       String?
+  icon              String?
+  yearsOfExperience Int?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+enum SkillCategory {
+  FRONTEND
+  BACKEND
+  DATABASE
+  DEVOPS
+  MOBILE
+  DESIGN
+  TOOLS
+  LANGUAGES
+  FRAMEWORKS
+  OTHER
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
 }
 
 enum TimeLinePostType {
