@@ -45,6 +45,17 @@ interface NavSection {
 }
 
 const navigationSections: NavSection[] = [
+   {
+    title: "Home",
+    items: [
+      {
+        title: "Home",
+        href: "/",
+        icon: Home,
+        description: "Return to the main site",
+      },
+    ],
+  },
   {
     title: "Overview",
     items: [
