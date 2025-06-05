@@ -37,6 +37,7 @@ interface NavItem {
   icon: React.ComponentType<{ className?: string }>
   badge?: string
   description?: string
+  dynamicBadge?: boolean
 }
 
 interface NavSection {
@@ -127,7 +128,7 @@ const navigationSections: NavSection[] = [
         title: "Messages",
         href: "/admin/messages",
         icon: Mail,
-        badge: (await getUnreadMessages()).toString(),
+        dynamicBadge: true,
         description: "Contact form submissions",
       },
       {
@@ -162,9 +163,20 @@ const navigationSections: NavSection[] = [
 
 function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: () => void }) {
   const pathname = usePathname()
+  const [unreadCount, setUnreadCount] = useState<number>(0)
 
   useEffect(() => {
-    getUnreadMessages()
+    const fetchUnreadMessages = async () => {
+      const count = await getUnreadMessages()
+      setUnreadCount(count)
+    }
+    
+    fetchUnreadMessages()
+    
+    // Optional: Set up polling to keep the count updated
+    const interval = setInterval(fetchUnreadMessages, 30000) // Update every 30 seconds
+    
+    return () => clearInterval(interval)
   }, [])
 
   return (
@@ -199,6 +211,12 @@ function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavig
                   const isActive = pathname === item.href
                   const Icon = item.icon
                   const isDisabled = item.badge === "Soon"
+                  
+                  // Get the badge value - either static or dynamic
+                  let badgeValue = item.badge
+                  if (item.dynamicBadge && item.title === "Messages") {
+                    badgeValue = unreadCount > 0 ? unreadCount.toString() : undefined
+                  }
 
                   return (
                     <Link
@@ -218,12 +236,12 @@ function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavig
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
                               <span className="font-medium">{item.title}</span>
-                              {item.badge && (
+                              {badgeValue && (
                                 <Badge
-                                  variant={item.badge === "Soon" ? "secondary" : "default"}
+                                  variant={badgeValue === "Soon" ? "secondary" : "default"}
                                   className="h-5 text-xs"
                                 >
-                                  {item.badge}
+                                  {badgeValue}
                                 </Badge>
                               )}
                             </div>

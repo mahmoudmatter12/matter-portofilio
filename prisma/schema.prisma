@@ -26,16 +26,6 @@ model TimeLinePost {
   updatedAt   DateTime          @updatedAt
 }
 
-// interface Project {
-//   title: string
-//   description: string
-//   image?: string
-//   github: string
-//   live?: string
-//   tags: string[]
-//   features?: string[] // New field
-//   achievements?: string[] // New field
-// }
 
 model Projects {
   id           String        @id @default(cuid())
