@@ -91,7 +91,7 @@ export default function TimelineAdminPage() {
 
   useEffect(() => {
     fetchTimelinePosts()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Filter and search posts
@@ -215,6 +215,13 @@ export default function TimelineAdminPage() {
     }
   }
 
+  // handle refresh
+  const handleRefresh = () => {
+    fetchTimelinePosts()
+    setSearchTerm("")
+    setFilterType("all")
+  }
+
   // Open create form
   const openCreateForm = () => {
     setEditingPost(null)
@@ -244,10 +251,17 @@ export default function TimelineAdminPage() {
               Manage your timeline posts, education, work experience, and achievements.
             </p>
           </div>
-          <Button onClick={openCreateForm} className="w-fit">
-            <Plus className="h-4 w-4 mr-2" />
-            Add New Post
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-6">
+            <Button onClick={openCreateForm} className="w-fit">
+              <Plus className="h-4 w-4 mr-2" />
+              Add New Post
+            </Button>
+            {/* refresh button */}
+            <Button variant="outline" onClick={handleRefresh} className="w-fit">
+              <Search className="h-4 w-4 mr-" />
+              Refresh Posts
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -340,7 +354,7 @@ export default function TimelineAdminPage() {
           <CardContent>
             {loading ? (
               <div className="space-y-4">
-                {Array.from({ length: 5 }).map((_, i) => (
+                {Array.from({ length: 3 }).map((_, i) => (
                   <div key={i} className="h-16 bg-muted animate-pulse rounded" />
                 ))}
               </div>

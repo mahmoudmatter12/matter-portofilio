@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Edit, Trash2, Eye, Search, Filter, Calendar, AlertTriangle } from "lucide-react"
+import { Plus, Edit, Trash2, Eye, Search, Filter, Calendar, AlertTriangle, RefreshCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -232,6 +232,13 @@ export default function CertificationsAdminPage() {
         }
     }
 
+    // handle refresh
+    const handleRefresh = () => {
+        fetchCertifications()
+        setSearchTerm("")
+        setFilterStatus("all")
+    }
+
     // Open create form
     const openCreateForm = () => {
         setEditingCertification(null)
@@ -267,10 +274,17 @@ export default function CertificationsAdminPage() {
                         <h1 className="text-3xl font-bold tracking-tight">Certifications</h1>
                         <p className="text-muted-foreground">Manage your professional certifications and credentials.</p>
                     </div>
-                    <Button onClick={openCreateForm} className="w-fit">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add New Certification
-                    </Button>
+                    <div className="flex items-center gap-5">
+
+                        <Button onClick={openCreateForm} className="w-fit">
+                            <Plus className="h-4 w-4 mr-2" />
+                            Add New Certification
+                        </Button>
+                        <Button variant="outline" onClick={handleRefresh} className="w-fit">
+                            <RefreshCcw className="h-4 w-4 mr-2" />
+                            Refresh Certificates
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Stats Cards */}
@@ -373,7 +387,7 @@ export default function CertificationsAdminPage() {
                     <CardContent>
                         {loading ? (
                             <div className="space-y-4">
-                                {Array.from({ length: 5 }).map((_, i) => (
+                                {Array.from({ length: 3 }).map((_, i) => (
                                     <div key={i} className="h-16 bg-muted animate-pulse rounded" />
                                 ))}
                             </div>

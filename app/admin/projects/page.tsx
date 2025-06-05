@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Edit, Trash2, Eye, Search, Filter, ExternalLink, Github } from "lucide-react"
+import { Plus, Edit, Trash2, Eye, Search, Filter, ExternalLink, Github, RefreshCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -253,6 +253,13 @@ export default function ProjectsAdminPage() {
     }
   }
 
+  // handle refresh
+  const handleRefresh = () => {
+    fetchProjects()
+    setSearchTerm("")
+    setFilterTag("all")
+  }
+
   // Open create form
   const openCreateForm = () => {
     setEditingProject(null)
@@ -289,10 +296,16 @@ export default function ProjectsAdminPage() {
             <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
             <p className="text-muted-foreground">Manage your portfolio projects and case studies.</p>
           </div>
-          <Button onClick={openCreateForm} className="w-fit">
-            <Plus className="h-4 w-4 mr-2" />
-            Add New Project
-          </Button>
+          <div className="flex items-center gap-5">
+            <Button onClick={openCreateForm} className="w-fit">
+              <Plus className="h-4 w-4 mr-2" />
+              Add New Project
+            </Button>
+            <Button variant="outline" onClick={handleRefresh} className="w-fit">
+              <RefreshCcw className="h-4 w-4 mr-2" />
+              Refresh Projects
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -383,7 +396,7 @@ export default function ProjectsAdminPage() {
           <CardContent>
             {loading ? (
               <div className="space-y-4">
-                {Array.from({ length: 5 }).map((_, i) => (
+                {Array.from({ length: 3 }).map((_, i) => (
                   <div key={i} className="h-16 bg-muted animate-pulse rounded" />
                 ))}
               </div>

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -44,8 +44,19 @@ interface NavSection {
   items: NavItem[]
 }
 
+const getUnreadMessages = async (): Promise<number> => {
+  try {
+    const response = await fetch("/api/messages/un-read-messages")
+    if (!response.ok) return 0
+    const data = await response.json()
+    return typeof data.count === "number" ? data.count : 0
+  } catch {
+    return 0
+  }
+}
+
 const navigationSections: NavSection[] = [
-   {
+  {
     title: "Home",
     items: [
       {
@@ -116,7 +127,7 @@ const navigationSections: NavSection[] = [
         title: "Messages",
         href: "/admin/messages",
         icon: Mail,
-        badge: "3",
+        badge: (await getUnreadMessages()).toString(),
         description: "Contact form submissions",
       },
       {
@@ -138,7 +149,7 @@ const navigationSections: NavSection[] = [
         badge: "Soon",
         description: "User management and permissions",
       },
-     
+
       {
         title: "Profile",
         href: "/admin/profile",
@@ -151,6 +162,10 @@ const navigationSections: NavSection[] = [
 
 function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: () => void }) {
   const pathname = usePathname()
+
+  useEffect(() => {
+    getUnreadMessages()
+  }, [])
 
   return (
     <div className="flex h-full flex-col">
