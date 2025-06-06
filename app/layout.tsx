@@ -7,7 +7,9 @@ import { Toaster } from "@/components/ui/sonner"
 import { Header } from "@/components/Header"
 import { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/react"
-
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   title: "Mahmoud Matter | Full Stack Developer",
@@ -57,13 +59,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             {/* Content Wrapper */}
             <Header />
-            <main className="relative z-10">
-              <FloatingSocialDock />
-              {children}
-              <Analytics />
-              <Toaster />
-            </main>
-
+            <ClerkProvider>
+              <main className="relative z-10">
+                <FloatingSocialDock />
+                {children}
+                <Analytics />
+                <Toaster />
+              </main>
+            </ClerkProvider>
           </div>
         </ThemeProvider>
       </body>

@@ -26,6 +26,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
+import { SignOutButton } from "@clerk/nextjs"
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -81,6 +82,7 @@ const navigationSections: NavSection[] = [
         title: "Analytics",
         href: "/admin/analytics",
         icon: BarChart3,
+        badge: "Soon",
         description: "Site statistics and insights",
       },
     ],
@@ -143,19 +145,19 @@ const navigationSections: NavSection[] = [
   {
     title: "System",
     items: [
-      {
-        title: "Users",
-        href: "/admin/users",
-        icon: Users,
-        badge: "Soon",
-        description: "User management and permissions",
-      },
 
       {
         title: "Profile",
         href: "/admin/profile",
         icon: User,
         description: "Your admin profile settings",
+      },
+      {
+        title: "Users",
+        href: "/admin/users",
+        icon: Users,
+        badge: "Soon",
+        description: "User management and permissions",
       },
     ],
   },
@@ -170,17 +172,17 @@ function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavig
       const count = await getUnreadMessages()
       setUnreadCount(count)
     }
-    
+
     fetchUnreadMessages()
-    
+
     // Optional: Set up polling to keep the count updated
-    const interval = setInterval(fetchUnreadMessages, 30000) // Update every 30 seconds
-    
+    const interval = setInterval(fetchUnreadMessages, 120000) // Update every 120 seconds
+
     return () => clearInterval(interval)
   }, [])
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-gray-900">
       {/* Header */}
       <div className="flex h-16 items-center border-b px-4">
         <div className="flex items-center gap-2">
@@ -211,7 +213,7 @@ function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavig
                   const isActive = pathname === item.href
                   const Icon = item.icon
                   const isDisabled = item.badge === "Soon"
-                  
+
                   // Get the badge value - either static or dynamic
                   let badgeValue = item.badge
                   if (item.dynamicBadge && item.title === "Messages") {
@@ -224,8 +226,8 @@ function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavig
                       href={isDisabled ? "#" : item.href}
                       onClick={onNavigate}
                       className={cn(
-                        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent",
-                        isActive && "bg-accent text-accent-foreground",
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-blue-500/40",
+                        isActive && "bg-blue-500/40 text-accent-foreground",
                         isDisabled && "cursor-not-allowed opacity-50 hover:bg-transparent",
                         collapsed && "justify-center px-2",
                       )}
@@ -261,17 +263,14 @@ function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavig
 
       {/* Footer */}
       <div className="border-t p-4">
-        <Button
-          variant="ghost"
-          className={cn("w-full justify-start gap-3", collapsed && "justify-center px-2")}
-          onClick={() => {
-            // Handle logout
-            console.log("Logout clicked")
-          }}
-        >
-          <LogOut className="h-4 w-4" />
-          {!collapsed && <span>Logout</span>}
-        </Button>
+        <SignOutButton>
+          <Button
+            variant="ghost"
+            className={cn("w-full justify-start gap-3 cursor-pointer text-red-500", collapsed && "justify-center px-2")}>
+            <LogOut className="h-4 w-4" />
+            {!collapsed && <span>Logout</span>}
+          </Button>
+        </SignOutButton>
       </div>
     </div>
   )
