@@ -310,7 +310,7 @@ export default function ProjectsAdminPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
+          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
             </CardHeader>
@@ -318,7 +318,7 @@ export default function ProjectsAdminPage() {
               <div className="text-2xl font-bold">{projects.length}</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20" >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">React Projects</CardTitle>
             </CardHeader>
@@ -328,7 +328,7 @@ export default function ProjectsAdminPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Next.js Projects</CardTitle>
             </CardHeader>
@@ -338,7 +338,7 @@ export default function ProjectsAdminPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Live Projects</CardTitle>
             </CardHeader>
@@ -349,7 +349,7 @@ export default function ProjectsAdminPage() {
         </div>
 
         {/* Filters and Search */}
-        <Card>
+        <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
           <CardHeader>
             <CardTitle>Filter & Search</CardTitle>
             <CardDescription>Find specific projects using filters and search.</CardDescription>
@@ -388,7 +388,7 @@ export default function ProjectsAdminPage() {
         </Card>
 
         {/* Projects Table */}
-        <Card>
+        <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
           <CardHeader>
             <CardTitle>Projects ({filteredProjects.length})</CardTitle>
             <CardDescription>A list of all your portfolio projects with quick actions.</CardDescription>

@@ -151,6 +151,7 @@ const navigationSections: NavSection[] = [
         href: "/admin/profile",
         icon: User,
         description: "Your admin profile settings",
+        badge: "Soon"
       },
       {
         title: "Users",
@@ -166,7 +167,6 @@ const navigationSections: NavSection[] = [
 function SidebarContent({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: () => void }) {
   const pathname = usePathname()
   const [unreadCount, setUnreadCount] = useState<number>(0)
-
   useEffect(() => {
     const fetchUnreadMessages = async () => {
       const count = await getUnreadMessages()

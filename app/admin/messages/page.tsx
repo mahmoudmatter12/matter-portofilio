@@ -221,7 +221,7 @@ export default function MessagesPage() {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card>
+                <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Messages</CardTitle>
                         <MessageSquare className="h-4 w-4 text-muted-foreground" />
@@ -231,7 +231,7 @@ export default function MessagesPage() {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">New Messages</CardTitle>
                         <Mail className="h-4 w-4 text-blue-500" />
@@ -241,7 +241,7 @@ export default function MessagesPage() {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20" >
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Read Messages</CardTitle>
                         <Eye className="h-4 w-4 text-yellow-500" />
@@ -251,7 +251,7 @@ export default function MessagesPage() {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Replied</CardTitle>
                         <CheckCircle className="h-4 w-4 text-green-500" />
@@ -263,7 +263,7 @@ export default function MessagesPage() {
             </div>
 
             {/* Filters */}
-            <Card>
+            <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                 <CardHeader>
                     <CardTitle className="text-lg">Filter Messages</CardTitle>
                 </CardHeader>
@@ -305,7 +305,7 @@ export default function MessagesPage() {
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
                 </div>
             ) : (
-                <Card>
+                <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                     <CardHeader>
                         <CardTitle>Messages ({filteredMessages.length})</CardTitle>
                         <CardDescription>{statusFilter === "all" ? "All messages" : `${statusFilter} messages`}</CardDescription>

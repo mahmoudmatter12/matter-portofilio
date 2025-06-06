@@ -272,7 +272,7 @@ export default function SkillsAdminPage() {
     <div className="p-6">
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Skills</h1>
             <p className="text-muted-foreground">Manage your technical skills and expertise levels.</p>
@@ -291,7 +291,7 @@ export default function SkillsAdminPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
+          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Skills</CardTitle>
             </CardHeader>
@@ -299,7 +299,7 @@ export default function SkillsAdminPage() {
               <div className="text-2xl font-bold">{skills.length}</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Expert Level</CardTitle>
             </CardHeader>
@@ -307,7 +307,7 @@ export default function SkillsAdminPage() {
               <div className="text-2xl font-bold">{skills.filter((s) => s.level === SkillLevel.EXPERT).length}</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Frontend Skills</CardTitle>
             </CardHeader>
@@ -317,7 +317,7 @@ export default function SkillsAdminPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Backend Skills</CardTitle>
             </CardHeader>
@@ -330,7 +330,7 @@ export default function SkillsAdminPage() {
         </div>
 
         {/* Filters and Search */}
-        <Card>
+        <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
           <CardHeader>
             <CardTitle>Filter & Search</CardTitle>
             <CardDescription>Find specific skills using filters and search.</CardDescription>
@@ -385,7 +385,7 @@ export default function SkillsAdminPage() {
         </Card>
 
         {/* Skills Table */}
-        <Card>
+        <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
           <CardHeader>
             <CardTitle>Skills ({filteredSkills.length})</CardTitle>
             <CardDescription>A list of all your skills with quick actions.</CardDescription>

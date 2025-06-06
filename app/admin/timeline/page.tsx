@@ -241,219 +241,221 @@ export default function TimelineAdminPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Timeline Posts</h1>
-            <p className="text-muted-foreground">
-              Manage your timeline posts, education, work experience, and achievements.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-6">
-            <Button onClick={openCreateForm} className="w-fit">
-              <Plus className="h-4 w-4 mr-2" />
-              Add New Post
-            </Button>
-            {/* refresh button */}
-            <Button variant="outline" onClick={handleRefresh} className="w-fit">
-              <Search className="h-4 w-4 mr-" />
-              Refresh Posts
-            </Button>
-          </div>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Posts</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{timelinePosts.length}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Education</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {timelinePosts.filter((p) => p.type === TimeLinePostType.EDUCATION).length}
+      <div className="p-6">
+        <div className="space-y-6">
+          {/* Header */}
+          <div className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20 rounded-lg p-6 shadow-md">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">Timeline Posts</h1>
+                <p className="text-muted-foreground">
+                  Manage your timeline posts, education, work experience, and achievements.
+                </p>
               </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Work</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {timelinePosts.filter((p) => p.type === TimeLinePostType.WORK).length}
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Awards</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {timelinePosts.filter((p) => p.type === TimeLinePostType.AWARD).length}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Filters and Search */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Filter & Search</CardTitle>
-            <CardDescription>Find specific timeline posts using filters and search.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search posts..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
-              <div className="w-full sm:w-48">
-                <Select value={filterType} onValueChange={setFilterType}>
-                  <SelectTrigger>
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Filter by type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    {Object.values(TimeLinePostType).map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {getTypeLabel(type)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <div className="flex flex-col sm:flex-row gap-6">
+                <Button onClick={openCreateForm} className="w-fit cursor-pointer">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add New Post
+                </Button>
+                {/* refresh button */}
+                <Button variant="outline" onClick={handleRefresh} className="w-fit cursor-pointer">
+                  <Search className="h-4 w-4 mr-" />
+                  Refresh Posts
+                </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Timeline Posts Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Timeline Posts ({filteredPosts.length})</CardTitle>
-            <CardDescription>A list of all your timeline posts with quick actions.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="space-y-4">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="h-16 bg-muted animate-pulse rounded" />
-                ))}
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ">
+            <Card className=" bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Posts</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{timelinePosts.length}</div>
+              </CardContent>
+            </Card>
+            <Card className=" bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Education</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {timelinePosts.filter((p) => p.type === TimeLinePostType.EDUCATION).length}
+                </div>
+              </CardContent>
+            </Card>
+            <Card className=" bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-900/20">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Work</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {timelinePosts.filter((p) => p.type === TimeLinePostType.WORK).length}
+                </div>
+              </CardContent>
+            </Card>
+            <Card className=" bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-900/20">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Awards</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {timelinePosts.filter((p) => p.type === TimeLinePostType.AWARD).length}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Filters and Search */}
+          <Card className=" bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-900/20">
+            <CardHeader>
+              <CardTitle>Filter & Search</CardTitle>
+              <CardDescription>Find specific timeline posts using filters and search.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search posts..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                <div className="w-full sm:w-48">
+                  <Select value={filterType} onValueChange={setFilterType}>
+                    <SelectTrigger>
+                      <Filter className="h-4 w-4 mr-2" />
+                      <SelectValue placeholder="Filter by type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      {Object.values(TimeLinePostType).map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {getTypeLabel(type)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            ) : filteredPosts.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">
-                  {searchTerm || filterType !== "all"
-                    ? "No posts match your search criteria."
-                    : "No timeline posts found. Create your first post!"}
-                </p>
-                {!searchTerm && filterType === "all" && (
-                  <Button onClick={openCreateForm} className="mt-4">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Your First Post
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Institution</TableHead>
-                      <TableHead>Year</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredPosts.map((post) => (
-                      <TableRow key={post.id}>
-                        <TableCell className="font-medium">
-                          <div className="max-w-48 truncate" title={post.title}>
-                            {post.title}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge className={getTypeBadgeColor(post.type)}>{getTypeLabel(post.type)}</Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="max-w-32 truncate" title={post.institution || ""}>
-                            {post.institution || "-"}
-                          </div>
-                        </TableCell>
-                        <TableCell>{post.year}</TableCell>
-                        <TableCell>
-                          <div className="max-w-32 truncate" title={post.location || ""}>
-                            {post.location || "-"}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <Button variant="ghost" size="sm" onClick={() => setPreviewPost(post)}>
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm" onClick={() => openEditForm(post)}>
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => setDeletingPost(post)}
-                              className="text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
+            </CardContent>
+          </Card>
+
+          {/* Timeline Posts Table */}
+          <Card className=" bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-900/20">
+            <CardHeader>
+              <CardTitle>Timeline Posts ({filteredPosts.length})</CardTitle>
+              <CardDescription>A list of all your timeline posts with quick actions.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="space-y-4">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="h-16 bg-muted animate-pulse rounded" />
+                  ))}
+                </div>
+              ) : filteredPosts.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">
+                    {searchTerm || filterType !== "all"
+                      ? "No posts match your search criteria."
+                      : "No timeline posts found. Create your first post!"}
+                  </p>
+                  {!searchTerm && filterType === "all" && (
+                    <Button onClick={openCreateForm} className="mt-4">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Your First Post
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Institution</TableHead>
+                        <TableHead>Year</TableHead>
+                        <TableHead>Location</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredPosts.map((post) => (
+                        <TableRow key={post.id}>
+                          <TableCell className="font-medium">
+                            <div className="max-w-48 truncate" title={post.title}>
+                              {post.title}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={getTypeBadgeColor(post.type)}>{getTypeLabel(post.type)}</Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="max-w-32 truncate" title={post.institution || ""}>
+                              {post.institution || "-"}
+                            </div>
+                          </TableCell>
+                          <TableCell>{post.year}</TableCell>
+                          <TableCell>
+                            <div className="max-w-32 truncate" title={post.location || ""}>
+                              {post.location || "-"}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <Button variant="ghost" size="sm" onClick={() => setPreviewPost(post)}>
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" onClick={() => openEditForm(post)}>
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setDeletingPost(post)}
+                                className="text-destructive hover:text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Form Modal */}
+        <TimelinePostForm
+          isOpen={isFormOpen}
+          onClose={closeForm}
+          onSubmit={handleFormSubmit}
+          initialData={editingPost}
+          loading={formLoading}
+        />
+
+        {/* Delete Confirmation Dialog */}
+        <DeleteConfirmDialog
+          isOpen={!!deletingPost}
+          onClose={() => setDeletingPost(null)}
+          onConfirm={() => deletingPost && handleDeletePost(deletingPost)}
+          title={deletingPost?.title || ""}
+        />
+
+        {/* Preview Modal */}
+        <TimelinePostPreview isOpen={!!previewPost} onClose={() => setPreviewPost(null)} post={previewPost} />
       </div>
-
-      {/* Form Modal */}
-      <TimelinePostForm
-        isOpen={isFormOpen}
-        onClose={closeForm}
-        onSubmit={handleFormSubmit}
-        initialData={editingPost}
-        loading={formLoading}
-      />
-
-      {/* Delete Confirmation Dialog */}
-      <DeleteConfirmDialog
-        isOpen={!!deletingPost}
-        onClose={() => setDeletingPost(null)}
-        onConfirm={() => deletingPost && handleDeletePost(deletingPost)}
-        title={deletingPost?.title || ""}
-      />
-
-      {/* Preview Modal */}
-      <TimelinePostPreview isOpen={!!previewPost} onClose={() => setPreviewPost(null)} post={previewPost} />
-    </div>
   )
 }

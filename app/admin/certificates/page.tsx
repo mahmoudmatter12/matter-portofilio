@@ -289,7 +289,7 @@ export default function CertificationsAdminPage() {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <Card>
+                    <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Total Certifications</CardTitle>
                         </CardHeader>
@@ -297,7 +297,7 @@ export default function CertificationsAdminPage() {
                             <div className="text-2xl font-bold">{stats.total}</div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Active</CardTitle>
                         </CardHeader>
@@ -305,7 +305,7 @@ export default function CertificationsAdminPage() {
                             <div className="text-2xl font-bold text-green-600">{stats.active}</div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Expired</CardTitle>
                         </CardHeader>
@@ -313,7 +313,7 @@ export default function CertificationsAdminPage() {
                             <div className="text-2xl font-bold text-red-600">{stats.expired}</div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Expiring Soon</CardTitle>
                         </CardHeader>
@@ -324,7 +324,7 @@ export default function CertificationsAdminPage() {
                 </div>
 
                 {/* Filters and Search */}
-                <Card>
+                <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                     <CardHeader>
                         <CardTitle>Filter & Search</CardTitle>
                         <CardDescription>Find specific certifications using filters and search.</CardDescription>
@@ -379,7 +379,7 @@ export default function CertificationsAdminPage() {
                 </Card>
 
                 {/* Certifications Table */}
-                <Card>
+                <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                     <CardHeader>
                         <CardTitle>Certifications ({filteredCertifications.length})</CardTitle>
                         <CardDescription>A list of all your certifications with quick actions.</CardDescription>
