@@ -4,13 +4,13 @@ import { memo } from "react"
 import { ThemeProvider } from "next-themes"
 import "./globals.css"
 import { FloatingSocialDock } from "@/components/FloatingSocialDock"
-import { Toaster } from "@/components/ui/sonner"
 import { Header } from "@/components/Header"
 import { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/react"
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
+import { ToastProvider } from "@/hooks/toastprovidor"
 
 export const metadata: Metadata = {
   title: "Mahmoud Matter | Full Stack Developer",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 const PortfolioBackgroundElements = memo(() => (
   <>
     {/* Subtle grid texture */}
-    <div 
+    <div
       className="absolute inset-0 opacity-[0.03] dark:opacity-[0.015]"
       style={{
         backgroundImage: `radial-gradient(circle at 1px 1px, rgba(99,102,241,0.15) 1px, transparent 0)`,
@@ -35,7 +35,7 @@ const PortfolioBackgroundElements = memo(() => (
     />
 
     {/* Main animated gradient orbs */}
-    <div 
+    <div
       className="absolute -top-32 -left-32 w-[700px] h-[700px] rounded-full 
       bg-gradient-to-br from-sky-400/20 via-cyan-400/12 to-blue-500/8 
       blur-3xl animate-pulse"
@@ -46,7 +46,7 @@ const PortfolioBackgroundElements = memo(() => (
       aria-hidden="true"
     />
 
-    <div 
+    <div
       className="absolute top-1/4 -right-40 w-[800px] h-[800px] rounded-full 
       bg-gradient-to-bl from-indigo-400/15 via-purple-400/10 to-pink-500/8 
       blur-3xl opacity-80 animate-pulse"
@@ -57,7 +57,7 @@ const PortfolioBackgroundElements = memo(() => (
       aria-hidden="true"
     />
 
-    <div 
+    <div
       className="absolute -bottom-32 left-1/4 w-[900px] h-[600px] rounded-full 
       bg-gradient-to-tr from-emerald-400/12 via-teal-400/15 to-cyan-500/10 
       blur-3xl opacity-75 animate-pulse"
@@ -69,7 +69,7 @@ const PortfolioBackgroundElements = memo(() => (
     />
 
     {/* Secondary floating orbs for depth */}
-    <div 
+    <div
       className="absolute top-1/2 left-1/3 w-[400px] h-[400px] rounded-full 
       bg-gradient-to-tr from-violet-400/10 via-fuchsia-400/8 to-rose-500/6 
       blur-3xl animate-pulse"
@@ -171,13 +171,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             transition-colors duration-500"
           >
             <PortfolioBackgroundElements />
-            
+
             {/* Content layer with subtle backdrop blur */}
             <div className="relative z-10 min-h-screen backdrop-blur-[0.5px]">
               <Header />
-              
+
               <ClerkProvider>
-                <main 
+                <main
                   className="relative min-h-screen
                   bg-white/20 dark:bg-slate-900/30 
                   backdrop-blur-[1px]
@@ -186,15 +186,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   transition-all duration-300"
                 >
                   <FloatingSocialDock />
-                  {children}
+                  <ToastProvider>
+                    {children}
+                  </ToastProvider>
+
                   <Analytics />
-                  <Toaster />
                 </main>
               </ClerkProvider>
             </div>
 
             {/* Subtle depth overlay */}
-            <div 
+            <div
               className="absolute inset-0 bg-gradient-to-t 
               from-black/3 via-transparent to-white/5 
               dark:from-black/10 dark:via-transparent dark:to-white/2 
@@ -203,7 +205,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
 
             {/* Top edge highlight */}
-            <div 
+            <div
               className="absolute top-0 left-0 right-0 h-px 
               bg-gradient-to-r from-transparent via-white/20 to-transparent 
               dark:via-white/10"

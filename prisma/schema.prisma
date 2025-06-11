@@ -26,7 +26,6 @@ model TimeLinePost {
   updatedAt   DateTime          @updatedAt
 }
 
-
 model Projects {
   id           String        @id @default(cuid())
   title        String
@@ -86,6 +85,13 @@ model Reply {
   sentAt    DateTime @default(now())
   messageId String   @unique
   message   messages @relation(fields: [messageId], references: [id])
+}
+
+// model for the property IsUnderdevelopment or not --> is a boolean and dueDate the date when the project is expected to be completed
+model ProjectDevelopment {
+  id         String    @id @default(cuid())
+  isUnderDev Boolean   @default(false)
+  dueDate    DateTime?
 }
 
 enum MessageStatus {

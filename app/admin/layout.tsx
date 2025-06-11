@@ -35,11 +35,11 @@ export default function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps
             </div>
 
             {/* Subtle overlay for depth */}
-            <div 
+            {/* <div 
               className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/10 
               dark:from-black/20 dark:via-transparent dark:to-white/5 pointer-events-none"
               aria-hidden="true"
-            />
+            /> */}
           </div>
         </AdminProvider>
       </AdminLayout>

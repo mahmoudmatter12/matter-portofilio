@@ -5,7 +5,7 @@ import { Spotlight } from "./ui/spotlight-new"
 import { MyLink } from "./MyLink"
 import Link from "next/link"
 import { useMobile } from "@/hooks/use-mobile"
-import { ArrowDown, Github, Linkedin,  ExternalLink } from "lucide-react"
+import { ArrowDown, Github, Linkedin, ExternalLink } from "lucide-react"
 
 export function Hero() {
   const isMobile = useMobile()
@@ -226,6 +226,7 @@ export function Hero() {
           </motion.div>
         </motion.div>
 
+
         {/* Scroll indicator */}
         <motion.div
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
@@ -239,7 +240,9 @@ export function Hero() {
             className="flex flex-col items-center"
           >
             <span className="text-sm text-gray-500 dark:text-gray-400 mb-2">Scroll Down</span>
-            <ArrowDown className="w-5 h-5 text-indigo-500 dark:text-cyan-400" />
+            <MyLink href="#about" className="flex flex-col items-center">
+              <ArrowDown className="w-5 h-5 text-indigo-500 dark:text-cyan-400" />
+            </MyLink>
           </motion.div>
         </motion.div>
       </div>

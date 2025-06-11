@@ -12,6 +12,7 @@ import { TimelineOPT } from "@/components/timeline-optimized"
 import { SkillsOpt } from "@/components/newSkills-opt"
 import { CertificationsOpt } from "@/components/certificatesNew"
 import { NewContact } from "@/components/contact-form"
+import IsDevelopment from "@/components/is-development"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -43,6 +44,7 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           >
           <Hero />
+          <IsDevelopment />
           <About />
           <TimelineOPT />
           {/* <TechStackSectionOpt /> */}
