@@ -145,7 +145,12 @@ const navigationSections: NavSection[] = [
   {
     title: "System",
     items: [
-
+      {
+        title: "Development",
+        href: "/admin/development",
+        icon: FolderOpen,
+        description: "Your admin development settings",
+      },
       {
         title: "Profile",
         href: "/admin/profile",

@@ -20,6 +20,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Mail, Search, Reply, Eye, Send, Calendar, User, MessageSquare, CheckCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { DeleteConfirmDialog } from "@/components/admin/delete-confirm-dialog"
 
 interface Message {
     id: string
@@ -49,7 +50,8 @@ export default function MessagesPage() {
     const [replyContent, setReplyContent] = useState("")
     const [isReplying, setIsReplying] = useState(false)
     const [stats, setStats] = useState<MessageStats>({ total: 0, NEW: 0, READ: 0, REPLIED: 0 })
-
+    const [showResetDialog, setShowResetDialog] = useState(false)
+    
     // Fetch messages
     const fetchMessages = async () => {
         try {
@@ -106,6 +108,29 @@ export default function MessagesPage() {
         setStats(stats)
     }
 
+    const handleResetMessages = async () => {
+        setLoading(true)
+        try {
+            const response = await fetch("/api/messages/delete-all", {
+                method: "DELETE",
+            })
+            if (response.ok) {
+                setMessages([])
+                setFilteredMessages([])
+                setStats({ total: 0, NEW: 0, READ: 0, REPLIED: 0 })
+            } else {
+                const errorData = await response.json()
+                console.error("Failed to reset messages:", errorData)
+            }
+        } catch (error) {
+            console.error("Error resetting messages:", error)
+            alert("Failed to reset messages. Please try again later.")
+        } finally {
+            setLoading(false)
+            setShowResetDialog(false)
+        }
+    }
+
     const markAsRead = async (messageId: string) => {
         try {
             const response = await fetch(`/api/messages/${messageId}/mark-read`, {
@@ -117,7 +142,7 @@ export default function MessagesPage() {
                 setStats((prev) => ({
                     ...prev,
                     NEW: prev.NEW - 1,
-                    READ: prev.READ + 1,
+                    read: prev.READ + 1,
                 }))
                 // Also update filtered messages
                 setFilteredMessages((prev) =>
@@ -161,7 +186,6 @@ export default function MessagesPage() {
         }
     }
 
-
     const getStatusBadge = (status: Message["status"]) => {
         switch (status) {
             case "NEW":
@@ -204,7 +228,6 @@ export default function MessagesPage() {
             minute: "2-digit",
         })
     }
-
 
     return (
         <div className="p-6 space-y-6">
@@ -291,7 +314,7 @@ export default function MessagesPage() {
                                 <SelectContent>
                                     <SelectItem value="all">All Messages</SelectItem>
                                     <SelectItem value="NEW">New Messages</SelectItem>
-                                    <SelectItem value="READ">Read Messages</SelectItem>
+                                    <SelectItem value="read">Read Messages</SelectItem>
                                     <SelectItem value="REPLIED">Replied Messages</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -307,7 +330,15 @@ export default function MessagesPage() {
             ) : (
                 <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
                     <CardHeader>
-                        <CardTitle>Messages ({filteredMessages.length})</CardTitle>
+                        <div className="flex items-center justify-between mb-2">
+                            <CardTitle>Messages ({filteredMessages.length})</CardTitle>
+                            <Button
+                                onClick={() => setShowResetDialog(true)}
+                                className="bg-red-700 text-white hover:bg-red-800 cursor-pointer"
+                            >
+                                Reset All Messages
+                            </Button>
+                        </div>
                         <CardDescription>{statusFilter === "all" ? "All messages" : `${statusFilter} messages`}</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -428,7 +459,6 @@ export default function MessagesPage() {
                                                         </DialogContent>
                                                     </Dialog>
                                                 )}
-
                                             </div>
                                         </div>
                                     </div>
@@ -438,8 +468,15 @@ export default function MessagesPage() {
                     </CardContent>
                 </Card>
             )}
-            {/* Messages List */}
 
+            {/* Delete Confirmation Dialog */}
+            <DeleteConfirmDialog
+                isOpen={showResetDialog}
+                onClose={() => setShowResetDialog(false)}
+                onConfirm={handleResetMessages}
+                title="all messages"
+                ActionName="Reset Messages"
+            />
         </div>
     )
 }
