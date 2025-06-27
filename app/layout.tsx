@@ -3,7 +3,6 @@ import { memo } from "react"
 // app/layout.tsx
 import { ThemeProvider } from "next-themes"
 import "./globals.css"
-import { FloatingSocialDock } from "@/components/FloatingSocialDock"
 import { Header } from "@/components/Header"
 import { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/react"
@@ -173,7 +172,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             transition-colors duration-500"
           >
             <PortfolioBackgroundElements />
-            <FloatingSocialDock />
+            {/* <FloatingSocialDock /> */}
             <Header />
             {/* Content layer with subtle backdrop blur */}
             <div className="relative z-10 min-h-screen backdrop-blur-[0.5px]">

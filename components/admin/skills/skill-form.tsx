@@ -17,38 +17,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
+import { SkillCategory, SkillLevel } from "@prisma/client"
+import { Skill } from "@/types/skills"
 
-enum SkillCategory {
-  FRONTEND = "FRONTEND",
-  BACKEND = "BACKEND",
-  DATABASE = "DATABASE",
-  DEVOPS = "DEVOPS",
-  MOBILE = "MOBILE",
-  DESIGN = "DESIGN",
-  TOOLS = "TOOLS",
-  LANGUAGES = "LANGUAGES",
-  FRAMEWORKS = "FRAMEWORKS",
-  OTHER = "OTHER",
-}
-
-enum SkillLevel {
-  BEGINNER = "BEGINNER",
-  INTERMEDIATE = "INTERMEDIATE",
-  ADVANCED = "ADVANCED",
-  EXPERT = "EXPERT",
-}
-
-interface Skill {
-  id: string
-  name: string
-  category: SkillCategory
-  level: SkillLevel
-  description?: string
-  icon?: string
-  yearsOfExperience?: number
-  createdAt: Date
-  updatedAt: Date
-}
 
 interface SkillFormProps {
   isOpen: boolean
@@ -70,7 +41,14 @@ function formatLevelName(level: SkillLevel): string {
 }
 
 export function SkillForm({ isOpen, onClose, onSubmit, initialData, loading = false }: SkillFormProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string
+    category: SkillCategory
+    level: SkillLevel
+    description: string
+    icon: string
+    yearsOfExperience: string
+  }>({
     name: "",
     category: SkillCategory.OTHER,
     level: SkillLevel.BEGINNER,

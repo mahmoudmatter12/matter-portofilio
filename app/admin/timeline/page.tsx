@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Edit, Trash2, Eye, Search, Filter } from "lucide-react"
+import { Plus, Edit, Trash2, Eye, Search, Filter, RefreshCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -13,9 +14,8 @@ import { TimelinePostPreview } from "@/components/admin/timeline-post-preview"
 import { DeleteConfirmDialog } from "@/components/admin/delete-confirm-dialog"
 import { TimelinePostForm } from "@/components/admin/timeline-post-form"
 import { TimeLinePostType } from "@prisma/client"
-import { TimelinePost } from "@/types/timelineposts"
-
-
+import type { TimelinePost } from "@/types/timelineposts"
+import { motion } from "framer-motion"
 
 function getTypeBadgeColor(type: TimeLinePostType): string {
   switch (type) {
@@ -55,6 +55,27 @@ function getTypeLabel(type: TimeLinePostType): string {
   }
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+}
+
 export default function TimelineAdminPage() {
   const [timelinePosts, setTimelinePosts] = useState<TimelinePost[]>([])
   const [loading, setLoading] = useState(true)
@@ -67,7 +88,6 @@ export default function TimelineAdminPage() {
   const [formLoading, setFormLoading] = useState(false)
   const { toast } = useToast()
 
-  // Fetch timeline posts
   const fetchTimelinePosts = async () => {
     try {
       setLoading(true)
@@ -91,10 +111,8 @@ export default function TimelineAdminPage() {
 
   useEffect(() => {
     fetchTimelinePosts()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Filter and search posts
   const filteredPosts = timelinePosts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -106,7 +124,6 @@ export default function TimelineAdminPage() {
     return matchesSearch && matchesFilter
   })
 
-  // Handle create post
   const handleCreatePost = async (postData: Omit<TimelinePost, "id">) => {
     try {
       setFormLoading(true)
@@ -141,7 +158,6 @@ export default function TimelineAdminPage() {
     }
   }
 
-  // Handle edit post
   const handleEditPost = async (postData: Omit<TimelinePost, "id">) => {
     if (!editingPost) return
 
@@ -179,7 +195,6 @@ export default function TimelineAdminPage() {
     }
   }
 
-  // Handle delete post
   const handleDeletePost = async (post: TimelinePost) => {
     try {
       const response = await fetch(`/api/timelineposts/${post.id}/delete`, {
@@ -206,7 +221,6 @@ export default function TimelineAdminPage() {
     }
   }
 
-  // Handle form submission
   const handleFormSubmit = (postData: Omit<TimelinePost, "id">) => {
     if (editingPost) {
       handleEditPost(postData)
@@ -215,121 +229,138 @@ export default function TimelineAdminPage() {
     }
   }
 
-  // handle refresh
   const handleRefresh = () => {
     fetchTimelinePosts()
     setSearchTerm("")
     setFilterType("all")
   }
 
-  // Open create form
   const openCreateForm = () => {
     setEditingPost(null)
     setIsFormOpen(true)
   }
 
-  // Open edit form
   const openEditForm = (post: TimelinePost) => {
     setEditingPost(post)
     setIsFormOpen(true)
   }
 
-  // Close form
   const closeForm = () => {
     setIsFormOpen(false)
     setEditingPost(null)
   }
 
+  const statCards = [
+    {
+      title: "Total Posts",
+      value: timelinePosts.length,
+      gradient: "from-blue-500 to-cyan-500",
+      bgGradient: "from-blue-500/10 to-cyan-500/10",
+    },
+    {
+      title: "Education",
+      value: timelinePosts.filter((p) => p.type === TimeLinePostType.EDUCATION).length,
+      gradient: "from-indigo-500 to-purple-500",
+      bgGradient: "from-indigo-500/10 to-purple-500/10",
+    },
+    {
+      title: "Work",
+      value: timelinePosts.filter((p) => p.type === TimeLinePostType.WORK).length,
+      gradient: "from-cyan-500 to-teal-500",
+      bgGradient: "from-cyan-500/10 to-teal-500/10",
+    },
+    {
+      title: "Awards",
+      value: timelinePosts.filter((p) => p.type === TimeLinePostType.AWARD).length,
+      gradient: "from-yellow-500 to-orange-500",
+      bgGradient: "from-yellow-500/10 to-orange-500/10",
+    },
+  ]
+
   return (
-      <div className="p-6">
-        <div className="space-y-6">
-          {/* Header */}
-          <div className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20 rounded-lg p-6 shadow-md">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ">
+    <motion.div className="p-6" variants={containerVariants} initial="hidden" animate="visible">
+      <div className="space-y-8">
+        {/* Header */}
+        <motion.div variants={itemVariants} className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl blur-xl" />
+          <div className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-8 border border-white/20 dark:border-slate-700/30">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold tracking-tight">Timeline Posts</h1>
-                <p className="text-muted-foreground">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                  Timeline Posts
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400 text-lg mt-2">
                   Manage your timeline posts, education, work experience, and achievements.
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-6">
-                <Button onClick={openCreateForm} className="w-fit cursor-pointer">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add New Post
-                </Button>
-                {/* refresh button */}
-                <Button variant="outline" onClick={handleRefresh} className="w-fit cursor-pointer">
-                  <Search className="h-4 w-4 mr-" />
-                  Refresh Posts
-                </Button>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    onClick={openCreateForm}
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add New Post
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    variant="outline"
+                    onClick={handleRefresh}
+                    className="border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 bg-transparent"
+                  >
+                    <RefreshCcw className="h-4 w-4 mr-2" />
+                    Refresh Posts
+                  </Button>
+                </motion.div>
               </div>
             </div>
           </div>
+        </motion.div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ">
-            <Card className=" bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Posts</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{timelinePosts.length}</div>
-              </CardContent>
-            </Card>
-            <Card className=" bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Education</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {timelinePosts.filter((p) => p.type === TimeLinePostType.EDUCATION).length}
-                </div>
-              </CardContent>
-            </Card>
-            <Card className=" bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-900/20">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Work</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {timelinePosts.filter((p) => p.type === TimeLinePostType.WORK).length}
-                </div>
-              </CardContent>
-            </Card>
-            <Card className=" bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-900/20">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Awards</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {timelinePosts.filter((p) => p.type === TimeLinePostType.AWARD).length}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+        {/* Stats Cards */}
+        <motion.div className="grid grid-cols-1 md:grid-cols-4 gap-6" variants={containerVariants}>
+          {statCards.map((stat, ) => (
+            <motion.div key={stat.title} variants={itemVariants}>
+              <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgGradient} opacity-50`} />
+                <div className="absolute inset-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm" />
+                <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-700 dark:text-gray-300">{stat.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="relative">
+                  <div className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
 
-          {/* Filters and Search */}
-          <Card className=" bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-900/20">
+        {/* Filters and Search */}
+        <motion.div variants={itemVariants}>
+          <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl">
             <CardHeader>
-              <CardTitle>Filter & Search</CardTitle>
-              <CardDescription>Find specific timeline posts using filters and search.</CardDescription>
+              <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">Filter & Search</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400">
+                Find specific timeline posts using filters and search.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       placeholder="Search posts..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
+                      className="pl-10 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                     />
                   </div>
                 </div>
                 <div className="w-full sm:w-48">
                   <Select value={filterType} onValueChange={setFilterType}>
-                    <SelectTrigger>
+                    <SelectTrigger className="border-gray-300 dark:border-gray-600">
                       <Filter className="h-4 w-4 mr-2" />
                       <SelectValue placeholder="Filter by type" />
                     </SelectTrigger>
@@ -346,51 +377,82 @@ export default function TimelineAdminPage() {
               </div>
             </CardContent>
           </Card>
+        </motion.div>
 
-          {/* Timeline Posts Table */}
-          <Card className=" bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-900/20">
+        {/* Timeline Posts Table */}
+        <motion.div variants={itemVariants}>
+          <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl">
             <CardHeader>
-              <CardTitle>Timeline Posts ({filteredPosts.length})</CardTitle>
-              <CardDescription>A list of all your timeline posts with quick actions.</CardDescription>
+              <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
+                Timeline Posts ({filteredPosts.length})
+              </CardTitle>
+              <CardDescription className="text-gray-600 dark:text-gray-400">
+                A list of all your timeline posts with quick actions.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {loading ? (
                 <div className="space-y-4">
                   {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="h-16 bg-muted animate-pulse rounded" />
+                    <motion.div
+                      key={i}
+                      className="h-16 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 animate-pulse rounded-lg"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: i * 0.1 }}
+                    />
                   ))}
                 </div>
               ) : filteredPosts.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">
+                <motion.div
+                  className="text-center py-12"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+                    <Search className="h-12 w-12 text-gray-500" />
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">
                     {searchTerm || filterType !== "all"
                       ? "No posts match your search criteria."
                       : "No timeline posts found. Create your first post!"}
                   </p>
                   {!searchTerm && filterType === "all" && (
-                    <Button onClick={openCreateForm} className="mt-4">
+                    <Button
+                      onClick={openCreateForm}
+                      className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
+                    >
                       <Plus className="h-4 w-4 mr-2" />
                       Add Your First Post
                     </Button>
                   )}
-                </div>
+                </motion.div>
               ) : (
-                <div className="rounded-md border">
+                <div className="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                   <Table>
                     <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Institution</TableHead>
-                        <TableHead>Year</TableHead>
-                        <TableHead>Location</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                      <TableRow className="bg-gray-50 dark:bg-gray-800/50">
+                        <TableHead className="font-semibold text-gray-900 dark:text-white">Title</TableHead>
+                        <TableHead className="font-semibold text-gray-900 dark:text-white">Type</TableHead>
+                        <TableHead className="font-semibold text-gray-900 dark:text-white">Institution</TableHead>
+                        <TableHead className="font-semibold text-gray-900 dark:text-white">Year</TableHead>
+                        <TableHead className="font-semibold text-gray-900 dark:text-white">Location</TableHead>
+                        <TableHead className="text-right font-semibold text-gray-900 dark:text-white">
+                          Actions
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {filteredPosts.map((post) => (
-                        <TableRow key={post.id}>
-                          <TableCell className="font-medium">
+                      {filteredPosts.map((post, index) => (
+                        <motion.tr
+                          key={post.id}
+                          className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                        >
+                          <TableCell className="font-medium text-gray-900 dark:text-white">
                             <div className="max-w-48 truncate" title={post.title}>
                               {post.title}
                             </div>
@@ -398,36 +460,52 @@ export default function TimelineAdminPage() {
                           <TableCell>
                             <Badge className={getTypeBadgeColor(post.type)}>{getTypeLabel(post.type)}</Badge>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="text-gray-600 dark:text-gray-400">
                             <div className="max-w-32 truncate" title={post.institution || ""}>
                               {post.institution || "-"}
                             </div>
                           </TableCell>
-                          <TableCell>{post.year}</TableCell>
-                          <TableCell>
+                          <TableCell className="text-gray-600 dark:text-gray-400">{post.year}</TableCell>
+                          <TableCell className="text-gray-600 dark:text-gray-400">
                             <div className="max-w-32 truncate" title={post.location || ""}>
                               {post.location || "-"}
                             </div>
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-2">
-                              <Button variant="ghost" size="sm" onClick={() => setPreviewPost(post)}>
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm" onClick={() => openEditForm(post)}>
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setDeletingPost(post)}
-                                className="text-destructive hover:text-destructive"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
+                              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setPreviewPost(post)}
+                                  className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              </motion.div>
+                              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => openEditForm(post)}
+                                  className="text-green-600 hover:text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20"
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                              </motion.div>
+                              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setDeletingPost(post)}
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </motion.div>
                             </div>
                           </TableCell>
-                        </TableRow>
+                        </motion.tr>
                       ))}
                     </TableBody>
                   </Table>
@@ -435,27 +513,28 @@ export default function TimelineAdminPage() {
               )}
             </CardContent>
           </Card>
-        </div>
-
-        {/* Form Modal */}
-        <TimelinePostForm
-          isOpen={isFormOpen}
-          onClose={closeForm}
-          onSubmit={handleFormSubmit}
-          initialData={editingPost}
-          loading={formLoading}
-        />
-
-        {/* Delete Confirmation Dialog */}
-        <DeleteConfirmDialog
-          isOpen={!!deletingPost}
-          onClose={() => setDeletingPost(null)}
-          onConfirm={() => deletingPost && handleDeletePost(deletingPost)}
-          title={deletingPost?.title || ""}
-        />
-
-        {/* Preview Modal */}
-        <TimelinePostPreview isOpen={!!previewPost} onClose={() => setPreviewPost(null)} post={previewPost} />
+        </motion.div>
       </div>
+
+      {/* Form Modal */}
+      <TimelinePostForm
+        isOpen={isFormOpen}
+        onClose={closeForm}
+        onSubmit={handleFormSubmit}
+        initialData={editingPost}
+        loading={formLoading}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmDialog
+        isOpen={!!deletingPost}
+        onClose={() => setDeletingPost(null)}
+        onConfirm={() => deletingPost && handleDeletePost(deletingPost)}
+        title={deletingPost?.title || ""}
+      />
+
+      {/* Preview Modal */}
+      <TimelinePostPreview isOpen={!!previewPost} onClose={() => setPreviewPost(null)} post={previewPost} />
+    </motion.div>
   )
 }

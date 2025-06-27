@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Code, Database, Server, Smartphone, Palette, Wrench, Globe, Zap } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
+import { Skill } from "@/types/skills"
 
 enum SkillCategory {
   FRONTEND = "FRONTEND",
@@ -26,17 +27,7 @@ enum SkillLevel {
   EXPERT = "EXPERT",
 }
 
-interface Skill {
-  id: string
-  name: string
-  category: SkillCategory
-  level: SkillLevel
-  description?: string
-  icon?: string
-  yearsOfExperience?: number
-  createdAt: Date
-  updatedAt: Date
-}
+
 
 interface SkillPreviewProps {
   isOpen: boolean
@@ -112,7 +103,7 @@ function getLevelInfo(level: SkillLevel): { color: string; percentage: number; l
   }
 }
 
-function formatCategoryName(category: SkillCategory): string {
+function formatCategoryName(category: string): string {
   return category
     .replace(/_/g, " ")
     .toLowerCase()
@@ -122,8 +113,8 @@ function formatCategoryName(category: SkillCategory): string {
 export function SkillPreview({ isOpen, onClose, skill }: SkillPreviewProps) {
   if (!skill) return null
 
-  const levelInfo = getLevelInfo(skill.level)
-  const categoryColor = getCategoryColor(skill.category)
+  const levelInfo = getLevelInfo(skill.level as SkillLevel)
+  const categoryColor = getCategoryColor(skill.category as SkillCategory)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -137,7 +128,7 @@ export function SkillPreview({ isOpen, onClose, skill }: SkillPreviewProps) {
           {/* Category Header */}
           <div className="flex items-center gap-3">
             <div className={`p-3 rounded-xl bg-gradient-to-r ${categoryColor} text-white shadow-lg`}>
-              {getCategoryIcon(skill.category)}
+              {getCategoryIcon(skill.category as SkillCategory)}
             </div>
             <div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">{formatCategoryName(skill.category)}</h3>

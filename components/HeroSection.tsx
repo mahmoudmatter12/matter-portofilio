@@ -199,7 +199,7 @@ const HeroSection = memo(() => {
                 {loading
                   ? "Loading..."
                   : profile?.bio ||
-                    "Passionate about creating exceptional digital experiences through clean code and innovative design. Let's build something amazing together!"}
+                  "Passionate about creating exceptional digital experiences through clean code and innovative design. Let's build something amazing together!"}
               </motion.p>
 
               {/* Personal Info Cards */}
@@ -374,20 +374,22 @@ const HeroSection = memo(() => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.5 }}
           >
-            <motion.div
-              className="flex flex-col items-center gap-2 text-gray-400 dark:text-gray-500"
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-            >
-              <span className="text-sm font-medium">Scroll to explore</span>
-              <div className="w-6 h-10 border-2 border-gray-300 dark:border-gray-600 rounded-full flex justify-center">
-                <motion.div
-                  className="w-1 h-3 bg-gray-400 dark:bg-gray-500 rounded-full mt-2"
-                  animate={{ y: [0, 12, 0] }}
-                  transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
-                />
-              </div>
-            </motion.div>
+            <MyLink href="#about" className="flex items-center gap-2">
+              <motion.div
+                className="flex flex-col items-center gap-2 text-gray-400 dark:text-gray-500"
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+              >
+                <span className="text-sm font-medium">Scroll to explore</span>
+                <div className="w-6 h-10 border-2 border-gray-300 dark:border-gray-600 rounded-full flex justify-center">
+                  <motion.div
+                    className="w-1 h-3 bg-gray-400 dark:bg-gray-500 rounded-full mt-2"
+                    animate={{ y: [0, 12, 0] }}
+                    transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+                  />
+                </div>
+              </motion.div>
+            </MyLink>
           </motion.div>
         </motion.div>
       </div>

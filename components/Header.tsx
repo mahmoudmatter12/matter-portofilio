@@ -47,7 +47,7 @@ const Header = memo(() => {
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+        className={`transition-all duration-500 ${isScrolled
             ? "py-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-lg border-b border-gray-200/20 dark:border-gray-800/20"
             : "py-4 bg-transparent"
           }`}

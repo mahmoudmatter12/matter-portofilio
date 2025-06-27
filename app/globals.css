@@ -275,3 +275,16 @@
 .custom-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Edge */
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(82, 4, 78);
+  border-radius: 4px;
+}

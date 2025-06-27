@@ -14,14 +14,14 @@ interface MyLinkProps {
   active?: boolean
 }
 
-export function MyLink({ 
-  className, 
-  children, 
-  href, 
-  target, 
-  rel, 
+export function MyLink({
+  className,
+  children,
+  href,
+  target,
+  rel,
   onClick,
-  active = false 
+  active = false
 }: MyLinkProps) {
   const handleClick = (e: React.MouseEvent) => {
     if (href.startsWith('#')) {

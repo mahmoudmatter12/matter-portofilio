@@ -16,8 +16,8 @@ import { Services } from "@/components/Services"
 import { NewContact } from "@/components/contact-form"
 import { Footer } from "@/components/Footer"
 import { SpaceLoader } from "@/components/Loader"
-import IsDevelopment, { IsDevelopmentProps } from "@/components/is-development"
 import HeroSection from "@/components/HeroSection"
+import IsDevelopment from "@/components/is-development"
 
 // Centralized fetcher (optional but recommended)
 const fetchData = async <T,>(url: string): Promise<T> => {
@@ -30,10 +30,10 @@ export default function Home() {
   const {  loading: profileLoading } = useProfile()
 
   // Fetch all data using React Query
-  const { data: devStatus, isLoading: devStatusLoading } = useQuery({
-    queryKey: ["devStatus"],
-    queryFn: () => fetchData<IsDevelopmentProps[]>("/api/development-status").then(res => res[0]),
-  })
+  // const { data: devStatus, isLoading: devStatusLoading } = useQuery({
+  //   queryKey: ["devStatus"],
+  //   queryFn: () => fetchData<IsDevelopmentProps[]>("/api/development-status").then(res => res[0]),
+  // })
 
   const { data: timelineItems, isLoading: timelineLoading } = useQuery({
     queryKey: ["timeline"],
@@ -56,7 +56,7 @@ export default function Home() {
   })
 
   // Combined loading state
-  const isLoading = profileLoading || devStatusLoading || timelineLoading || skillsDataLoading || certLoading || projectLoading
+  const isLoading = profileLoading || timelineLoading || skillsDataLoading || certLoading || projectLoading
 
   return (
     <AnimatePresence mode="wait">
@@ -72,7 +72,7 @@ export default function Home() {
           className="flex flex-col min-h-screen"
         >
           <HeroSection  />
-          <IsDevelopment devStatus={devStatus ?? null} loading={devStatusLoading} />
+          <IsDevelopment />
           <About />
           <TimelineOPT timelineItems={timelineItems || []} timelineLoading={timelineLoading} />
           <SkillsOpt skills={skillsData || null} skillloading={skillsDataLoading} />

@@ -1,7 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Edit, Trash2, Eye, Search, Filter, ExternalLink, Github, RefreshCcw } from "lucide-react"
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  Search,
+  Filter,
+  ExternalLink,
+  Github,
+  RefreshCcw,
+  FolderOpen,
+  Code,
+  Globe,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -12,6 +26,7 @@ import { DeleteConfirmDialog } from "@/components/admin/delete-confirm-dialog"
 import { useToast } from "@/hooks/use-toast"
 import { ProjectPreview } from "@/components/admin/projects/project-preview"
 import { ProjectForm } from "@/components/admin/projects/project-form"
+import { motion, AnimatePresence } from "framer-motion"
 
 enum ProjectTags {
   JS = "JS",
@@ -62,35 +77,57 @@ export interface Project {
 
 function getTagBadgeColor(tag: ProjectTags): string {
   const colors: Record<string, string> = {
-    JS: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-    HTML: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
-    CSS: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-    REACT: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400",
-    NEXTJS: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
-    TAILWINDCSS: "bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400",
-    TYPESCRIPT: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-    NODEJS: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-    MONGODB: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-    POSTGRESQL: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
-    GRAPHQL: "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400",
-    GITHUB: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
-    VERCEL: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
-    NETLIFY: "bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400",
-    AWS: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
-    DOCKER: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-    PYTHON: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-    DJANGO: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-    FLASK: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
-    REDUX: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-    VUEJS: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-    ANGULAR: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    BOOTSTRAP: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-    SASS: "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400",
-    FIGMA: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-    API: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
+    JS: "bg-yellow-500/20 text-yellow-600 border-yellow-500/30 shadow-yellow-500/20",
+    HTML: "bg-orange-500/20 text-orange-600 border-orange-500/30 shadow-orange-500/20",
+    CSS: "bg-blue-500/20 text-blue-600 border-blue-500/30 shadow-blue-500/20",
+    REACT: "bg-cyan-500/20 text-cyan-600 border-cyan-500/30 shadow-cyan-500/20",
+    NEXTJS: "bg-gray-500/20 text-gray-600 border-gray-500/30 shadow-gray-500/20",
+    TAILWINDCSS: "bg-teal-500/20 text-teal-600 border-teal-500/30 shadow-teal-500/20",
+    TYPESCRIPT: "bg-blue-500/20 text-blue-600 border-blue-500/30 shadow-blue-500/20",
+    NODEJS: "bg-green-500/20 text-green-600 border-green-500/30 shadow-green-500/20",
+    MONGODB: "bg-green-500/20 text-green-600 border-green-500/30 shadow-green-500/20",
+    POSTGRESQL: "bg-indigo-500/20 text-indigo-600 border-indigo-500/30 shadow-indigo-500/20",
+    GRAPHQL: "bg-pink-500/20 text-pink-600 border-pink-500/30 shadow-pink-500/20",
+    GITHUB: "bg-gray-500/20 text-gray-600 border-gray-500/30 shadow-gray-500/20",
+    VERCEL: "bg-gray-500/20 text-gray-600 border-gray-500/30 shadow-gray-500/20",
+    NETLIFY: "bg-teal-500/20 text-teal-600 border-teal-500/30 shadow-teal-500/20",
+    AWS: "bg-orange-500/20 text-orange-600 border-orange-500/30 shadow-orange-500/20",
+    DOCKER: "bg-blue-500/20 text-blue-600 border-blue-500/30 shadow-blue-500/20",
+    PYTHON: "bg-yellow-500/20 text-yellow-600 border-yellow-500/30 shadow-yellow-500/20",
+    DJANGO: "bg-green-500/20 text-green-600 border-green-500/30 shadow-green-500/20",
+    FLASK: "bg-gray-500/20 text-gray-600 border-gray-500/30 shadow-gray-500/20",
+    REDUX: "bg-purple-500/20 text-purple-600 border-purple-500/30 shadow-purple-500/20",
+    VUEJS: "bg-green-500/20 text-green-600 border-green-500/30 shadow-green-500/20",
+    ANGULAR: "bg-red-500/20 text-red-600 border-red-500/30 shadow-red-500/20",
+    BOOTSTRAP: "bg-purple-500/20 text-purple-600 border-purple-500/30 shadow-purple-500/20",
+    SASS: "bg-pink-500/20 text-pink-600 border-pink-500/30 shadow-pink-500/20",
+    FIGMA: "bg-purple-500/20 text-purple-600 border-purple-500/30 shadow-purple-500/20",
+    API: "bg-indigo-500/20 text-indigo-600 border-indigo-500/30 shadow-indigo-500/20",
   }
 
-  return colors[tag] || "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
+  return colors[tag] || "bg-gray-500/20 text-gray-600 border-gray-500/30 shadow-gray-500/20"
+}
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
 }
 
 export default function ProjectsAdminPage() {
@@ -129,7 +166,6 @@ export default function ProjectsAdminPage() {
 
   useEffect(() => {
     fetchProjects()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Filter and search projects
@@ -288,224 +324,311 @@ export default function ProjectsAdminPage() {
   }
 
   return (
-    <div className="p-6">
+    <motion.div
+      className="p-6 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
-            <p className="text-muted-foreground">Manage your portfolio projects and case studies.</p>
+        <motion.div
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+          variants={itemVariants}
+        >
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 dark:from-white dark:via-purple-100 dark:to-white bg-clip-text text-transparent">
+              Projects
+            </h1>
+            <p className="text-muted-foreground text-lg">Manage your portfolio projects and showcase your work.</p>
           </div>
-          <div className="flex items-center gap-5">
-            <Button onClick={openCreateForm} className="w-fit">
-              <Plus className="h-4 w-4 mr-2" />
-              Add New Project
-            </Button>
-            <Button variant="outline" onClick={handleRefresh} className="w-fit">
-              <RefreshCcw className="h-4 w-4 mr-2" />
-              Refresh Projects
-            </Button>
+          <div className="flex items-center gap-3">
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button
+                onClick={openCreateForm}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add New Project
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button
+                variant="outline"
+                onClick={handleRefresh}
+                className="border-purple-200 hover:border-purple-300 hover:bg-purple-50 dark:border-purple-800 dark:hover:border-purple-700 dark:hover:bg-purple-950/50 bg-transparent"
+              >
+                <RefreshCcw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{projects.length}</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20" >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">React Projects</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {projects.filter((p) => p.tags.includes(ProjectTags.REACT)).length}
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Next.js Projects</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {projects.filter((p) => p.tags.includes(ProjectTags.NEXTJS)).length}
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Live Projects</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{projects.filter((p) => p.live).length}</div>
-            </CardContent>
-          </Card>
-        </div>
+        <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-6" variants={containerVariants}>
+          {[
+            {
+              title: "Total Projects",
+              value: projects.length,
+              icon: FolderOpen,
+              gradient: "from-blue-500 to-cyan-500",
+            },
+            {
+              title: "With Live Demo",
+              value: projects.filter((p) => p.live).length,
+              icon: Globe,
+              gradient: "from-emerald-500 to-teal-500",
+            },
+            {
+              title: "With Source Code",
+              value: projects.filter((p) => p.github).length,
+              icon: Code,
+              gradient: "from-purple-500 to-pink-500",
+            },
+          ].map((stat, index) => (
+            <motion.div key={stat.title} variants={itemVariants}>
+              <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-5`} />
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
+                  <motion.div
+                    className={`p-2 rounded-lg bg-gradient-to-br ${stat.gradient} shadow-lg`}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <stat.icon className="h-4 w-4 text-white" />
+                  </motion.div>
+                </CardHeader>
+                <CardContent className="relative z-10">
+                  <motion.div
+                    className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: index * 0.1, type: "spring", stiffness: 200 }}
+                  >
+                    {stat.value}
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Filters and Search */}
-        <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
-          <CardHeader>
-            <CardTitle>Filter & Search</CardTitle>
-            <CardDescription>Find specific projects using filters and search.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search projects..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
+        <motion.div variants={itemVariants}>
+          <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Search className="h-5 w-5 text-purple-600" />
+                Filter & Search
+              </CardTitle>
+              <CardDescription>Find specific projects using filters and search.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search projects..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 border-purple-200 focus:border-purple-400 focus:ring-purple-400"
+                    />
+                  </div>
+                </div>
+                <div className="w-full sm:w-48">
+                  <Select value={filterTag} onValueChange={setFilterTag}>
+                    <SelectTrigger className="border-purple-200 focus:border-purple-400 focus:ring-purple-400">
+                      <Filter className="h-4 w-4 mr-2" />
+                      <SelectValue placeholder="Filter by tag" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Tags</SelectItem>
+                      {Object.values(ProjectTags).map((tag) => (
+                        <SelectItem key={tag} value={tag}>
+                          {tag}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-              <div className="w-full sm:w-48">
-                <Select value={filterTag} onValueChange={setFilterTag}>
-                  <SelectTrigger>
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Filter by tag" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Tags</SelectItem>
-                    {Object.values(ProjectTags).map((tag) => (
-                      <SelectItem key={tag} value={tag}>
-                        {tag.replace(/_/g, " ")}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Projects Table */}
-        <Card className="bg-gradient-to-r dark:from-blue-900/10 dark:to-blue-900/20">
-          <CardHeader>
-            <CardTitle>Projects ({filteredProjects.length})</CardTitle>
-            <CardDescription>A list of all your portfolio projects with quick actions.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="space-y-4">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="h-16 bg-muted animate-pulse rounded" />
-                ))}
-              </div>
-            ) : filteredProjects.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">
-                  {searchTerm || filterTag !== "all"
-                    ? "No projects match your search criteria."
-                    : "No projects found. Create your first project!"}
-                </p>
-                {!searchTerm && filterTag === "all" && (
-                  <Button onClick={openCreateForm} className="mt-4">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Your First Project
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead>Tags</TableHead>
-                      <TableHead>Links</TableHead>
-                      <TableHead>Updated</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredProjects.map((project) => (
-                      <TableRow key={project.id}>
-                        <TableCell className="font-medium">
-                          <div className="max-w-48 truncate" title={project.title}>
-                            {project.title}
-                          </div>
-
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          <div className="max-w-96 truncate" title={project.description}>
-                            {project.description}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1 max-w-48">
-                            {project.tags.slice(0, 3).map((tag) => (
-                              <Badge key={tag} className={getTagBadgeColor(tag)}>
-                                {tag}
-                              </Badge>
-                            ))}
-                            {project.tags.length > 3 && <Badge variant="outline">+{project.tags.length - 3}</Badge>}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            {project.github && (
-                              <a
-                                href={project.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-muted-foreground hover:text-foreground"
-                                title="GitHub Repository"
-                              >
-                                <Github className="h-4 w-4" />
-                              </a>
-                            )}
-                            {project.live && (
-                              <a
-                                href={project.live}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-muted-foreground hover:text-foreground"
-                                title="Live Demo"
-                              >
-                                <ExternalLink className="h-4 w-4" />
-                              </a>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">{formatDate(project.updatedAt)}</div>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <Button variant="ghost" size="sm" onClick={() => setPreviewProject(project)}>
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm" onClick={() => openEditForm(project)}>
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => setDeletingProject(project)}
-                              className="text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
+        <motion.div variants={itemVariants}>
+          <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FolderOpen className="h-5 w-5 text-purple-600" />
+                Projects ({filteredProjects.length})
+              </CardTitle>
+              <CardDescription>A list of all your projects with quick actions.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="space-y-4">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="h-16 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 animate-pulse rounded-lg"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.1 }}
+                    />
+                  ))}
+                </div>
+              ) : filteredProjects.length === 0 ? (
+                <motion.div
+                  className="text-center py-12"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <FolderOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground text-lg mb-4">
+                    {searchTerm || filterTag !== "all"
+                      ? "No projects match your search criteria."
+                      : "No projects found. Create your first project!"}
+                  </p>
+                  {!searchTerm && filterTag === "all" && (
+                    <Button
+                      onClick={openCreateForm}
+                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Your First Project
+                    </Button>
+                  )}
+                </motion.div>
+              ) : (
+                <div className="rounded-lg border border-purple-100 dark:border-purple-900/50 overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50">
+                        <TableHead className="font-semibold">Title</TableHead>
+                        <TableHead className="font-semibold">Tags</TableHead>
+                        <TableHead className="font-semibold">Links</TableHead>
+                        <TableHead className="font-semibold">Created</TableHead>
+                        <TableHead className="text-right font-semibold">Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    </TableHeader>
+                    <TableBody>
+                      <AnimatePresence>
+                        {filteredProjects.map((project, index) => (
+                          <motion.tr
+                            key={project.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            transition={{ delay: index * 0.05 }}
+                            className="hover:bg-purple-50/50 dark:hover:bg-purple-950/20 transition-colors duration-200"
+                          >
+                            <TableCell className="font-medium">
+                              <div>
+                                <div className="max-w-48 truncate font-semibold" title={project.title}>
+                                  {project.title}
+                                </div>
+                                <div
+                                  className="text-xs text-muted-foreground mt-1 max-w-48 truncate"
+                                  title={project.description}
+                                >
+                                  {project.description}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex flex-wrap gap-1 max-w-48">
+                                {project.tags.slice(0, 3).map((tag) => (
+                                  <Badge key={tag} className={getTagBadgeColor(tag)}>
+                                    {tag}
+                                  </Badge>
+                                ))}
+                                {project.tags.length > 3 && (
+                                  <Badge variant="outline" className="text-xs">
+                                    +{project.tags.length - 3}
+                                  </Badge>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                {project.live && (
+                                  <motion.div whileHover={{ scale: 1.1 }}>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => window.open(project.live, "_blank")}
+                                      className="hover:bg-green-100 hover:text-green-700 dark:hover:bg-green-950 dark:hover:text-green-300"
+                                    >
+                                      <ExternalLink className="h-3 w-3" />
+                                    </Button>
+                                  </motion.div>
+                                )}
+                                {project.github && (
+                                  <motion.div whileHover={{ scale: 1.1 }}>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => window.open(project.github, "_blank")}
+                                      className="hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-950 dark:hover:text-gray-300"
+                                    >
+                                      <Github className="h-3 w-3" />
+                                    </Button>
+                                  </motion.div>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="text-sm text-muted-foreground">{formatDate(project.createdAt)}</div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex items-center justify-end gap-1">
+                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setPreviewProject(project)}
+                                    className="hover:bg-blue-100 hover:text-blue-700 dark:hover:bg-blue-950 dark:hover:text-blue-300"
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                </motion.div>
+                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => openEditForm(project)}
+                                    className="hover:bg-green-100 hover:text-green-700 dark:hover:bg-green-950 dark:hover:text-green-300"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                </motion.div>
+                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setDeletingProject(project)}
+                                    className="hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-950 dark:hover:text-red-300"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </motion.div>
+                              </div>
+                            </TableCell>
+                          </motion.tr>
+                        ))}
+                      </AnimatePresence>
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
 
       {/* Form Modal */}
@@ -527,6 +650,6 @@ export default function ProjectsAdminPage() {
 
       {/* Preview Modal */}
       <ProjectPreview isOpen={!!previewProject} onClose={() => setPreviewProject(null)} project={previewProject} />
-    </div>
+    </motion.div>
   )
 }
