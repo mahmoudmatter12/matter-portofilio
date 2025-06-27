@@ -18,7 +18,7 @@ const eslintConfig = [
       ".next/**",
       "out/**",
       "build/**"
-    ]
+    ],
   }
 ];
 

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -26,33 +27,52 @@ import {
     FileText,
     Plus,
     X,
+    Upload,
+    ImageIcon,
 } from "lucide-react"
 import Image from "next/image"
+import { profileType } from "@/types/profile"
+
+interface ApiResponse {
+    url?: string
+    secure_url?: string
+    public_id?: string
+    error?: string
+    message?: string
+}
 
 export default function ProfilePage() {
     const { profile, loading, updateProfile } = useProfile()
     const { toast } = useToast()
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [formData, setFormData] = useState({
-        name: profile?.name || "",
-        email: profile?.email || [],
-        location: profile?.location || "",
-        bio: profile?.bio || "",
-        phone: profile?.phone || [],
-        professions: profile?.professions || [],
-        about: profile?.about || "",
-        avatar: profile?.avatar || "",
-        website: profile?.website || "",
-        github: profile?.github || "",
-        linkedin: profile?.linkedin || "",
-        facebook: profile?.facebook || "",
-        instagram: profile?.instagram || "",
-        CV: profile?.CV || "",
+    const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+    const [isUploadingCV, setIsUploadingCV] = useState(false)
+    const avatarInputRef = useRef<HTMLInputElement>(null)
+    const cvInputRef = useRef<HTMLInputElement>(null)
+
+    const [formData, setFormData] = useState<profileType>({
+        id: "",
+        name: "",
+        email: [],
+        location: "",
+        bio: "",
+        phone: [],
+        professions: [],
+        about: "",
+        avatar: "",
+        website: "",
+        github: "",
+        linkedin: "",
+        facebook: "",
+        instagram: "",
+        CV: "",
     })
+
     // Update form data when profile loads
-    useState(() => {
+    useEffect(() => {
         if (profile) {
             setFormData({
+                id: profile.id || "",
                 name: profile.name || "",
                 email: profile.email || [],
                 location: profile.location || "",
@@ -69,7 +89,8 @@ export default function ProfilePage() {
                 CV: profile.CV || "",
             })
         }
-    })
+    }, [profile])
+
 
     const handleInputChange = (field: string, value: string) => {
         setFormData((prev) => ({
@@ -81,22 +102,155 @@ export default function ProfilePage() {
     const handleArrayChange = (field: string, index: number, value: string) => {
         setFormData((prev) => ({
             ...prev,
-            [field]: (prev[field as keyof typeof prev] as string[]).map((item: string, i: number) => (i === index ? value : item)),
+            [field]: Array.isArray(prev[field as keyof typeof prev])
+                ? (prev[field as keyof typeof prev] as string[]).map((item: string, i: number) => (i === index ? value : item))
+                : prev[field as keyof typeof prev],
         }))
     }
 
     const addArrayItem = (field: string) => {
         setFormData((prev) => ({
             ...prev,
-            [field]: [...prev[field as keyof typeof prev], ""],
+            [field]: Array.isArray(prev[field as keyof typeof prev])
+                ? [...(prev[field as keyof typeof prev] as string[]), ""]
+                : [""],
         }))
     }
 
     const removeArrayItem = (field: string, index: number) => {
         setFormData((prev) => ({
             ...prev,
-            [field]: (prev[field as keyof typeof prev] as string[]).filter((_: string, i: number) => i !== index),
+            [field]: Array.isArray(prev[field as keyof typeof prev])
+                ? (prev[field as keyof typeof prev] as string[]).filter((_: string, i: number) => i !== index)
+                : prev[field as keyof typeof prev],
         }))
+    }
+
+    const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (!file) return
+
+        // Validate file type
+        if (!file.type.startsWith("image/")) {
+            toast({
+                title: "Error",
+                description: "Please select a valid image file.",
+                variant: "destructive",
+            })
+            return
+        }
+
+        // Validate file size (5MB limit)
+        if (file.size > 5 * 1024 * 1024) {
+            toast({
+                title: "Error",
+                description: "Image size should be less than 5MB.",
+                variant: "destructive",
+            })
+            return
+        }
+
+        setIsUploadingAvatar(true)
+
+        try {
+            const formData = new FormData()
+            formData.append("file", file)
+
+            const response = await fetch("/api/upload/pic", {
+                method: "POST",
+                body: formData,
+            })
+
+            const result: ApiResponse = await response.json()
+
+            if (result.error) {
+                throw new Error(result.error)
+            }
+
+            const imageUrl = result.secure_url || result.url
+            if (imageUrl) {
+                setFormData((prev) => ({
+                    ...prev,
+                    avatar: imageUrl,
+                }))
+                toast({
+                    title: "Success",
+                    description: "Avatar uploaded successfully!",
+                })
+            }
+        } catch (error) {
+            console.log("Avatar upload error:", error)
+            toast({
+                title: "Error",
+                description: "Failed to upload avatar. Please try again.",
+                variant: "destructive",
+            })
+        } finally {
+            setIsUploadingAvatar(false)
+        }
+    }
+
+    const handleCVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (!file) return
+
+        // Validate file type
+        if (file.type !== "application/pdf") {
+            toast({
+                title: "Error",
+                description: "Please select a PDF file for your CV.",
+                variant: "destructive",
+            })
+            return
+        }
+
+        // Validate file size (10MB limit)
+        if (file.size > 10 * 1024 * 1024) {
+            toast({
+                title: "Error",
+                description: "CV file size should be less than 10MB.",
+                variant: "destructive",
+            })
+            return
+        }
+
+        setIsUploadingCV(true)
+
+        try {
+            const formData = new FormData()
+            formData.append("file", file)
+
+            const response = await fetch("/api/upload/cv", {
+                method: "POST",
+                body: formData,
+            })
+
+            const result: ApiResponse = await response.json()
+
+            if (result.error) {
+                throw new Error(result.error)
+            }
+
+            const cvUrl = result.secure_url || result.url
+            if (cvUrl) {
+                setFormData((prev) => ({
+                    ...prev,
+                    CV: cvUrl,
+                }))
+                toast({
+                    title: "Success",
+                    description: "CV uploaded successfully!",
+                })
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Failed to upload CV. Please try again.",
+                variant: "destructive",
+            })
+        } finally {
+            setIsUploadingCV(false)
+        }
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -107,20 +261,18 @@ export default function ProfilePage() {
             // Filter out empty strings from arrays
             const cleanedData = {
                 ...formData,
-                id: profile?.id, // Ensure we send the existing profile ID
+                id: profile?.id || "no profile", // Ensure we send the existing profile ID
                 email: formData.email.filter((email) => email.trim() !== ""),
-                phone: formData.phone.filter((phone) => phone.trim() !== ""),
-                professions: formData.professions.filter((profession) => profession.trim() !== ""),
+                phone: (formData.phone ?? []).filter((phone) => phone.trim() !== ""),
+                professions: (formData.professions ?? []).filter((profession) => profession.trim() !== ""),
             }
-            console.log(cleanedData)
-
+            console.log("Submitting profile data:", cleanedData)
             await updateProfile(cleanedData)
             toast({
                 title: "Success",
                 description: "Profile updated successfully!",
             })
         } catch (error) {
-            console.error("Failed to update profile:", error)
             toast({
                 title: "Error",
                 description: "Failed to update profile. Please try again.",
@@ -157,25 +309,48 @@ export default function ProfilePage() {
                         <CardDescription>Your personal details and professional information</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        {/* Avatar Preview */}
-                        {formData.avatar && (
-                            <div className="flex items-center gap-4">
+                        {/* Avatar Upload */}
+                        <div>
+                            <Label>Profile Avatar</Label>
+                            <div className="flex items-center gap-4 mt-2">
                                 <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-gray-200">
                                     <Image
-                                        src={formData.avatar || "/placeholder.svg"}
+                                        src={formData.avatar || "/placeholder.svg?height=80&width=80"}
                                         alt="Profile avatar"
                                         fill
                                         className="object-cover"
                                     />
                                 </div>
-                                <div>
-                                    <Label>Current Avatar</Label>
-                                    <p className="text-sm text-muted-foreground">
-                                        Update the avatar URL below to change your profile picture
-                                    </p>
+                                <div className="space-y-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => avatarInputRef.current?.click()}
+                                        disabled={isUploadingAvatar}
+                                    >
+                                        {isUploadingAvatar ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                Uploading...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <ImageIcon className="h-4 w-4 mr-2" />
+                                                Upload Avatar
+                                            </>
+                                        )}
+                                    </Button>
+                                    <p className="text-sm text-muted-foreground">Upload a profile picture (JPG, PNG, max 5MB)</p>
                                 </div>
+                                <input
+                                    ref={avatarInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleAvatarUpload}
+                                    className="hidden"
+                                />
                             </div>
-                        )}
+                        </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -220,16 +395,6 @@ export default function ProfilePage() {
                                 onChange={(e) => handleInputChange("about", e.target.value)}
                                 placeholder="Detailed description about yourself, your experience, and interests"
                                 rows={4}
-                            />
-                        </div>
-
-                        <div>
-                            <Label htmlFor="avatar">Avatar URL</Label>
-                            <Input
-                                id="avatar"
-                                value={formData.avatar}
-                                onChange={(e) => handleInputChange("avatar", e.target.value)}
-                                placeholder="https://example.com/your-photo.jpg"
                             />
                         </div>
                     </CardContent>
@@ -277,7 +442,7 @@ export default function ProfilePage() {
                                     Add Phone
                                 </Button>
                             </div>
-                            {formData.phone.map((phone, index) => (
+                            {(formData.phone ?? []).map((phone, index) => (
                                 <div key={index} className="flex gap-2 mb-2">
                                     <div className="relative flex-1">
                                         <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -315,7 +480,7 @@ export default function ProfilePage() {
                                     Add Profession
                                 </Button>
                             </div>
-                            {formData.professions.map((profession, index) => (
+                            {(formData.professions ?? []).map((profession, index) => (
                                 <div key={index} className="flex gap-2 mb-2">
                                     <Input
                                         value={profession}
@@ -334,17 +499,38 @@ export default function ProfilePage() {
                             ))}
                         </div>
 
+                        {/* CV Upload */}
                         <div>
-                            <Label htmlFor="cv">CV/Resume URL</Label>
-                            <div className="relative">
-                                <FileText className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    id="cv"
-                                    value={formData.CV}
-                                    onChange={(e) => handleInputChange("CV", e.target.value)}
-                                    placeholder="https://drive.google.com/file/d/your-cv"
-                                    className="pl-10"
-                                />
+                            <Label>CV/Resume</Label>
+                            <div className="space-y-2 mt-2">
+                                <div className="flex items-center gap-4">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => cvInputRef.current?.click()}
+                                        disabled={isUploadingCV}
+                                    >
+                                        {isUploadingCV ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                Uploading...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Upload className="h-4 w-4 mr-2" />
+                                                Upload CV
+                                            </>
+                                        )}
+                                    </Button>
+                                    {formData.CV && (
+                                        <Button type="button" variant="ghost" onClick={() => window.open(formData.CV, "_blank")}>
+                                            <FileText className="h-4 w-4 mr-2" />
+                                            View Current CV
+                                        </Button>
+                                    )}
+                                </div>
+                                <p className="text-sm text-muted-foreground">Upload your CV/Resume (PDF only, max 10MB)</p>
+                                <input ref={cvInputRef} type="file" accept=".pdf" onChange={handleCVUpload} className="hidden" />
                             </div>
                         </div>
                     </CardContent>

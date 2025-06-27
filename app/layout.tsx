@@ -172,11 +172,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             transition-colors duration-500"
           >
             <PortfolioBackgroundElements />
-
+            <FloatingSocialDock />
+            <Header />
             {/* Content layer with subtle backdrop blur */}
             <div className="relative z-10 min-h-screen backdrop-blur-[0.5px]">
-              <Header />
-
               <ClerkProvider>
                 <main
                   className="relative min-h-screen
@@ -186,7 +185,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   shadow-2xl shadow-black/5 dark:shadow-black/20
                   transition-all duration-300"
                 >
-                  <FloatingSocialDock />
                   <ProfileProvider>
                     <ToastProvider>
                       {children}
@@ -198,22 +196,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </ClerkProvider>
             </div>
 
-            {/* Subtle depth overlay */}
-            <div
-              className="absolute inset-0 bg-gradient-to-t 
-              from-black/3 via-transparent to-white/5 
-              dark:from-black/10 dark:via-transparent dark:to-white/2 
-              pointer-events-none"
-              aria-hidden="true"
-            />
-
-            {/* Top edge highlight */}
-            <div
-              className="absolute top-0 left-0 right-0 h-px 
-              bg-gradient-to-r from-transparent via-white/20 to-transparent 
-              dark:via-white/10"
-              aria-hidden="true"
-            />
           </div>
         </ThemeProvider>
       </body>

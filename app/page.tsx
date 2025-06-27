@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Services } from "@/components/Services"
-import { Hero } from "@/components/HeroSection"
-import { About } from "@/components/AboutSection"
 import { SpaceLoader } from "@/components/Loader"
 import { Footer } from "@/components/Footer"
 import { TeamCarousel } from "@/components/TeamCarousel"
@@ -13,6 +11,8 @@ import { SkillsOpt } from "@/components/newSkills-opt"
 import { CertificationsOpt } from "@/components/certificatesNew"
 import { NewContact } from "@/components/contact-form"
 import IsDevelopment from "@/components/is-development"
+import { Hero } from "@/components/HeroSection"
+import { About } from "@/components/AboutSection"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)

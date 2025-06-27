@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
-import { profile } from "@/types/profile";
+import { profileType } from "@/types/profile";
 import { NextResponse } from "next/server";
 
 export async function PATCH(request: Request) {
-  const profileData: profile = await request.json();
+  const profileData: profileType = await request.json();
   console.log("Received profile data:", profileData);
   try {
     // Update profile in the database

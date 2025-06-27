@@ -1,10 +1,10 @@
 "use client";
-import { profile, ProfileUpdate } from '@/types/profile';
+import { profileType, ProfileUpdate } from '@/types/profile';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Create the context
 type ProfileContextType = {
-    profile: profile | null;
+    profile: profileType | null;
     loading: boolean;
     error: string | null;
     updateProfile: (newProfile: ProfileUpdate) => Promise<ProfileUpdate>;

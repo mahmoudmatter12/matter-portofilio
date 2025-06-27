@@ -1,4 +1,4 @@
-export interface profile {
+export interface profileType {
   id: string;
   name: string;
   email: string[];
@@ -18,6 +18,7 @@ export interface profile {
   updatedAt?: Date;
 }
 export interface ProfileUpdate {
+  id?: string; // Optional for updates, required for creation
   name?: string;
   email?: string[];
   location?: string;
