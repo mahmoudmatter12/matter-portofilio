@@ -271,7 +271,7 @@ export default function MessagesPage() {
 
   return (
     <motion.div
-      className="p-6 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+      className="p-6 min-h-screen  "
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -438,11 +438,11 @@ export default function MessagesPage() {
                           className={cn(
                             "border rounded-xl p-6 transition-all hover:shadow-md bg-gradient-to-r",
                             message.status === "NEW" &&
-                              "from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 border-blue-200 dark:border-blue-800",
+                            "from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 border-blue-200 dark:border-blue-800",
                             message.status === "READ" &&
-                              "from-yellow-50/50 to-orange-50/50 dark:from-yellow-950/20 dark:to-orange-950/20 border-yellow-200 dark:border-yellow-800",
+                            "from-yellow-50/50 to-orange-50/50 dark:from-yellow-950/20 dark:to-orange-950/20 border-yellow-200 dark:border-yellow-800",
                             message.status === "REPLIED" &&
-                              "from-emerald-50/50 to-teal-50/50 dark:from-emerald-950/20 dark:to-teal-950/20 border-emerald-200 dark:border-emerald-800",
+                            "from-emerald-50/50 to-teal-50/50 dark:from-emerald-950/20 dark:to-teal-950/20 border-emerald-200 dark:border-emerald-800",
                           )}
                         >
                           <div className="flex items-start justify-between">

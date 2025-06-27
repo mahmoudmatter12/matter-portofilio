@@ -310,7 +310,7 @@ export default function ProfilePage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+            <div className="flex items-center justify-center min-h-screen  ">
                 <motion.div
                     className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"
                     animate={{ rotate: 360 }}
@@ -322,7 +322,7 @@ export default function ProfilePage() {
 
     return (
         <motion.div
-            className="p-6 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+            className="p-6 min-h-screen  "
             initial="hidden"
             animate="visible"
             variants={containerVariants}

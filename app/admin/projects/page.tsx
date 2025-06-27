@@ -325,7 +325,7 @@ export default function ProjectsAdminPage() {
 
   return (
     <motion.div
-      className="p-6 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+      className="p-6 min-h-screen"
       initial="hidden"
       animate="visible"
       variants={containerVariants}

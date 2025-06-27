@@ -465,7 +465,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         </motion.header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <main className="flex-1 overflow-y-auto  ">
           <div className="relative min-h-full">
             {/* Animated background elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
