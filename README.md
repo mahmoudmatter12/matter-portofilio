@@ -157,7 +157,6 @@ Visit `http://localhost:3000` to see your portfolio!
 
 ## 📁 Project Structure
 
-\`\`\`
 ├── app/                    # Next.js App Router
 │   ├── (auth)/            # Authentication pages
 │   ├── admin/             # Admin dashboard pages
@@ -173,7 +172,7 @@ Visit `http://localhost:3000` to see your portfolio!
 ├── prisma/               # Database schema and migrations
 ├── types/                # TypeScript type definitions
 └── public/               # Static assets
-\`\`\`
+
 
 ## 🎯 Key Features Breakdown
 
