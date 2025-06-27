@@ -4,8 +4,21 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, FolderOpen, Mail, Users, TrendingUp, Clock, CheckCircle, AlertCircle, Plus } from "lucide-react"
+import {
+  Calendar,
+  FolderOpen,
+  Mail,
+  Users,
+  TrendingUp,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Plus,
+  User,
+} from "lucide-react"
 import Link from "next/link"
+import { useProfile } from "@/context/ProfileProvidor"
+import Image from "next/image"
 
 interface DashboardStats {
   timelinePosts: number
@@ -65,6 +78,7 @@ export default function AdminDashboard() {
     },
   ])
   const [loading, setLoading] = useState(true)
+  const { profile } = useProfile()
 
   useEffect(() => {
     // Fetch dashboard stats
@@ -205,19 +219,19 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Link href="/admin/timeline">
-              <Button className="w-full justify-start" variant="outline">
+              <Button className="w-full justify-start bg-transparent" variant="outline">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Timeline Post
               </Button>
             </Link>
             <Link href="/admin/projects">
-              <Button className="w-full justify-start" variant="outline">
+              <Button className="w-full justify-start bg-transparent" variant="outline">
                 <Plus className="h-4 w-4 mr-2" />
                 Create New Project
               </Button>
             </Link>
             <Link href="/admin/projects">
-              <Button className="w-full justify-start" variant="outline" disabled>
+              <Button className="w-full justify-start bg-transparent" variant="outline" disabled>
                 <Plus className="h-4 w-4 mr-2" />
                 Add new skills
                 <Badge variant="secondary" className="ml-auto">
@@ -226,12 +240,63 @@ export default function AdminDashboard() {
               </Button>
             </Link>
             <Link href="/admin/messages">
-              <Button className="w-full justify-start" variant="outline">
+              <Button className="w-full justify-start bg-transparent" variant="outline">
                 <Mail className="h-4 w-4 mr-2" />
                 Check Messages
                 <Badge className="ml-auto bg-red-100 text-red-800">3</Badge>
               </Button>
             </Link>
+          </CardContent>
+        </Card>
+
+        {/* Profile Overview */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Profile Overview</CardTitle>
+            <CardDescription>Your current profile information</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {profile ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  {profile.avatar && (
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-gray-200">
+                      <Image src={profile.avatar || "/placeholder.svg"} alt="Profile" fill className="object-cover" />
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-medium">{profile.name}</p>
+                    <p className="text-sm text-muted-foreground">{profile.professions?.[0] || "No profession set"}</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Location:</span>
+                    <p>{profile.location || "Not set"}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Email:</span>
+                    <p>{profile.email?.[0] || "Not set"}</p>
+                  </div>
+                </div>
+                <Link href="/admin/profile">
+                  <Button className="w-full bg-transparent" variant="outline">
+                    <User className="h-4 w-4 mr-2" />
+                    Manage Profile
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-muted-foreground mb-4">No profile found</p>
+                <Link href="/admin/profile">
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Profile
+                  </Button>
+                </Link>
+              </div>
+            )}
           </CardContent>
         </Card>
 

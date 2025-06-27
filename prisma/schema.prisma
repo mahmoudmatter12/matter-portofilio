@@ -13,6 +13,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Profile {
+  id          String   @id @default(cuid())
+  name        String
+  email       String[]
+  location    String?
+  bio         String?
+  phone       String[]
+  professions String[]
+  about       String?
+  avatar      String?
+  website     String?
+  github      String?
+  linkedin    String?
+  facebook    String?
+  instagram   String?
+  CV          String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model TimeLinePost {
   id          String            @id @default(cuid())
   title       String

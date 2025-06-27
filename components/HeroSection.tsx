@@ -5,6 +5,7 @@ import { Spotlight } from "./ui/spotlight-new"
 import { MyLink } from "./MyLink"
 import Link from "next/link"
 import { useMobile } from "@/hooks/use-mobile"
+import { useProfile } from "@/context/ProfileProvidor"
 import { ArrowDown, Github, Linkedin, ExternalLink } from "lucide-react"
 
 export function Hero() {
@@ -12,7 +13,15 @@ export function Hero() {
   const controls = useAnimation()
   const [typedText, setTypedText] = useState("")
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
-  const phrases = useMemo(() => ["Full Stack Developer", "UI/UX Enthusiast", "Problem Solver"], [])
+  const { profile, loading } = useProfile()
+
+  // Use profile professions or fallback to default
+  const phrases = useMemo(() => {
+    if (profile?.professions && profile.professions.length > 0) {
+      return profile.professions
+    }
+    return ["Full Stack Developer", "UI/UX Enthusiast", "Problem Solver"]
+  }, [profile?.professions])
 
   // Typing animation effect
   useEffect(() => {
@@ -86,6 +95,12 @@ export function Hero() {
     delay: Math.random() * 5,
   }))
 
+  // Get social links from profile
+  const socialLinks = [
+    { icon: <Github className="w-5 h-5" />, href: profile?.github || "https://github.com/mahmoudmatter12" },
+    { icon: <Linkedin className="w-5 h-5" />, href: profile?.linkedin || "https://www.linkedin.com/in/mahmoudmatter/" },
+  ].filter((link) => link.href) // Only show links that exist
+
   return (
     <section id="home" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
       {/* Spotlight Background */}
@@ -132,10 +147,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            {[
-              { icon: <Github className="w-5 h-5" />, href: "https://github.com/mahmoudmatter12" },
-              { icon: <Linkedin className="w-5 h-5" />, href: "https://www.linkedin.com/in/mahmoudmatter/" },
-            ].map((social, index) => (
+            {socialLinks.map((social, index) => (
               <motion.a
                 key={index}
                 href={social.href}
@@ -161,7 +173,9 @@ export function Hero() {
               <span className="bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent">
                 Hello, I&apos;m
               </span>{" "}
-              <span className="text-gray-900 dark:text-white">Mahmoud Matter</span>
+              <span className="text-gray-900 dark:text-white">
+                {loading ? "Loading..." : profile?.name || "Mahmoud Matter"}
+              </span>
             </motion.h1>
 
             {/* Animated underline */}
@@ -193,8 +207,10 @@ export function Hero() {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
           >
-            A passionate developer building digital experiences with modern web technologies. Specializing in creating
-            beautiful, functional, and user-friendly applications.
+            {loading
+              ? "Loading..."
+              : profile?.bio ||
+                "A passionate developer building digital experiences with modern web technologies. Specializing in creating beautiful, functional, and user-friendly applications."}
           </motion.p>
 
           {/* CTA Buttons with enhanced animations */}
@@ -225,7 +241,6 @@ export function Hero() {
             </motion.div>
           </motion.div>
         </motion.div>
-
 
         {/* Scroll indicator */}
         <motion.div

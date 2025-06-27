@@ -11,6 +11,7 @@ import {
   ClerkProvider,
 } from '@clerk/nextjs'
 import { ToastProvider } from "@/hooks/toastprovidor"
+import ProfileProvider from "@/context/ProfileProvidor"
 
 export const metadata: Metadata = {
   title: "Mahmoud Matter | Full Stack Developer",
@@ -186,9 +187,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   transition-all duration-300"
                 >
                   <FloatingSocialDock />
-                  <ToastProvider>
-                    {children}
-                  </ToastProvider>
+                  <ProfileProvider>
+                    <ToastProvider>
+                      {children}
+                    </ToastProvider>
+                  </ProfileProvider>
 
                   <Analytics />
                 </main>
