@@ -1,34 +1,22 @@
-"use client";
-import React from "react";
-import { motion } from "framer-motion";
+"use client"
+import { cn } from "@/lib/utils"
+import { memo } from "react"
 
-export function BackgroundBeams({ className }: { className?: string }) {
-  return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{
-            opacity: 0,
-            x: Math.random() * 100 - 50,
-            y: Math.random() * 100 - 50,
-          }}
-          animate={{
-            opacity: [0, 0.5, 0],
-            transition: {
-              duration: 2 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            },
-          }}
-          className="absolute h-0.5 w-20 bg-gradient-to-r from-cyan-500 to-indigo-500"
-          style={{
-            transform: `rotate(${Math.random() * 360}deg)`,
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-          }}
-        />
-      ))}
-    </div>
-  );
+interface BackgroundBeamsProps {
+  className?: string
 }
+
+const BackgroundBeams = memo(({ className }: BackgroundBeamsProps) => {
+  return (
+    <div
+      className={cn(
+        "absolute inset-0 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:6rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]",
+        className,
+      )}
+    />
+  )
+})
+
+BackgroundBeams.displayName = "BackgroundBeams"
+
+export { BackgroundBeams }

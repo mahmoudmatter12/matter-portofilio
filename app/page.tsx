@@ -6,7 +6,7 @@ import { TimelinePost } from "@/types/timelineposts"
 import { Skill } from "@/types/skills"
 import { Certification } from "@/types/certificates"
 import { Project } from "@/types/projects"
-import { Hero } from "@/components/HeroSection"
+// import { Hero } from "@/components/HeroSection"
 import { About } from "@/components/AboutSection"
 import { TimelineOPT } from "@/components/timeline-optimized"
 import { SkillsOpt } from "@/components/newSkills-opt"
@@ -17,6 +17,7 @@ import { NewContact } from "@/components/contact-form"
 import { Footer } from "@/components/Footer"
 import { SpaceLoader } from "@/components/Loader"
 import IsDevelopment, { IsDevelopmentProps } from "@/components/is-development"
+import HeroSection from "@/components/HeroSection"
 
 // Centralized fetcher (optional but recommended)
 const fetchData = async <T,>(url: string): Promise<T> => {
@@ -26,7 +27,7 @@ const fetchData = async <T,>(url: string): Promise<T> => {
 }
 
 export default function Home() {
-  const { profile, loading: profileLoading } = useProfile()
+  const {  loading: profileLoading } = useProfile()
 
   // Fetch all data using React Query
   const { data: devStatus, isLoading: devStatusLoading } = useQuery({
@@ -70,7 +71,7 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           className="flex flex-col min-h-screen"
         >
-          <Hero loading={profileLoading} profile={profile ?? undefined} />
+          <HeroSection  />
           <IsDevelopment devStatus={devStatus ?? null} loading={devStatusLoading} />
           <About />
           <TimelineOPT timelineItems={timelineItems || []} timelineLoading={timelineLoading} />
