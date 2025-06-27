@@ -1,8 +1,9 @@
-# 🚀 Modern Portfolio Website
+![image](https://github.com/user-attachments/assets/6ceeba10-7bb6-4a3f-90ff-2fe71dd11f2c)# 🚀 Modern Portfolio Website
 
 A comprehensive, full-stack portfolio website built with Next.js 14, featuring a stunning frontend and a powerful admin dashboard for content management.
 
-![Portfolio Preview](https://via.placeholder.com/1200x600/6366f1/ffffff?text=Modern+Portfolio+Website)
+![Portfolio Preview](https://matter-portofilio.vercel.app/)
+![image](https://github.com/user-attachments/assets/179254c5-224a-4b48-82cd-24be8c1a2e4e)
 
 ## ✨ Features
 
