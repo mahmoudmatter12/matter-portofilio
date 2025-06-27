@@ -1,5 +1,7 @@
 import { SkillCategory, SkillLevel } from "@prisma/client"
 
+export type { SkillCategory, SkillLevel }
+
 export interface Skill {
   id: string
   name: string

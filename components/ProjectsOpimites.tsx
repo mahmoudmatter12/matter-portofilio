@@ -1,10 +1,11 @@
 "use client"
-import React, { useMemo, useState, useEffect } from "react"
+import React, { useMemo } from "react"
 import { motion } from "framer-motion"
 import { Github, ExternalLink, CheckCircle, Award } from "lucide-react"
 import { MyLink } from "./MyLink"
 import Image from "next/image"
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
+import { Project } from "@/types/projects"
 
 enum ProjectTags {
   JS = "JS",
@@ -39,19 +40,7 @@ enum ProjectTags {
   OTHER = "OTHER",
 }
 
-interface Project {
-  id: string
-  title: string
-  description: string
-  image?: string
-  github?: string
-  live?: string
-  tags: ProjectTags[]
-  features: string[]
-  achievements: string[]
-  createdAt: Date
-  updatedAt: Date
-}
+
 
 // Loading skeleton component
 const ProjectCardSkeleton = React.memo(({ index }: { index: number }) => {
@@ -149,12 +138,12 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-4">
-            {project.tags.map((tag: ProjectTags, tagIndex: number) => (
+            {project.tags.map((tag, tagIndex: number) => (
               <span
                 key={tagIndex}
                 className="text-xs font-medium px-2.5 py-1 rounded-full bg-indigo-100/50 dark:bg-gray-700 text-indigo-700 dark:text-cyan-400"
               >
-                {formatTag(tag)}
+                {formatTag(tag as ProjectTags)}
               </span>
             ))}
           </div>
@@ -236,37 +225,12 @@ const ProjectCard = React.memo(({ project, index }: { project: Project; index: n
 
 ProjectCard.displayName = "ProjectCard"
 
-export function ProjectsOpt() {
-  // State for projects data
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+interface ProjectsOptProps {
+  projects: Project[]
+  loading: boolean
+}
 
-  // Fetch projects data
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const response = await fetch("/api/projects")
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch projects: ${response.status}`)
-        }
-
-        const data: Project[] = await response.json()
-        setProjects(data)
-      } catch (err) {
-        console.error("Error fetching projects:", err)
-        setError(err instanceof Error ? err.message : "Failed to load projects")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchProjects()
-  }, [])
+export function ProjectsOpt({ projects, loading}: ProjectsOptProps) {
 
   // Memoize the background elements to prevent unnecessary re-renders
   const BackgroundElements = useMemo(
@@ -310,7 +274,7 @@ export function ProjectsOpt() {
             </p>
           </div>
 
-          {/* Error state */}
+          {/* Error state
           {error && (
             <div className="text-center py-12">
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
@@ -324,10 +288,10 @@ export function ProjectsOpt() {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Loading state */}
-          {loading && !error && (
+          {loading && (
             <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
               {Array.from({ length: 6 }).map((_, index) => (
                 <ProjectCardSkeleton key={index} index={index} />
@@ -336,13 +300,13 @@ export function ProjectsOpt() {
           )}
 
           {/* Projects Grid - Updated layout with fewer columns for larger cards */}
-          {!loading && !error && projects.length === 0 && (
+          {!loading && projects.length === 0 && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400">No projects found.</p>
             </div>
           )}
 
-          {!loading && !error && projects.length > 0 && (
+          {!loading  && projects.length > 0 && (
             <>
               <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
                 {projects.map((project, index) => (

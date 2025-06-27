@@ -5,15 +5,19 @@ import { Spotlight } from "./ui/spotlight-new"
 import { MyLink } from "./MyLink"
 import Link from "next/link"
 import { useMobile } from "@/hooks/use-mobile"
-import { useProfile } from "@/context/ProfileProvidor"
 import { ArrowDown, Github, Linkedin, ExternalLink } from "lucide-react"
+import { profileType } from "@/types/profile"
 
-export function Hero() {
+interface IheroSection {
+  profile?: profileType,
+  loading?: boolean
+}
+
+export function Hero({ profile, loading }: IheroSection) {
   const isMobile = useMobile()
   const controls = useAnimation()
   const [typedText, setTypedText] = useState("")
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
-  const { profile, loading } = useProfile()
 
   // Use profile professions or fallback to default
   const phrases = useMemo(() => {

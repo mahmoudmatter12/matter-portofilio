@@ -1,39 +1,65 @@
 "use client"
-import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Services } from "@/components/Services"
-import { SpaceLoader } from "@/components/Loader"
-import { Footer } from "@/components/Footer"
-import { TeamCarousel } from "@/components/TeamCarousel"
-import { ProjectsOpt } from "@/components/ProjectsOpimites"
+import { useQuery } from "@tanstack/react-query"
+import { useProfile } from "@/context/ProfileProvidor"
+import { TimelinePost } from "@/types/timelineposts"
+import { Skill } from "@/types/skills"
+import { Certification } from "@/types/certificates"
+import { Project } from "@/types/projects"
+import { Hero } from "@/components/HeroSection"
+import { About } from "@/components/AboutSection"
 import { TimelineOPT } from "@/components/timeline-optimized"
 import { SkillsOpt } from "@/components/newSkills-opt"
 import { CertificationsOpt } from "@/components/certificatesNew"
+import { ProjectsOpt } from "@/components/ProjectsOpimites"
+import { Services } from "@/components/Services"
 import { NewContact } from "@/components/contact-form"
-import IsDevelopment from "@/components/is-development"
-import { Hero } from "@/components/HeroSection"
-import { About } from "@/components/AboutSection"
+import { Footer } from "@/components/Footer"
+import { SpaceLoader } from "@/components/Loader"
+import IsDevelopment, { IsDevelopmentProps } from "@/components/is-development"
+
+// Centralized fetcher (optional but recommended)
+const fetchData = async <T,>(url: string): Promise<T> => {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Failed to fetch ${url}`)
+  return res.json()
+}
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const { profile, loading: profileLoading } = useProfile()
 
-  useEffect(() => {
-    setMounted(true)
+  // Fetch all data using React Query
+  const { data: devStatus, isLoading: devStatusLoading } = useQuery({
+    queryKey: ["devStatus"],
+    queryFn: () => fetchData<IsDevelopmentProps[]>("/api/development-status").then(res => res[0]),
+  })
 
-    // Simulate loading for a smoother entry experience
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 1500)
+  const { data: timelineItems, isLoading: timelineLoading } = useQuery({
+    queryKey: ["timeline"],
+    queryFn: () => fetchData<TimelinePost[]>("/api/timelineposts"),
+  })
 
-    return () => clearTimeout(timer)
-  }, [])
+  const { data: skillsData, isLoading: skillsDataLoading } = useQuery({
+    queryKey: ["skills"],
+    queryFn: () => fetchData<Skill[]>("/api/skills"),
+  })
 
-  if (!mounted) return null
+  const { data: certifications, isLoading: certLoading } = useQuery({
+    queryKey: ["certifications"],
+    queryFn: () => fetchData<Certification[]>("/api/certifications"),
+  })
+
+  const { data: projects, isLoading: projectLoading } = useQuery({
+    queryKey: ["projects"],
+    queryFn: () => fetchData<Project[]>("/api/projects"),
+  })
+
+  // Combined loading state
+  const isLoading = profileLoading || devStatusLoading || timelineLoading || skillsDataLoading || certLoading || projectLoading
 
   return (
     <AnimatePresence mode="wait">
-      {loading ? (
+      {isLoading ? (
         <SpaceLoader key="loader" />
       ) : (
         <motion.div
@@ -42,18 +68,16 @@ export default function Home() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          >
-          <Hero />
-          <IsDevelopment />
+          className="flex flex-col min-h-screen"
+        >
+          <Hero loading={profileLoading} profile={profile ?? undefined} />
+          <IsDevelopment devStatus={devStatus ?? null} loading={devStatusLoading} />
           <About />
-          <TimelineOPT />
-          {/* <TechStackSectionOpt /> */}
-          <SkillsOpt />
-          <CertificationsOpt />
-          <ProjectsOpt />
+          <TimelineOPT timelineItems={timelineItems || []} timelineLoading={timelineLoading} />
+          <SkillsOpt skills={skillsData || null} skillloading={skillsDataLoading} />
+          <CertificationsOpt certifications={certifications || []} loading={certLoading} />
+          <ProjectsOpt projects={projects || []} loading={projectLoading} />
           <Services />
-          <TeamCarousel />
-          {/* <Contact /> */}
           <NewContact />
           <Footer />
         </motion.div>

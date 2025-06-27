@@ -1,31 +1,17 @@
 "use client"
-import React, { useMemo, useState, useEffect } from "react"
+import React, { useMemo } from "react"
 import { motion } from "framer-motion"
 import { Award, ExternalLink, Calendar, Building, CheckCircle, AlertTriangle, Clock, Shield } from "lucide-react"
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
 import { Badge } from "@/components/ui/badge"
 import { MyLink } from "./MyLink"
+import { Certification } from "@/types/certificates"
 
 enum CertificationStatus {
   ACTIVE = "ACTIVE",
   EXPIRED = "EXPIRED",
   PENDING = "PENDING",
   REVOKED = "REVOKED",
-}
-
-interface Certification {
-  id: string
-  name: string
-  issuer: string
-  issueDate: Date
-  expiryDate?: Date
-  credentialId?: string
-  credentialUrl?: string
-  description?: string
-  skills: string[]
-  status: CertificationStatus
-  createdAt: Date
-  updatedAt: Date
 }
 
 // Get status color and icon
@@ -124,7 +110,7 @@ const CertificationCard = React.memo(({ certification, index }: { certification:
     once: true,
   })
 
-  const statusInfo = getStatusInfo(certification.status)
+  const statusInfo = getStatusInfo(certification.status as CertificationStatus)
   const expiringSoon = isExpiringSoon(certification.expiryDate)
 
   return (
@@ -284,38 +270,12 @@ const StatusSection = React.memo(
 
 StatusSection.displayName = "StatusSection"
 
-export function CertificationsOpt() {
-  // State for certifications data
-  const [certifications, setCertifications] = useState<Certification[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+interface CertificationsOptProps {
+  certifications: Certification[]
+  loading: boolean
+}
 
-  // Fetch certifications data
-  useEffect(() => {
-    const fetchCertifications = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const response = await fetch("/api/certifications")
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch certifications: ${response.status}`)
-        }
-
-        const data: Certification[] = await response.json()
-        setCertifications(data)
-      } catch (err) {
-        console.error("Error fetching certifications:", err)
-        setError(err instanceof Error ? err.message : "Failed to load certifications")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchCertifications()
-  }, [])
-
+export function CertificationsOpt({ certifications, loading }: CertificationsOptProps) {
   // Group certifications by status
   const certificationsByStatus = useMemo(() => {
     const grouped = certifications.reduce(
@@ -391,7 +351,7 @@ export function CertificationsOpt() {
             </p>
 
             {/* Quick stats */}
-            {!loading && !error && stats.total > 0 && (
+            {!loading && stats.total > 0 && (
               <div className="mt-8 flex justify-center gap-8 text-sm">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-indigo-600 dark:text-cyan-400">{stats.total}</div>
@@ -411,24 +371,10 @@ export function CertificationsOpt() {
             )}
           </div>
 
-          {/* Error state */}
-          {error && (
-            <div className="text-center py-12">
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
-                <p className="text-red-600 dark:text-red-400 font-medium">Failed to load certifications</p>
-                <p className="text-red-500 dark:text-red-300 text-sm mt-1">{error}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
-                >
-                  Retry
-                </button>
-              </div>
-            </div>
-          )}
+         
 
           {/* Loading state */}
-          {loading && !error && (
+          {loading && (
             <div className="space-y-12">
               {Array.from({ length: 2 }).map((_, statusIndex) => (
                 <div key={statusIndex}>
@@ -450,14 +396,14 @@ export function CertificationsOpt() {
           )}
 
           {/* Empty state */}
-          {!loading && !error && certifications.length === 0 && (
+          {!loading && certifications.length === 0 && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400">No certifications found.</p>
             </div>
           )}
 
           {/* Certifications by status */}
-          {!loading && !error && certifications.length > 0 && (
+          {!loading && certifications.length > 0 && (
             <div className="space-y-8">
               {/* Show active certifications first, then others */}
               {[CertificationStatus.ACTIVE, CertificationStatus.PENDING, CertificationStatus.EXPIRED].map(

@@ -1,5 +1,5 @@
 "use client"
-import { useState, useRef, useMemo, useEffect } from "react"
+import { useState, useRef, useMemo } from "react"
 import React from "react"
 
 import { motion, useScroll, useTransform } from "framer-motion"
@@ -241,7 +241,12 @@ const TimelineItemSkeleton = React.memo(function TimelineItemSkeleton({
   )
 })
 
-export function TimelineOPT() {
+interface TimelineOPTProps {
+  timelineItems?: TimelinePost[]
+  timelineLoading?: boolean
+}
+
+export function TimelineOPT({ timelineItems, timelineLoading }: TimelineOPTProps) {
   const isMobile = useMobile()
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
@@ -256,9 +261,6 @@ export function TimelineOPT() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   // State for timeline data
-  const [timelineItems, setTimelineItems] = useState<TimelinePost[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   // Section intersection observer
   const [sectionRef, isSectionInView] = useIntersectionObserver<HTMLElement>({
@@ -266,31 +268,6 @@ export function TimelineOPT() {
     once: true,
   })
 
-  // Fetch timeline data
-  useEffect(() => {
-    const fetchTimelineData = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const response = await fetch("/api/timelineposts")
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch timeline data: ${response.status}`)
-        }
-
-        const data: TimelinePost[] = await response.json()
-        setTimelineItems(data)
-      } catch (err) {
-        console.error("Error fetching timeline data:", err)
-        setError(err instanceof Error ? err.message : "Failed to load timeline data")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchTimelineData()
-  }, [])
 
   // Memoize background elements
   const BackgroundElements = useMemo(
@@ -388,24 +365,9 @@ export function TimelineOPT() {
               />
             </div>
 
-            {/* Error state */}
-            {error && (
-              <div className="text-center py-12">
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
-                  <p className="text-red-600 dark:text-red-400 font-medium">Failed to load timeline</p>
-                  <p className="text-red-500 dark:text-red-300 text-sm mt-1">{error}</p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
-                  >
-                    Retry
-                  </button>
-                </div>
-              </div>
-            )}
 
             {/* Loading state */}
-            {loading && !error && (
+            {timelineLoading && (
               <>
                 {Array.from({ length: 3 }).map((_, index) => (
                   <TimelineItemSkeleton key={index} index={index} isMobile={isMobile} />
@@ -414,15 +376,14 @@ export function TimelineOPT() {
             )}
 
             {/* Timeline items */}
-            {!loading && !error && timelineItems.length === 0 && (
+            {!timelineLoading && timelineItems?.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">No timeline items found.</p>
               </div>
             )}
 
-            {!loading &&
-              !error &&
-              timelineItems.map((item, index) => (
+            {!timelineLoading &&
+              timelineItems?.map((item, index) => (
                 <TimelineItem
                   key={item.id}
                   item={item}

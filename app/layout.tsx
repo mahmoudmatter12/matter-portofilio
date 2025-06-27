@@ -12,6 +12,7 @@ import {
 } from '@clerk/nextjs'
 import { ToastProvider } from "@/hooks/toastprovidor"
 import ProfileProvider from "@/context/ProfileProvidor"
+import { ReactQueryProvider } from "@/context/reactquiryProvidor"
 
 export const metadata: Metadata = {
   title: "Mahmoud Matter | Full Stack Developer",
@@ -185,11 +186,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   shadow-2xl shadow-black/5 dark:shadow-black/20
                   transition-all duration-300"
                 >
-                  <ProfileProvider>
-                    <ToastProvider>
-                      {children}
-                    </ToastProvider>
-                  </ProfileProvider>
+                  <ReactQueryProvider>
+                    <ProfileProvider>
+                      <ToastProvider>
+                        {children}
+                      </ToastProvider>
+                    </ProfileProvider>
+                  </ReactQueryProvider>
 
                   <Analytics />
                 </main>

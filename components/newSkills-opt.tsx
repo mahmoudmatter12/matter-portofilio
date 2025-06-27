@@ -1,8 +1,9 @@
 "use client"
-import React, { useMemo, useState, useEffect } from "react"
+import React, { useMemo } from "react"
 import { motion } from "framer-motion"
 import { Code, Database, Server, Smartphone, Palette, Wrench, Globe, Zap } from "lucide-react"
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer"
+import { Skill } from "@/types/skills"
 
 enum SkillCategory {
   FRONTEND = "FRONTEND",
@@ -24,17 +25,6 @@ enum SkillLevel {
   EXPERT = "EXPERT",
 }
 
-interface Skill {
-  id: string
-  name: string
-  category: SkillCategory
-  level: SkillLevel
-  description?: string
-  icon?: string
-  yearsOfExperience?: number
-  createdAt: Date
-  updatedAt: Date
-}
 
 // Get category icon
 function getCategoryIcon(category: SkillCategory) {
@@ -143,7 +133,7 @@ const SkillCard = React.memo(({ skill, index }: { skill: Skill; index: number })
     once: true,
   })
 
-  const levelInfo = getLevelInfo(skill.level)
+  const levelInfo = getLevelInfo(skill.level as SkillLevel)
 
   return (
     <motion.div
@@ -241,41 +231,15 @@ const CategorySection = React.memo(
 
 CategorySection.displayName = "CategorySection"
 
-export function SkillsOpt() {
-  // State for skills data
-  const [skills, setSkills] = useState<Skill[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  // Fetch skills data
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const response = await fetch("/api/skills")
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch skills: ${response.status}`)
-        }
-
-        const data: Skill[] = await response.json()
-        setSkills(data)
-      } catch (err) {
-        console.error("Error fetching skills:", err)
-        setError(err instanceof Error ? err.message : "Failed to load skills")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchSkills()
-  }, [])
-
+interface SkillsOptProps {  // No props needed for this component
+  skills?: Skill[] | null
+  skillloading: boolean
+}
+export function SkillsOpt({ skills, skillloading }: SkillsOptProps) {
+  
   // Group skills by category
   const skillsByCategory = useMemo(() => {
-    const grouped = skills.reduce(
+    const grouped = skills?.reduce(
       (acc, skill) => {
         if (!acc[skill.category]) {
           acc[skill.category] = []
@@ -287,14 +251,16 @@ export function SkillsOpt() {
     )
 
     // Sort skills within each category by level (Expert first) and then by name
-    Object.keys(grouped).forEach((category) => {
-      grouped[category as SkillCategory].sort((a, b) => {
-        const levelOrder = { EXPERT: 4, ADVANCED: 3, INTERMEDIATE: 2, BEGINNER: 1 }
-        const levelDiff = levelOrder[b.level] - levelOrder[a.level]
-        if (levelDiff !== 0) return levelDiff
-        return a.name.localeCompare(b.name)
+    if (grouped) {
+      Object.keys(grouped).forEach((category) => {
+        grouped[category as SkillCategory].sort((a, b) => {
+          const levelOrder = { EXPERT: 4, ADVANCED: 3, INTERMEDIATE: 2, BEGINNER: 1 }
+          const levelDiff = levelOrder[b.level] - levelOrder[a.level]
+          if (levelDiff !== 0) return levelDiff
+          return a.name.localeCompare(b.name)
+        })
       })
-    })
+    }
 
     return grouped
   }, [skills])
@@ -341,24 +307,9 @@ export function SkillsOpt() {
             </p>
           </div>
 
-          {/* Error state */}
-          {error && (
-            <div className="text-center py-12">
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
-                <p className="text-red-600 dark:text-red-400 font-medium">Failed to load skills</p>
-                <p className="text-red-500 dark:text-red-300 text-sm mt-1">{error}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
-                >
-                  Retry
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Loading state */}
-          {loading && !error && (
+          {skillloading&& (
             <div className="space-y-12">
               {Array.from({ length: 3 }).map((_, categoryIndex) => (
                 <div key={categoryIndex}>
@@ -380,16 +331,16 @@ export function SkillsOpt() {
           )}
 
           {/* Empty state */}
-          {!loading && !error && skills.length === 0 && (
+          {!skillloading && skills?.length === 0 && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400">No skills found.</p>
             </div>
           )}
 
           {/* Skills by category */}
-          {!loading && !error && skills.length > 0 && (
+          {!skillloading && (skills?.length ?? 0) > 0 && (
             <div className="space-y-8">
-              {Object.entries(skillsByCategory).map(([category, categorySkills], index) => (
+              {Object.entries(skillsByCategory ?? {}).map(([category, categorySkills], index) => (
                 <CategorySection
                   key={category}
                   category={category as SkillCategory}
