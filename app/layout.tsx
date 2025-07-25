@@ -1,17 +1,16 @@
 import type React from "react"
 import { memo } from "react"
-// app/layout.tsx
 import { ThemeProvider } from "next-themes"
 import "./globals.css"
 import { Header } from "@/components/Header"
 import { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/react"
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
 import { ToastProvider } from "@/hooks/toastprovidor"
 import ProfileProvider from "@/context/ProfileProvidor"
 import { ReactQueryProvider } from "@/context/reactquiryProvidor"
+import IsDevelopment from "@/components/is-development"
+import { ContentWrapper } from "@/components/ContentWrapper"
 
 export const metadata: Metadata = {
   title: "Mahmoud Matter | Full Stack Developer",
@@ -23,57 +22,45 @@ export const metadata: Metadata = {
   },
 }
 
-// Memoized background elements for better performance
+// Optimized background elements with reduced complexity
 const PortfolioBackgroundElements = memo(() => (
   <>
-    {/* Subtle grid texture */}
+    {/* Simplified grid texture */}
     <div
-      className="absolute inset-0 opacity-[0.03] dark:opacity-[0.015]"
+      className="absolute inset-0 opacity-[0.02] dark:opacity-[0.01]"
       style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(99,102,241,0.15) 1px, transparent 0)`,
-        backgroundSize: '24px 24px'
+        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(99,102,241,0.1) 1px, transparent 0)`,
+        backgroundSize: '32px 32px'
       }}
     />
 
-    {/* Main animated gradient orbs */}
+    {/* Reduced number of animated elements */}
     <div
-      className="absolute -top-32 -left-32 w-[700px] h-[700px] rounded-full 
-      bg-gradient-to-br from-sky-400/20 via-cyan-400/12 to-blue-500/8 
+      className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full 
+      bg-gradient-to-br from-sky-400/15 via-cyan-400/10 to-blue-500/6 
       blur-3xl animate-pulse"
       style={{
-        animationDuration: '12s',
+        animationDuration: '15s',
         animationDelay: '0s'
       }}
       aria-hidden="true"
     />
 
     <div
-      className="absolute top-1/4 -right-40 w-[800px] h-[800px] rounded-full 
-      bg-gradient-to-bl from-indigo-400/15 via-purple-400/10 to-pink-500/8 
-      blur-3xl opacity-80 animate-pulse"
-      style={{
-        animationDuration: '15s',
-        animationDelay: '3s'
-      }}
-      aria-hidden="true"
-    />
-
-    <div
-      className="absolute -bottom-32 left-1/4 w-[900px] h-[600px] rounded-full 
-      bg-gradient-to-tr from-emerald-400/12 via-teal-400/15 to-cyan-500/10 
-      blur-3xl opacity-75 animate-pulse"
+      className="absolute top-1/4 -right-40 w-[700px] h-[700px] rounded-full 
+      bg-gradient-to-bl from-indigo-400/12 via-purple-400/8 to-pink-500/6 
+      blur-3xl opacity-70 animate-pulse"
       style={{
         animationDuration: '18s',
-        animationDelay: '6s'
+        animationDelay: '4s'
       }}
       aria-hidden="true"
     />
 
-    {/* Secondary floating orbs for depth */}
     <div
-      className="absolute top-1/2 left-1/3 w-[400px] h-[400px] rounded-full 
-      bg-gradient-to-tr from-violet-400/10 via-fuchsia-400/8 to-rose-500/6 
-      blur-3xl animate-pulse"
+      className="absolute -bottom-32 left-1/4 w-[800px] h-[500px] rounded-full 
+      bg-gradient-to-tr from-emerald-400/10 via-teal-400/12 to-cyan-500/8 
+      blur-3xl opacity-60 animate-pulse"
       style={{
         animationDuration: '20s',
         animationDelay: '8s'
@@ -81,76 +68,18 @@ const PortfolioBackgroundElements = memo(() => (
       aria-hidden="true"
     />
 
-    {/* Interactive floating elements */}
+    {/* Single interactive element */}
     <div
-      className="absolute top-1/5 right-24 w-40 h-40 
-      bg-gradient-to-br from-rose-400/12 to-pink-500/18 
-      rounded-[2.5rem] backdrop-blur-sm
-      shadow-[0_30px_70px_-15px_rgba(251,113,133,0.3)] 
-      rotate-12 animate-bounce hover:scale-110 
-      transition-all duration-700 hover:shadow-[0_40px_90px_-15px_rgba(251,113,133,0.4)]
-      border border-white/10 dark:border-white/5"
-      style={{
-        animationDuration: '8s',
-        animationDelay: '2s'
-      }}
-      aria-hidden="true"
-    />
-
-    <div
-      className="absolute bottom-1/4 left-32 w-48 h-48 
-      bg-gradient-to-tr from-cyan-400/12 to-blue-500/18 
-      rounded-full backdrop-blur-sm
-      shadow-[0_30px_60px_-15px_rgba(34,211,238,0.3)] 
-      -rotate-12 animate-bounce hover:scale-105 
-      transition-all duration-700 hover:shadow-[0_40px_80px_-15px_rgba(34,211,238,0.4)]
+      className="absolute top-1/3 right-24 w-32 h-32 
+      bg-gradient-to-br from-rose-400/10 to-pink-500/15 
+      rounded-2xl backdrop-blur-sm
+      shadow-[0_20px_40px_-10px_rgba(251,113,133,0.2)] 
+      rotate-12 animate-bounce hover:scale-105 
+      transition-all duration-500 hover:shadow-[0_30px_60px_-10px_rgba(251,113,133,0.3)]
       border border-white/10 dark:border-white/5"
       style={{
         animationDuration: '10s',
-        animationDelay: '4s'
-      }}
-      aria-hidden="true"
-    />
-
-    <div
-      className="absolute top-2/3 right-1/3 w-32 h-32 
-      bg-gradient-to-bl from-violet-400/12 to-purple-500/18 
-      rounded-3xl backdrop-blur-sm
-      shadow-[0_25px_50px_-10px_rgba(147,51,234,0.3)] 
-      rotate-45 animate-spin hover:rotate-[60deg] 
-      transition-all duration-700 hover:shadow-[0_35px_70px_-10px_rgba(147,51,234,0.4)]
-      border border-white/10 dark:border-white/5"
-      style={{
-        animationDuration: '25s'
-      }}
-      aria-hidden="true"
-    />
-
-    <div
-      className="absolute top-1/3 left-20 w-28 h-28 
-      bg-gradient-to-tr from-amber-400/12 to-orange-500/18 
-      rounded-2xl backdrop-blur-sm
-      shadow-[0_20px_40px_-10px_rgba(245,158,11,0.3)] 
-      -rotate-6 animate-bounce hover:scale-110 
-      transition-all duration-700 hover:shadow-[0_30px_60px_-10px_rgba(245,158,11,0.4)]
-      border border-white/10 dark:border-white/5"
-      style={{
-        animationDuration: '12s',
-        animationDelay: '6s'
-      }}
-      aria-hidden="true"
-    />
-
-    <div
-      className="absolute bottom-1/2 right-16 w-36 h-36 
-      bg-gradient-to-bl from-green-400/12 to-emerald-500/18 
-      rounded-[3rem] backdrop-blur-sm
-      shadow-[0_25px_55px_-12px_rgba(34,197,94,0.3)] 
-      rotate-24 animate-spin hover:rotate-[30deg] 
-      transition-all duration-700 hover:shadow-[0_35px_75px_-12px_rgba(34,197,94,0.4)]
-      border border-white/10 dark:border-white/5"
-      style={{
-        animationDuration: '30s'
+        animationDelay: '2s'
       }}
       aria-hidden="true"
     />
@@ -164,26 +93,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {/* Enhanced Background Container */}
+          {/* Optimized Background Container */}
           <div
             className="relative min-h-screen overflow-hidden 
-            bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-50/60
-            dark:from-slate-900 dark:via-slate-800/90 dark:to-slate-900
-            transition-colors duration-500"
+            bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50
+            dark:from-slate-900 dark:via-slate-800/80 dark:to-slate-900
+            transition-colors duration-300"
           >
             <PortfolioBackgroundElements />
-            {/* <FloatingSocialDock /> */}
+            <IsDevelopment />
             <Header />
-            {/* Content layer with subtle backdrop blur */}
-            <div className="relative z-10 min-h-screen backdrop-blur-[0.5px]">
+            <ContentWrapper>
               <ClerkProvider>
                 <main
                   className="relative min-h-screen
-                  bg-white/20 dark:bg-slate-900/30 
-                  backdrop-blur-[1px]
+                  bg-white/15 dark:bg-slate-900/25 
+                  backdrop-blur-[0.5px]
                   border-l border-r border-white/10 dark:border-slate-700/20
-                  shadow-2xl shadow-black/5 dark:shadow-black/20
-                  transition-all duration-300"
+                  shadow-xl shadow-black/5 dark:shadow-black/15
+                  transition-all duration-200"
                 >
                   <ReactQueryProvider>
                     <ProfileProvider>
@@ -196,8 +124,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <Analytics />
                 </main>
               </ClerkProvider>
-            </div>
-
+            </ContentWrapper>
           </div>
         </ThemeProvider>
       </body>

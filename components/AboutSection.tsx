@@ -250,11 +250,10 @@ const About = memo(() => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                      activeTab === tab.id
-                        ? "bg-white dark:bg-gray-700 text-indigo-600 dark:text-cyan-400 shadow-sm"
-                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                    }`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeTab === tab.id
+                      ? "bg-white dark:bg-gray-700 text-indigo-600 dark:text-cyan-400 shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                      }`}
                   >
                     {tab.icon}
                     {tab.label}
@@ -279,7 +278,7 @@ const About = memo(() => {
                           {loading
                             ? "Loading..."
                             : profile?.about ||
-                              `I'm a passionate developer with ${yearsOfExperience}+ years of experience crafting digital experiences. My journey in tech started when I built my first website at 15, and I've been hooked ever since.`}
+                            `I'm a passionate developer with ${yearsOfExperience}+ years of experience crafting digital experiences. My journey in tech started when I built my first website at 15, and I've been hooked ever since.`}
                         </p>
 
                         <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-300">
