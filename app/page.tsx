@@ -66,7 +66,7 @@ export default function Home() {
   })
 
   // Memoized loading state
-  const isLoading = useMemo(() => 
+  const isLoading = useMemo(() =>
     profileLoading || timelineLoading || skillsDataLoading || certLoading || projectLoading,
     [profileLoading, timelineLoading, skillsDataLoading, certLoading, projectLoading]
   )
@@ -85,21 +85,21 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <MemoizedHeroSection />
       <MemoizedAbout />
-      <MemoizedTimeline 
-        timelineItems={memoizedTimelineItems} 
-        timelineLoading={timelineLoading} 
+      <MemoizedTimeline
+        timelineItems={memoizedTimelineItems}
+        timelineLoading={timelineLoading}
       />
-      <MemoizedSkills 
-        skills={memoizedSkillsData} 
-        skillloading={skillsDataLoading} 
+      <MemoizedSkills
+        skills={memoizedSkillsData}
+        skillloading={skillsDataLoading}
       />
-      <MemoizedCertifications 
-        certifications={memoizedCertifications} 
-        loading={certLoading} 
+      <MemoizedCertifications
+        certifications={memoizedCertifications}
+        loading={certLoading}
       />
-      <MemoizedProjects 
-        projects={memoizedProjects} 
-        loading={projectLoading} 
+      <MemoizedProjects
+        projects={memoizedProjects}
+        loading={projectLoading}
       />
       <MemoizedServices />
       <MemoizedContact />
