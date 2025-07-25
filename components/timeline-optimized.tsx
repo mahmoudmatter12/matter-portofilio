@@ -106,18 +106,16 @@ const TimelineItem = React.memo(function TimelineItem({
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ delay: 0.1 * index, duration: 0.5 }}
-      className={`relative mb-12 flex ${
-        isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-      } items-center`}
+      className={`relative mb-12 flex ${isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+        } items-center`}
       onMouseEnter={() => setHoveredIndex(index)}
       onMouseLeave={() => setHoveredIndex(null)}
     >
       {/* Timeline dot with pulse effect on hover */}
       <div className="relative flex items-center justify-center z-10">
         <div
-          className={`w-10 h-10 rounded-full bg-white dark:bg-gray-800 border-4 ${
-            hoveredIndex === index ? "border-indigo-500 dark:border-cyan-400" : "border-indigo-300 dark:border-cyan-600"
-          } flex items-center justify-center transition-colors duration-300`}
+          className={`w-10 h-10 rounded-full bg-white dark:bg-gray-800 border-4 ${hoveredIndex === index ? "border-indigo-500 dark:border-cyan-400" : "border-indigo-300 dark:border-cyan-600"
+            } flex items-center justify-center transition-colors duration-300`}
         >
           {getIcon(item.type)}
         </div>
@@ -134,9 +132,8 @@ const TimelineItem = React.memo(function TimelineItem({
 
       {/* Card with enhanced hover effects */}
       <div
-        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${
-          !isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
-        }`}
+        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${!isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
+          }`}
       >
         <motion.div
           className="relative p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-sky-100 dark:border-gray-700 shadow-sm overflow-hidden group"
@@ -208,9 +205,8 @@ const TimelineItemSkeleton = React.memo(function TimelineItemSkeleton({
 }) {
   return (
     <div
-      className={`relative mb-12 flex ${
-        isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-      } items-center`}
+      className={`relative mb-12 flex ${isMobile ? "flex-col" : index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+        } items-center`}
     >
       {/* Timeline dot skeleton */}
       <div className="relative flex items-center justify-center z-10">
@@ -219,9 +215,8 @@ const TimelineItemSkeleton = React.memo(function TimelineItemSkeleton({
 
       {/* Card skeleton */}
       <div
-        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${
-          !isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
-        }`}
+        className={`w-full ${isMobile ? "mt-4" : "md:w-5/12"} ${!isMobile && index % 2 === 0 ? "md:ml-8" : !isMobile ? "md:mr-8" : ""
+          }`}
       >
         <div className="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-sky-100 dark:border-gray-700 shadow-sm">
           <div className="flex gap-2 mb-2">
@@ -269,37 +264,41 @@ export function TimelineOPT({ timelineItems, timelineLoading }: TimelineOPTProps
   })
 
 
-  // Memoize background elements
+  // Memoize background elements - Optimized for mobile
   const BackgroundElements = useMemo(
     () => (
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-1/3 -left-32 w-64 h-64 rounded-full bg-cyan-400/10 blur-3xl"
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl"
-          animate={{
-            y: [0, 30, 0],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-          }}
-        />
+        {!isMobile && (
+          <>
+            <motion.div
+              className="absolute top-1/3 -left-32 w-64 h-64 rounded-full bg-cyan-400/10 blur-3xl"
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.5, 0.8, 0.5],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.div
+              className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl"
+              animate={{
+                y: [0, 30, 0],
+                opacity: [0.5, 0.8, 0.5],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            />
+          </>
+        )}
       </div>
     ),
-    [],
+    [isMobile],
   )
 
   return (

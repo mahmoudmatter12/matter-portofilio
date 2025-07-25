@@ -26,9 +26,9 @@ export function SpaceLoader() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center from-[#111827] via-[#1F2937] to-[#17263d] z-[999] overflow-hidden">
-      {/* Stars background */}
+      {/* Stars background - Reduced on mobile for performance */}
       <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
+        {[...Array(typeof window !== 'undefined' && window.innerWidth < 768 ? 20 : 50)].map((_, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0 }}
@@ -104,7 +104,7 @@ export function SpaceLoader() {
             className="text-center"
           >
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.7, 1, 0.7]
               }}
@@ -134,7 +134,7 @@ export function SpaceLoader() {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ 
+              transition={{
                 type: "spring",
                 stiffness: 200,
                 damping: 15
@@ -184,7 +184,7 @@ export function SpaceLoader() {
           </motion.div>
         )}
       </AnimatePresence>
-      
+
     </div>
   )
 }

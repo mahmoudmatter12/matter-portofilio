@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
       "react-icons",
       "@radix-ui/react-icons",
     ],
+    // Reduce bundle size for mobile
+    optimizeCss: true,
   },
   turbopack: {
     rules: {

@@ -103,10 +103,14 @@ const About = memo(() => {
 
   return (
     <section id="about" className="relative py-24 sm:py-32 overflow-hidden" ref={containerRef}>
-      {/* Enhanced Background Effects */}
+      {/* Enhanced Background Effects - Optimized for mobile */}
       <div className="absolute inset-0">
-        <BackgroundBeams className="opacity-30" />
-        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(99, 102, 241, 0.1)" />
+        {!isMobile && (
+          <>
+            <BackgroundBeams className="opacity-30" />
+            <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(99, 102, 241, 0.1)" />
+          </>
+        )}
         <div className="absolute -top-32 -left-32 w-64 h-64 rounded-full bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-0 w-96 h-96 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/3 left-1/4 w-48 h-48 rounded-full bg-gradient-to-r from-emerald-500/20 to-teal-500/20 blur-3xl animate-pulse delay-2000" />

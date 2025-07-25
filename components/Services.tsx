@@ -1,11 +1,21 @@
 "use client"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Code, LayoutTemplate, Smartphone, BarChart2, Cpu, Zap, ArrowRight, CheckCircle, Sparkles } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 export function Services() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
 
   // State to track which service is being hovered
@@ -59,32 +69,36 @@ export function Services() {
 
   return (
     <section id="services" className="relative py-24 sm:py-32 overflow-hidden" ref={containerRef}>
-      {/* Animated background elements */}
+      {/* Animated background elements - Optimized for mobile */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-1/3 -right-32 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl"
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 -left-32 w-96 h-96 rounded-full bg-cyan-400/10 blur-3xl"
-          animate={{
-            y: [0, 30, 0],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-          }}
-        />
+        {!isMobile && (
+          <>
+            <motion.div
+              className="absolute top-1/3 -right-32 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl"
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.5, 0.8, 0.5],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.div
+              className="absolute bottom-1/4 -left-32 w-96 h-96 rounded-full bg-cyan-400/10 blur-3xl"
+              animate={{
+                y: [0, 30, 0],
+                opacity: [0.5, 0.8, 0.5],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            />
+          </>
+        )}
       </div>
 
       <div className="container mx-auto px-6">

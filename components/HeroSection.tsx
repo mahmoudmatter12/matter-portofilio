@@ -27,20 +27,22 @@ const HeroSection = memo(() => {
   const { profile, loading } = useProfile()
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
-  // Track mouse position for interactive effects
+  // Track mouse position for interactive effects - Disabled on mobile for performance
   useEffect(() => {
+    if (isMobile) return
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
     }
 
     window.addEventListener("mousemove", handleMouseMove)
     return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
+  }, [isMobile])
 
-  // Memoized floating elements for performance
+  // Memoized floating elements for performance - Reduced on mobile
   const floatingElements = useMemo(
     () =>
-      Array.from({ length: 12 }, (_, i) => ({
+      Array.from({ length: isMobile ? 6 : 12 }, (_, i) => ({
         id: i,
         size: Math.random() * 100 + 50,
         duration: Math.random() * 20 + 10,
@@ -48,7 +50,7 @@ const HeroSection = memo(() => {
         x: Math.random() * 100,
         y: Math.random() * 100,
       })),
-    [],
+    [isMobile],
   )
 
   // Memoized social links
@@ -98,13 +100,17 @@ const HeroSection = memo(() => {
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-black"
     >
-      {/* Enhanced Background Effects */}
+      {/* Enhanced Background Effects - Optimized for mobile */}
       <div className="absolute inset-0">
-        <BackgroundBeams className="opacity-40" />
-        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(99, 102, 241, 0.)" />
+        {!isMobile && (
+          <>
+            <BackgroundBeams className="opacity-40" />
+            <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(99, 102, 241, 0.)" />
+          </>
+        )}
 
-        {/* Floating background elements */}
-        {floatingElements.map((element) => (
+        {/* Floating background elements - Reduced on mobile */}
+        {floatingElements.slice(0, isMobile ? 4 : 12).map((element) => (
           <motion.div
             key={element.id}
             className="absolute rounded-full bg-gradient-to-r from-indigo-500/10 to-cyan-500/10 blur-xl"
@@ -114,13 +120,13 @@ const HeroSection = memo(() => {
               left: `${element.x}%`,
               top: `${element.y}%`,
             }}
-            animate={{
+            animate={isMobile ? {} : {
               y: [0, -30, 0],
               x: [0, 15, 0],
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.6, 0.3],
             }}
-            transition={{
+            transition={isMobile ? {} : {
               duration: element.duration,
               repeat: Number.POSITIVE_INFINITY,
               delay: element.delay,
@@ -130,15 +136,17 @@ const HeroSection = memo(() => {
         ))}
       </div>
 
-      {/* Interactive cursor effect */}
-      <motion.div
-        className="fixed pointer-events-none z-10 w-6 h-6 rounded-full bg-gradient-to-r from-indigo-500/30 to-cyan-500/30 blur-sm"
-        animate={{
-          x: mousePosition.x - 12,
-          y: mousePosition.y - 12,
-        }}
-        transition={{ type: "spring", stiffness: 500, damping: 28 }}
-      />
+      {/* Interactive cursor effect - Disabled on mobile for performance */}
+      {!isMobile && (
+        <motion.div
+          className="fixed pointer-events-none z-10 w-6 h-6 rounded-full bg-gradient-to-r from-indigo-500/30 to-cyan-500/30 blur-sm"
+          animate={{
+            x: mousePosition.x - 12,
+            y: mousePosition.y - 12,
+          }}
+          transition={{ type: "spring", stiffness: 500, damping: 28 }}
+        />
+      )}
 
       <div className="container mx-auto px-6 relative z-20">
         <motion.div className="max-w-7xl mx-auto" variants={containerVariants} initial="hidden" animate="visible">
